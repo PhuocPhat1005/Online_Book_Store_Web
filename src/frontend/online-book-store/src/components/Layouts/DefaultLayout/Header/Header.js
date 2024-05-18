@@ -1,13 +1,36 @@
+import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faMagnifyingGlass, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import Tippy from '@tippyjs/react/headless';
 
 import styles from './Header.module.scss';
+import { Wrapper as PopperWrapper } from '~/components/Popper';
+import BookItem from '~/components/BookItem';
 
 const cx = classNames.bind(styles);
 
 function Header() {
+    const [searchResult, setSearchResult] = useState([]);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setSearchResult([1, 2, 3]);
+        }, 1000);
+    }, []);
+
+    const renderSearchResult = (attrs) => (
+        <div className={cx('search-result')} tabIndex="-1" {...attrs}>
+            <PopperWrapper>
+                <h4 className={cx('search-title')}>Products</h4>
+                <BookItem />
+                <BookItem />
+                <BookItem />
+                <BookItem />
+            </PopperWrapper>
+        </div>
+    );
+
     return (
         <header className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -21,17 +44,12 @@ function Header() {
                         <span className={cx('label')}>Home</span>
                         <span className={cx('label')}>Shop Books</span>
                     </div>
-                    <Tippy
-                        interactive
-                        placement="bottom"
-                        render={(attrs) => (
-                            <div className="box" tabIndex="-1" {...attrs}>
-                                My tippy box
-                            </div>
-                        )}
-                    >
+                    <Tippy visible={searchResult.length > 0} interactive placement="bottom" render={renderSearchResult}>
                         <div className={cx('search-bar')}>
                             <input placeholder="Search..." spellCheck="false" />
+                            <button className={cx('close')}>
+                                <FontAwesomeIcon icon={faXmarkCircle} />
+                            </button>
                             <button className={cx('search-btn')}>
                                 <FontAwesomeIcon icon={faMagnifyingGlass} />
                             </button>
