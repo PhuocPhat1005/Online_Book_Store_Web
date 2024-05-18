@@ -1,12 +1,14 @@
 import classNames from 'classnames/bind';
+
 import styles from './BookItem.module.scss';
+import Image from '~/components/Image';
 
 const cx = classNames.bind(styles);
 
 function BookItem() {
     return (
         <div className={cx('wrapper')}>
-            <img
+            <Image
                 className={cx('avatar')}
                 src="https://bci.kinokuniya.com/jsp/images/book-img/20100/20100250/2010025063124.JPG"
                 alt=""
