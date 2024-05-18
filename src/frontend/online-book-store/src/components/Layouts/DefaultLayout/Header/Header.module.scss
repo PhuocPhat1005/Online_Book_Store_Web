@@ -40,14 +40,9 @@
 }
 
 .category {
-    text-align: center;
-}
-
-.label {
-    font-size: 1.8rem;
-    font-weight: 400;
-    padding: 0 10px;
-    color: #808080;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Search */

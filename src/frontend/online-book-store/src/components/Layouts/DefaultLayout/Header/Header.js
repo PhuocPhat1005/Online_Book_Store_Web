@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faMagnifyingGlass, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faMagnifyingGlass, faXmark, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import Tippy from '@tippyjs/react/headless';
 
 import styles from './Header.module.scss';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import BookItem from '~/components/BookItem';
+import Button from '~/components/Button';
 
 const cx = classNames.bind(styles);
 
@@ -41,10 +42,20 @@ function Header() {
                 />
                 <div className={cx('content')}>
                     <div className={cx('category')}>
-                        <span className={cx('label')}>Home</span>
-                        <span className={cx('label')}>Shop Books</span>
+                        <Button types="primary" className={cx('label')}>
+                            Home
+                        </Button>
+                        <Button types="primary" className={cx('label')}>
+                            Shop Books
+                        </Button>
                     </div>
-                    <Tippy visible={searchResult.length > 0} interactive placement="bottom" render={renderSearchResult}>
+                    <Tippy
+                        offset={[0, 10]}
+                        visible={searchResult.length > 0}
+                        interactive
+                        placement="bottom"
+                        render={renderSearchResult}
+                    >
                         <div className={cx('search-bar')}>
                             <input placeholder="Search..." spellCheck="false" />
                             <button className={cx('close')}>
