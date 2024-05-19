@@ -35,11 +35,11 @@ const USER_MENU = [
 function Header() {
     const [searchResult, setSearchResult] = useState([]);
 
-    useEffect(() => {
-        setTimeout(() => {
-            setSearchResult([1, 2, 3]);
-        }, 1000);
-    }, []);
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         setSearchResult([1, 2, 3]);
+    //     }, 1000);
+    // }, []);
 
     const renderSearchResult = (attrs) => (
         <div className={cx('search-result')} tabIndex="-1" {...attrs}>
