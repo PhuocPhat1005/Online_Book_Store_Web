@@ -8,6 +8,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 
     &.disabled {
         user-select: none;
@@ -88,7 +89,7 @@
 // Icon
 
 .icon {
-    width: 35px;
+    width: 50px;
 }
 
 .icon + .title,
