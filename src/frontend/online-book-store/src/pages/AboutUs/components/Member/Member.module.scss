@@ -1,0 +1,28 @@
+.wrapper {
+    max-width: 300px;
+    padding: 0 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    text-justify: inter-word;
+}
+
+.avatar {
+    width: 200px;
+    height: 200px;
+    border-radius: 99px;
+    object-fit: cover;
+}
+
+.name {
+    margin: 16px 0;
+    font-size: 2rem;
+    letter-spacing: 2px;
+}
+
+.description {
+    font-size: 1.6rem;
+    line-height: 1.6;
+}

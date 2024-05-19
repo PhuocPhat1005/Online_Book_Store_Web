@@ -14,7 +14,7 @@ function Menu({ items, children }) {
     return (
         <div>
             <Tippy
-                visible
+                // visible
                 interactive
                 render={(attrs) => (
                     <PopperWrapper>

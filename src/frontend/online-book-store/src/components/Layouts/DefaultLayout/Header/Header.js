@@ -63,7 +63,7 @@ function Header() {
                 />
                 <div className={cx('content')}>
                     <div className={cx('category')}>
-                        <Button types="primary" className={cx('label')}>
+                        <Button to="/" types="primary" className={cx('label')}>
                             Home
                         </Button>
                         <Button types="primary" className={cx('label')}>
@@ -72,7 +72,7 @@ function Header() {
                         <Button types="primary" className={cx('label')}>
                             Contact
                         </Button>
-                        <Button types="primary" className={cx('label')}>
+                        <Button to="/aboutus" types="primary" className={cx('label')}>
                             About
                         </Button>
                     </div>
