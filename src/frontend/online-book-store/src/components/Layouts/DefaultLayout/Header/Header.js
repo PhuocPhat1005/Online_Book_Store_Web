@@ -17,6 +17,7 @@ import BookItem from '~/components/BookItem';
 import Button from '~/components/Button';
 import Image from '~/components/Image';
 import Menu from '~/components/Menu';
+import config from '~/config';
 
 const cx = classNames.bind(styles);
 const USER_MENU = [
@@ -63,16 +64,16 @@ function Header() {
                 />
                 <div className={cx('content')}>
                     <div className={cx('category')}>
-                        <Button to="/" types="primary" className={cx('label')}>
+                        <Button to={config.routes.home} types="primary" className={cx('label')}>
                             Home
                         </Button>
-                        <Button types="primary" className={cx('label')}>
+                        <Button to={config.routes.shopbooks} types="primary" className={cx('label')}>
                             Shop Books
                         </Button>
-                        <Button types="primary" className={cx('label')}>
+                        <Button to={config.routes.contact} types="primary" className={cx('label')}>
                             Contact
                         </Button>
-                        <Button to="/aboutus" types="primary" className={cx('label')}>
+                        <Button to={config.routes.about} types="primary" className={cx('label')}>
                             About
                         </Button>
                     </div>

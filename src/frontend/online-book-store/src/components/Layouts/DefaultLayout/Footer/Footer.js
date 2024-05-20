@@ -53,7 +53,13 @@ function Footer() {
                             <label className={cx('label')} htmlFor="email">
                                 Subscribe to Our Newsletter
                             </label>
-                            <input className={cx('input-email')} type="email" name="email" placeholder="Email *" />
+                            <input
+                                className={cx('input-email')}
+                                type="email"
+                                name="email"
+                                placeholder="Email *"
+                                required
+                            />
                             <Button className={cx('submit-btn')} types="submit">
                                 Submit
                             </Button>
