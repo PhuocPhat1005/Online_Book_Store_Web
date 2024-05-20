@@ -3,6 +3,10 @@ import classNames from 'classnames/bind';
 import { HeaderContentLayout } from '~/components/Layouts';
 import styles from './Home.module.scss';
 import Slide from '~/components/Slide';
+import ConnectedLine from '~/components/ConnectedLine';
+import IntroductionBlock from './components/IntroductionBlock';
+import EventBlock from './components/EventBlock';
+import Image from '~/components/Image';
 
 const cx = classNames.bind(styles);
 
@@ -14,9 +18,22 @@ const data = [
 
 function Home() {
     return (
-        <div>
+        <div className={cx('wrapper')}>
             <HeaderContentLayout title="SIBooks" subtitle="The World of Books" />
             <Slide images={data} />
+            <ConnectedLine />
+            <div className={cx('container')}>
+                <div className={cx('introduction')}>
+                    <IntroductionBlock />
+                </div>
+                <ConnectedLine />
+                <div className={cx('events')}>
+                    <EventBlock />
+                </div>
+                <ConnectedLine />
+            </div>
+            <ConnectedLine />
+            <ConnectedLine />
         </div>
     );
 }

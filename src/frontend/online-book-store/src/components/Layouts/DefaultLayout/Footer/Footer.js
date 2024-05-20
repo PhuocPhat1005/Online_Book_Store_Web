@@ -33,7 +33,9 @@ function Footer() {
                     </div>
                     <div className={cx('about')}>
                         <p className={cx('title')}>SIBooks</p>
-                        <p className={cx('details')}>227 Nguyen Van Cu, District 5, Ho Chi Minh city, Vietnam</p>
+                        <p className={cx('details')}>
+                            227 Nguyen Van Cu, District 5, Ho Chi Minh city, Vietnam | Open: 24 / 7.
+                        </p>
                         <p className={cx('details')}>Contributors:</p>
                         <p className={cx('details')}>Lê Phước Phát | 22127322 (Leader)</p>
                         <p className={cx('details')}>Ngô Văn Khải | 22127174</p>

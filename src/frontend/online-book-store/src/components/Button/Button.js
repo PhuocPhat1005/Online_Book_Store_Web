@@ -22,9 +22,10 @@ function Button({ to, href, className, types = '', size = '', disabled, leftIcon
     const classes = cx('wrapper', {
         [className]: className,
         primary: types.includes('primary'),
-        addToCart: types.includes('addToCart'),
+        addtocart: types.includes('addtocart'),
         checkout: types.includes('checkout'),
         submit: types.includes('submit'),
+        findmore: types.includes('findmore'),
         disabled,
     });
 

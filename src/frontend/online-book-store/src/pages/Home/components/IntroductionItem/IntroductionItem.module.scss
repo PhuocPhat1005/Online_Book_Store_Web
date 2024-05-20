@@ -1,0 +1,37 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.image {
+    max-width: 460px;
+    height: 480px;
+    object-fit: cover;
+    object-position: 50% 50%;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    margin: 0 128px;
+}
+
+.title {
+    color: #e8898e;
+    font-size: 2.8rem;
+    font-weight: 400;
+    letter-spacing: 2px;
+    margin-bottom: 32px;
+}
+
+.paragraph {
+    min-height: 200px;
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: #808080;
+    text-align: center;
+}
