@@ -1,0 +1,32 @@
+.heading {
+    width: 900px;
+    border: 12px solid var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 1.6rem;
+    font-weight: 300;
+    padding: 24px 0;
+    line-height: 2;
+}
+
+.heading-title {
+    color: #808080;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.heading-body {
+    text-align: center;
+}
+
+.list-item {
+    list-style-type: none;
+}
+
+.question {
+    color: #808080;
+    font-weight: 600;
+    margin-right: 8px;
+}

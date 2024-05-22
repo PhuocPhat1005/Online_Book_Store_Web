@@ -4,11 +4,14 @@ import ConntectedLine from '~/components/ConnectedLine';
 
 const cx = classNames.bind(styles);
 
-function ContentLayout({ title, subtitle }) {
+function ContentLayout({ title, subtitle, placementSubtitle = 'bottom' }) {
     return (
         <header className={cx('header')}>
+            {placementSubtitle === 'top' && (
+                <p className={cx('subtitle', { top: placementSubtitle === 'top' })}>{subtitle}</p>
+            )}
             <p className={cx('title')}>{title}</p>
-            <p className={cx('subtitle')}>{subtitle}</p>
+            {placementSubtitle === 'bottom' && <p className={cx('subtitle')}>{subtitle}</p>}
             <ConntectedLine />
         </header>
     );

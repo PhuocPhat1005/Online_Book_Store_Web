@@ -11,7 +11,7 @@ const cx = classNames.bind(styles);
 function Contact() {
     return (
         <div className={cx('wrapper')}>
-            <HeaderContentLayout title="Contact Us" subtitle="Got a question ?" />
+            <HeaderContentLayout title="Contact Us" subtitle="Got a question ?" placementSubtitle="top" />
             <div className={cx('container')}>
                 <div className={cx('content')}>
                     <div className={cx('heading')}>

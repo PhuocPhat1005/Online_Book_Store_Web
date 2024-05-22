@@ -1,0 +1,27 @@
+.wrapper {
+}
+
+.container {
+    min-width: 820px;
+    background-color: #e8898e;
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.sidebar {
+    width: 240px;
+}
+
+.sidebar-heading {
+    font-size: 2.4rem;
+    border-bottom: 1px solid rgba(42, 42, 42, 0.2);
+    padding-bottom: 16px;
+}
+
+.content {
+}
+
+.content-heading {
+    width: 200px;
+}
