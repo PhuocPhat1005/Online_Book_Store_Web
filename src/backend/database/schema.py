@@ -1,13 +1,24 @@
-from sqlmodel import SQLModel, Session, text
-import sys
+# from sqlmodel import SQLModel, Session
+
+# from .models import * # Adjusted for correct import
+# from backend.database.engine import engine
+
+# SQLModel.metadata.create_all(engine)
+
+# session = Session(engine)
 
 
-sys.path.append("../../../relative_face_recognition_app/server")
-from models import *
-from database.engine import engine
+from sqlalchemy.orm import Session
+from .db_conn import engine
+from .models import *  # Điều chỉnh để import đúng các models
+from .engine import Base
 
-SQLModel.metadata.create_all(engine)
+# Tạo các bảng trong cơ sở dữ liệu
+def create_tables():
+    Base.metadata.create_all(engine)
 
+# Tạo một session
 session = Session(engine)
 
-session.exec(text("CREATE EXTENSION IF NOT EXISTS vector"))
+
+
