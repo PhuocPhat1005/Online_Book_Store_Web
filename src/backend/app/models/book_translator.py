@@ -1,10 +1,11 @@
-from sqlalchemy import Column, UUID, ForeignKey
+from sqlalchemy import Column, ForeignKey
 from app.database.database import Base
+import uuid
+from sqlalchemy.dialects.postgresql import UUID
 
 
 class BookTranslator(Base):
     __tablename__ = "translator_authors"
-    book_id = Column(UUID, ForeignKey("books.book_id"), primary_key=True)
-    translator_id = Column(
-        UUID, ForeignKey("translators.translator_id"), primary_key=True
-    )
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4())
+    book_id = Column(UUID, ForeignKey("books.id"), primary_key=True)
+    translator_id = Column(UUID, ForeignKey("translators.id"), primary_key=True)

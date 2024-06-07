@@ -15,7 +15,11 @@ SessionLocal = sessionmaker(
 )
 
 # Khởi tạo ứng dụng FastAPI
-app = FastAPI()
+app = FastAPI(
+    title="SIBOOKS Web API",
+    description="API documents for the online bookstore SIBOOKS project",
+    version="1.0.0",
+)
 
 
 # Khởi tạo các bảng trong cơ sở dữ liệu

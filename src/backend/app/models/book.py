@@ -2,7 +2,6 @@ from sqlalchemy import (
     Column,
     String,
     Text,
-    UUID,
     Date,
     DECIMAL,
     Integer,
@@ -11,18 +10,20 @@ from sqlalchemy import (
 )
 from app.database.database import Base
 from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
 
 class Book(Base):
     __tablename__ = "books"
-    book_id = Column(UUID, primary_key=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4())
     book_name = Column(String(255), nullable=False)
     isbn = Column(String(50), nullable=False, unique=True)
     publishing_company_id = Column(
-        UUID, ForeignKey("publishing_companies.publishing_company_id"), nullable=False
+        UUID, ForeignKey("publishing_companies.id"), nullable=False
     )
     publishing_date = Column(Date)
-    category_id = Column(UUID, ForeignKey("categories.category_id"))
+    category_id = Column(UUID, ForeignKey("categories.id"))
     price = Column(DECIMAL(10, 2), nullable=False)
     language = Column(String(100), nullable=False)
     book_size = Column(String(20), nullable=False)

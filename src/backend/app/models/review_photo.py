@@ -1,12 +1,19 @@
-from sqlalchemy import Column, UUID, ForeignKey, TIMESTAMP, Text
+from sqlalchemy import Column, ForeignKey, TIMESTAMP, Text
 from app.database.database import Base
 from sqlalchemy.orm import relationship
+import uuid
+from sqlalchemy.dialects.postgresql import UUID
 
 
 class ReviewPhoto(Base):
     __tablename__ = "review_photos"
-    review_photo_id = Column(UUID, primary_key=True)
-    review_id = Column(UUID, ForeignKey("reviews.review_id"), nullable=False)
+    id = Column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        index=True,
+        default=uuid.uuid4(),
+    )
+    review_id = Column(UUID, ForeignKey("reviews.id"), nullable=False)
     photo = Column(Text)
     create_at = Column(TIMESTAMP)
     update_at = Column(TIMESTAMP)
