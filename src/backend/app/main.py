@@ -1,3 +1,6 @@
+import signal
+import asyncio
+import uvicorn
 from fastapi import FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
@@ -32,3 +35,35 @@ async def startup():
 # Kết nối các router
 app.include_router(auth.router)
 app.include_router(account.router)
+
+
+def main():
+    config = uvicorn.Config(
+        "app.main:app", host="0.0.0.0", port=8000, log_level="info", reload=True
+    )
+    server = uvicorn.Server(config)
+
+    loop = asyncio.get_event_loop()
+
+    def handle_shutdown(loop, sig):
+        print(f"Received exit signal {sig.name}...")
+        tasks = [t for t in asyncio.all_tasks() if t is not asyncio.current_task()]
+
+        for task in tasks:
+            task.cancel()
+
+        loop.stop()
+
+    for sig in (signal.SIGINT, signal.SIGTERM):
+        loop.add_signal_handler(sig, handle_shutdown, loop, sig)
+
+    try:
+        loop.run_until_complete(server.serve())
+    except asyncio.CancelledError:
+        pass
+    finally:
+        loop.close()
+
+
+if __name__ == "__main__":
+    main()

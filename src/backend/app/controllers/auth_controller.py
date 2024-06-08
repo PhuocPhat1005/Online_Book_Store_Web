@@ -39,14 +39,14 @@ async def sign_up(account: AccountCreate, db: AsyncSession = Depends(get_db)):
             status_code=400,
             detail="Username already registered",
         )
-    account.password_hash = get_password_hash(account.password)
+    account.password = get_password_hash(account.password)
     await create_account(db, account)
     access_token = create_access_token(data={"sub": account.username})
     refresh_token = create_refresh_token(data={"sub": account.username})
     return {"access_token": access_token, "refresh_token": refresh_token}
 
 
-# API from Backend to Database for signing in a user account
+# API from backend to database for signing in a user account
 @router.post(
     "/sign_in",
     response_model=Token,
