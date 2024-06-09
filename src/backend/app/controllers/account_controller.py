@@ -11,7 +11,7 @@ router = APIRouter()
 
 # API from backend to database for reading account data
 @router.get(
-    "/account",
+    "/read_account",
     response_model=TokenData,
     summary="Retrieve account details by providing a JWT token. The token will be decoded to get the username, and the account details will be fetched from the database.",
     description="The account details, including the username.",
