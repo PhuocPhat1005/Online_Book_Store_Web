@@ -2,7 +2,33 @@ from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.account import Account
 from app.schemas.account import AccountCreate
-from app.utils.security import get_password_hash
+from fastapi.security import OAuth2PasswordBearer
+from fastapi import Depends, HTTPException
+from app.config.config import settings
+from jose import jwt, JWTError
+from app.database.database import get_db
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+
+async def get_current_account(
+    token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)
+):
+    try:
+        payload = jwt.decode_token(token, settings.SECRET_KEY)
+        username: str = payload.get("sub")
+        if username is None:
+            raise HTTPException(
+                status_code=401, detail="Could not validate credentials"
+            )
+        account = await get_account_by_username(db, username=username)
+        if account is None:
+            raise HTTPException(
+                status_code=401, detail="Could not validate credentials"
+            )
+        return account
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Could not validate credentials")
 
 
 async def get_account_by_username(db: AsyncSession, username: str):
