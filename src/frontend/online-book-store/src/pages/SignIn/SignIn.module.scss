@@ -133,6 +133,11 @@
 .info-text {
     font-size: 2.4rem;
     color: var(--white);
+
+    &:hover {
+        cursor: pointer;
+        color: #00FFFF;
+    }
 }
 
 .submit-btn {
@@ -156,6 +161,11 @@
     font-weight: bold;
     color: var(--white);
     text-decoration: underline;
+
+    &:hover {
+        cursor: pointer;
+        color: #00FFFF;
+    }
 }
 
 .gg-signup {

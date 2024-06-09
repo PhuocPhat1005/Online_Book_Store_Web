@@ -28,8 +28,8 @@ const USER_MENU = [
     },
     {
         icon: <FontAwesomeIcon icon={faRightFromBracket} />,
-        title: 'Log out',
-        to: '/',
+        title: 'Sign out',
+        to: '/signin',
     },
 ];
 

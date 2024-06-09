@@ -1,9 +1,13 @@
 import classNames from "classnames/bind";
+import { useState } from "react";
+
 import Image from "~/components/Image";
 import images from '~/assets';
 import styles from './SignIn.module.scss';
 import Button from "~/components/Button";
-import { Link } from "react-router-dom";
+import IncorrectBox from "~/components/IncorrectBox";
+
+import { Link, useNavigate } from "react-router-dom";
 import config from "~/config";
 
 import request from "~/utils/request";
@@ -13,26 +17,38 @@ import { faHouse, faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 const cx = classNames.bind(styles)
 
 function SignIn() {
+    
+    const [toggleToast, setToggleToast] = useState(true);
+    const [inCorrectMess, setIncorrectMess] = useState('')
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
     
         const formData = new FormData(event.target);
-        const signup_data = {
+        const signin_data = {
             username: formData.get('username'),
             password: formData.get('password')
         };
     
-        // console.log(signup_data);
+        console.log(signin_data);
     
         try {
-            const response = await request.post('auth/sign_in', signup_data);
+            const response = await request.post('auth/sign_in', signin_data, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            });
     
             if (response.status === 200) {
                 // Handle successful form submission
+                setToggleToast(true);
                 console.log('Form submitted successfully');
+
+                navigate(config.routes.home);
             } else {
                 // Handle errors
+                setToggleToast(false);
                 console.error('Form submission failed', response.data);
             }
         } catch (error) {
@@ -40,6 +56,9 @@ function SignIn() {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
                 console.error('Form submission failed', error.response.data);
+
+                setToggleToast(false);
+                setIncorrectMess(error.response.data.detail);
             } else if (error.request) {
                 // The request was made but no response was received
                 console.error('No response received', error.request);
@@ -50,10 +69,20 @@ function SignIn() {
         }
     }
 
+    const handleToast = () => {
+        if (inCorrectMess === '') return;
+        setToggleToast(true);
+    }
+
+    const closeIncorrectBox = () => {
+        setToggleToast(true);
+        setIncorrectMess('')
+    }
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('header')}>
-                <Link className={cx('header-item')}>
+                <Link to={config.routes.home} className={cx('header-item')}>
                     <FontAwesomeIcon className={cx('header-icon')} icon={faHouse}/>
                 </Link>
                 <Link to={config.routes.signup} className={cx('header-item')}>
@@ -85,7 +114,7 @@ function SignIn() {
                             </div>
                             <span className={cx('info-text')}>Forgot password?</span>
                         </div>
-                        <Button className={cx('submit-btn')}>Sign In</Button>
+                        <Button className={cx('submit-btn')} onClick={handleToast}>Sign In</Button>
                     </div>
                     <div className={cx('footer')}>
                         <div className={cx('footer-container')}>
@@ -100,6 +129,7 @@ function SignIn() {
                     </div>
                 </div>
             </form>
+            {!toggleToast && <IncorrectBox mess={inCorrectMess} onClose={closeIncorrectBox}/>}
         </div>
     )
 }
