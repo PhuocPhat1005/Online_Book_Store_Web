@@ -9,6 +9,8 @@ from app.routes import auth, account
 from app.database.database import Base
 from app.config.config import settings
 
+from fastapi.middleware.cors import CORSMiddleware
+
 # Khởi tạo AsyncEngine
 engine = create_async_engine(settings.DATABASE_URL, echo=True)
 
@@ -36,6 +38,20 @@ async def startup():
 app.include_router(auth.router)
 app.include_router(account.router)
 
+# Set all CORS enabled origins
+origins = [
+    "http://localhost:3000",  # React app's origin
+    "http://127.0.0.1:3000",
+    # Add other origins if needed
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # Allows all the specified origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allows all headers
+)
 
 def main():
     config = uvicorn.Config(
