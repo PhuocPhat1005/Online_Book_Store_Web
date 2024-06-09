@@ -4,6 +4,8 @@ import uvicorn
 from fastapi import FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 
 from app.routes import auth, account
 from app.database.database import Base
@@ -24,6 +26,20 @@ app = FastAPI(
     version="1.0.0",
 )
 
+origins = [
+    "http://localhost:3000",
+    "http://localhost:8080",
+    "http://localhost:8000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # Khởi tạo các bảng trong cơ sở dữ liệu
 @app.on_event("startup")
@@ -33,6 +49,7 @@ async def startup():
 
 
 # Kết nối các router
+app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
 app.include_router(auth.router)
 app.include_router(account.router)
 
