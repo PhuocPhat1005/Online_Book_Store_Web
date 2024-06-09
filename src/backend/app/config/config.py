@@ -19,10 +19,10 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = int(env_values.get("REFRESH_TOKEN_EXPIRE_DAYS", 7))
     GOOGLE_CLIENT_ID: str = env_values.get(
         "GOOGLE_CLIENT_ID",
-        "281043051253-mhrsn8j7oagearoc5ac1lrgu962v6vav.apps.googleusercontent.com",
+        "803720744889-m0kk10jt16rcsvidoiuceqn1ho7ep816.apps.googleusercontent.com",
     )
     GOOGLE_CLIENT_SECRET: str = env_values.get(
-        "GOOGLE_CLIENT_SECRET", "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"
+        "GOOGLE_CLIENT_SECRET", "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"
     )
     # GOOGLE_AUTH_URI: str = "https://accounts.google.com/o/oauth2/auth"
     # GOOGLE_TOKEN_URI: str = "https://oauth2.googleapis.com/token"
