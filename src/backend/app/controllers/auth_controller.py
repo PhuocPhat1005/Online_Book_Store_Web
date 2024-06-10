@@ -20,10 +20,7 @@ from app.services.user_service import (
 from app.database.database import get_db
 from app.config.config import settings
 from uuid import uuid4
-from starlette.config import Config
-from starlette.middleware.sessions import SessionMiddleware
-from starlette.responses import RedirectResponse
-import requests
+import jwt
 
 
 router = APIRouter()
@@ -52,28 +49,13 @@ async def google_login(request: Request, session: Session = Depends(get_session)
 @router.get("/google-callback", name="google_auth", tags=["Authentication"])
 async def google_auth(
     request: Request,
-    session: Session = Depends(get_session),
     db: AsyncSession = Depends(get_db),
 ):
     try:
         token = await oauth.google.authorize_access_token(request)
-        print("Token received:", token)
-
-        # In giá trị của trạng thái từ yêu cầu
-        request_state = request.query_params.get("state")
-        print("Request state:", request_state)
-
-        # In giá trị của trạng thái từ phản hồi
-        response_state = session.get("oauth_state")
-        print("Response state:", response_state)
-
-        if response_state != request_state:
-            raise HTTPException(
-                status_code=400,
-                detail="CSRF Warning! State not equal in request and response.",
-            )
-        # Xóa trạng thái khỏi phiên
-        del session["oauth_state"]
+        print("Token received: ", token)
+        if not token:
+            raise HTTPException(status_code=400, detail="Missing token from Google.")
 
         # Ensure 'id_token' exists in the token
         if "id_token" not in token:
@@ -81,27 +63,51 @@ async def google_auth(
                 status_code=400, detail="ID token missing in the OAuth token."
             )
 
-        user_info = await oauth.google.parse_id_token(request, token)
+        # Validate state to protect against CSRF attacks
+        request_state = request.query_params.get("state")
+        response_state = request.session.get("oauth_state")
+        if response_state != request_state:
+            raise HTTPException(
+                status_code=400,
+                detail="CSRF Warning! State not equal in request and response.",
+            )
+        # Clear the state from the session
+        del request.session["oauth_state"]
+
+        # Use id_token to parse user info
+        id_token = token["id_token"]
+        print("ID Token: ", id_token)
+        user_info = jwt.decode(
+            id_token,
+            options={"verify_signature": False},
+            audience=settings.GOOGLE_CLIENT_ID,
+        )
+        print("User info received:", user_info)
+        # Continue with your user handling logic
+        username = user_info["name"]
+        email = user_info["email"]
+        picture = user_info["picture"]
+        password = user_info["aud"]
+        account = await get_account_by_username(db, username)
+
+        if not account:
+            account_data = AccountCreate(
+                username=username,
+                email=email,
+                password=get_password_hash(password + "google"),
+            )
+            account = await create_account(db, account_data)
+
+        access_token = create_access_token(data={"sub": account.username})
+        refresh_token = create_refresh_token(data={"sub": account.username})
+
+        return {"access_token": access_token, "refresh_token": refresh_token}
+    except jwt.InvalidAudienceError:
+        raise HTTPException(status_code=400, detail="Invalid audience in ID token.")
     except OAuthError as e:
         return {"error": e.error, "error_description": e.description}
     except Exception as e:
         return {"error": str(e)}
-
-    username = user_info["email"]
-    account = await get_account_by_username(db, username)
-
-    if not account:
-        account_data = AccountCreate(
-            username=username,
-            email=username,
-            password=get_password_hash(username + "google"),
-        )
-        account = await create_account(db, account_data)
-
-    access_token = create_access_token(data={"sub": account.username})
-    refresh_token = create_refresh_token(data={"sub": account.username})
-
-    return {"access_token": access_token, "refresh_token": refresh_token}
 
 
 @router.post(
