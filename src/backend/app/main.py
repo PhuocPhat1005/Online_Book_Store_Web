@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 
-from app.routes import auth, account
+from app.routes import auth, account, author, book
 from app.database.database import Base
 from app.config.config import settings
 
@@ -54,6 +54,8 @@ async def startup():
 app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
 app.include_router(auth.router)
 app.include_router(account.router)
+app.include_router(author.router)
+app.include_router(book.router)
 
 
 def main():
