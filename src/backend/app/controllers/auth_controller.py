@@ -11,11 +11,14 @@ from app.utils.security import (
     create_refresh_token,
     verify_password,
     get_password_hash,
+    decode_token,
 )
 from app.services.user_service import (
     get_account_by_username,
+    get_account_by_email,
     create_account,
     get_current_account,
+    send_email_to_user,
 )
 from app.database.database import get_db
 from app.config.config import settings
@@ -177,6 +180,58 @@ async def reset_password(
         )
     hashed_password = get_password_hash(new_password)
     account.password = hashed_password
-    db.add(account)
+    db.add(account) #Xoa dong nay duoc k z
     await db.commit()
     return {"msg": "Password updated successfully!"}
+
+@router.post(
+    "/forgot_password", summary="Forgot password", description="Forgot password"
+)
+async def forgot_password(
+    email: str, 
+    db: AsyncSession = Depends(get_db),
+):
+    account = await get_account_by_email(db, email=email)
+    if not account:
+        raise HTTPException(
+            status_code=404,
+            detail="Account not found",
+        )
+    refresh_token = create_refresh_token(data={"sub": account.username})
+    reset_link = f"https://your-frontend-domain.com/reset_password_by_email?token={refresh_token}"
+    email_subject = "Reset your Password"
+    await send_email_to_user(email, email_subject, reset_link)
+    return {"msg": "Send password reset email to email: " + email + " link: " + reset_link}
+
+@router.put(
+    "/reset_password_by_email", summary = "Reset password by email", description = "Reset password by email"
+)
+async def reset_password_by_email(
+    token: str,
+    new_password: str,
+    db: AsyncSession = Depends(get_db),
+):
+    try:
+        user_name = decode_token(token)
+        account = await get_account_by_username(db, user_name)
+
+        if not account:
+            raise HTTPException(
+                status_code=404,
+                detail="Account not found",
+            )
+        hashed_password = get_password_hash(new_password)
+        
+        account.password_hash = hashed_password
+        await db.commit()
+        return {"msg": "Password updated successfully!"}, 200
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(
+            status_code=400,
+            detail="Token expired",
+        )
+    except jwt.InvalidTokenError:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid Token",
+        )

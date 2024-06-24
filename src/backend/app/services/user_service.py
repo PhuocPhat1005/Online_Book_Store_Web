@@ -8,6 +8,11 @@ from app.config.config import settings
 from jose import jwt, JWTError
 from app.database.database import get_db
 
+# Send mail
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
@@ -39,6 +44,13 @@ async def get_account_by_username(db: AsyncSession, username: str):
     print(f"Account: {account}")
     return account
 
+async def get_account_by_email(db: AsyncSession, email: str):
+    # Find account by email
+    query = select(Account).where(Account.email == email)
+    result = await db.execute(query)
+    account = result.scalars().first()
+    print(f"Account: {account}")
+    return account
 
 async def create_account(db: AsyncSession, account: AccountCreate):
     # Create a new account
@@ -58,3 +70,24 @@ async def create_account(db: AsyncSession, account: AccountCreate):
         await db.rollback()
         raise RuntimeError(f"Failed to create account: {e}") from e
     return new_account
+
+async def send_email_to_user(receiver_email: str, your_subject: str ,your_msg: str):
+    msg = MIMEMultipart()
+    msg['From'] = settings.MAIL_SENDER
+    msg['To'] = receiver_email
+    msg['Subject'] = your_subject
+    
+    msg.attach(MIMEText(your_msg, 'plain'))
+    
+    try:
+        # Connect to the Gmail SMTP server
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()  # Secure the connection
+        server.login(settings.MAIL_SENDER, settings.MAIL_PASSWORD)
+        text = msg.as_string()
+        server.sendmail(settings.MAIL_SENDER, receiver_email, text)
+        server.quit()
+
+        print("Email sent successfully!")
+    except Exception as e:
+        print(f"Failed to send email: {e}")

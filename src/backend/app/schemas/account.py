@@ -10,3 +10,6 @@ class AccountCreate(BaseModel):
 class AccountLogin(BaseModel):
     username: str
     password: str
+
+class EmailVerify(BaseModel):
+    email: EmailStr

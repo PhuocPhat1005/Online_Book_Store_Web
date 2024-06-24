@@ -3,9 +3,9 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 # Email configuration
-sender_email = "wakanicky@gmail.com"  # Replace with your email
-receiver_email = "qtgamingvn@gmail.com"
-password = "waka123456"  # Replace with your email password
+sender_email = "me@gmail.com"  # Replace with your email
+receiver_email = "you@gmail.com"
+password = "passwordapp"  # Replace with your email password
 
 # Create the email content
 subject = "I love Book"
