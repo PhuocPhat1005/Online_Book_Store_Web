@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from authlib.integrations.starlette_client import OAuth, OAuthError
 from starlette.requests import Request
 from app.schemas.token import Token
-from app.schemas.account import AccountCreate
+from app.schemas.account import AccountCreate, EmailVerify
 from app.utils.security import (
     create_access_token,
     create_refresh_token,
@@ -188,7 +188,7 @@ async def reset_password(
     "/forgot_password", summary="Forgot password", description="Forgot password"
 )
 async def forgot_password(
-    email: str, 
+    email: EmailVerify, 
     db: AsyncSession = Depends(get_db),
 ):
     account = await get_account_by_email(db, email=email)
