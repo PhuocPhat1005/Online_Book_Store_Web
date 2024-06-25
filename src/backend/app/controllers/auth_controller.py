@@ -201,7 +201,7 @@ async def forgot_password(
     reset_link = f"https://your-frontend-domain.com/reset_password_by_email?token={refresh_token}"
     email_subject = "Reset your Password"
     await send_email_to_user(email, email_subject, reset_link)
-    return {"msg": "Send password reset email to email: " + email + " link: " + reset_link}
+    return refresh_token
 
 @router.put(
     "/reset_password_by_email", summary = "Reset password by email", description = "Reset password by email"
