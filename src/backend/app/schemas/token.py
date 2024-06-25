@@ -8,3 +8,6 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: str | None = None
+    
+class ResetToken(BaseModel):
+    token: str

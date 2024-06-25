@@ -13,3 +13,9 @@ class AccountLogin(BaseModel):
 
 class EmailVerify(BaseModel):
     email: EmailStr
+
+class UserEmail(BaseModel):
+    email: str
+class ResetPasswordForm(BaseModel):
+    token: str
+    password: str
