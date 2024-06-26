@@ -24,7 +24,7 @@
     transform: translate(-50%, -50%);
 
     width: 400px;
-    height: 200px;
+    min-height: 264px;
     background-color: var(--white);
 }
 
@@ -72,6 +72,11 @@
     margin-bottom: 16px;
 }
 
+.fp-paragraph {
+    color: #808080;
+    margin-bottom: 16px;
+}
+
 .fb-body-btn {
     background-color: #5D3FD3;
     color: var(--white);
@@ -80,7 +85,7 @@
 
 .loading {
     position: absolute;
-    top: 44%;
+    top: 45%;
     bottom: 50%;
     left: 47%;
     right: 50%;

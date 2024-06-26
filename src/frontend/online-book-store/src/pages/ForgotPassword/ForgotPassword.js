@@ -131,7 +131,8 @@ function ForgotPassword() {
                             <p className={cx('input-label')}>New password</p>
                             <input 
                                 className={cx('input-bar')} 
-                                type="text" name="password" 
+                                type="password" 
+                                name="password" 
                                 required
                                 onChange={(e) => setPasswordResult(e.target.value)}/>
                         </div>

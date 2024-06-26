@@ -93,6 +93,7 @@ function SendEmail(props) {
                     <div className={cx('fp-body')}>
                         <label className={cx('fp-body-label')}>Email</label>
                         <input className={cx('fp-body-input')} name="email" type="email" placeholder="e.g, email_name@gmail.com" required/>
+                        <p className={cx('fp-paragraph')}>We will send a notification to your email address, please check your email after few seconds.</p>
                         <Button className={cx('fb-body-btn')} onClick={handleToast}>Send</Button>
                     </div>
                 </div>}
