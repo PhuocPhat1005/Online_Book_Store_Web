@@ -24,6 +24,9 @@ from app.database.database import get_db
 from app.config.config import settings
 from uuid import uuid4
 import jwt
+from datetime import timedelta
+from fastapi.responses import JSONResponse
+from jose import JWTError, jwt
 
 
 router = APIRouter()
@@ -197,10 +200,12 @@ async def forgot_password(
             status_code=404,
             detail="Account not found",
         )
-    reset_token = create_refresh_token(data={"sub": account.username})
+    expiration_minute = 5
+    reset_token = create_access_token(data={"sub": account.username}, expires_delta=timedelta(minutes=expiration_minute))
     reset_link = f"http://localhost:3000/signin/forgotpassword/?token={reset_token}"
     email_subject = "Reset your Password"
-    await send_email_to_user(form_data.email, email_subject, reset_link)
+    message = f"Click the link to reset your password: {reset_link}\nYour link will expire in {expiration_minute} minutes.\nIf you did not request this, please ignore this email."
+    await send_email_to_user(form_data.email, email_subject, message)
     return reset_token
 
 @router.put(
@@ -214,30 +219,37 @@ async def reset_password_by_email(
 ):
     try:
         user_name = decode_token(form_data.token)
-        account = await get_account_by_username(db, user_name)
-
-        if not account:
-            raise HTTPException(
-                status_code=404,
-                detail="Account not found",
+    except JWTError as e:
+        error_message = str(e)
+        if "expired" in error_message:
+            return JSONResponse(
+                status_code=400,
+                content={"detail": "Token expired"}
+            )
+        elif "invalid" in error_message or "credentials" in error_message:
+            return JSONResponse(
+                status_code=400,
+                content={"detail": "Invalid Token"}
+            )
+        else:
+            return JSONResponse(
+                status_code=400,
+                content={"detail": error_message}
             )
 
-        hashed_password = get_password_hash(form_data.password)
-        account.password_hash = hashed_password
-        await db.commit()
-        return {"msg": "Password updated successfully!"}
-    
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(
-            status_code=400,
-            detail="Token expired",
+    account = await get_account_by_username(db, user_name)
+
+    if not account:
+        return JSONResponse(
+            status_code=404,
+            content={"detail": "Account not found"}
         )
-    
-    except jwt.InvalidTokenError:
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid Token",
-        )
+
+    hashed_password = get_password_hash(form_data.password)
+    account.password_hash = hashed_password
+    await db.commit()
+
+    return {"msg": "Password updated successfully!"}
         
 # @router.put(
 #     "/reset_password_by_email/{reset_token}", summary = "Reset password by email", description = "Reset password by email"
