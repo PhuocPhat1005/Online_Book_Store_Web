@@ -1,18 +1,26 @@
 from pydantic import BaseModel
 from datetime import date
-from typing import Optional
 from uuid import UUID
 
-class BookCreate(BaseModel):
+class BookBase(BaseModel):
     book_name: str
     isbn: str
-    publishing_company_id: Optional[UUID] = None
-    author_id: Optional[UUID] = None
-    category_id: Optional[UUID] = None
-    publishing_date: Optional[date] = None
+    publishing_company_id: UUID | None = None
+    category_id: UUID | None = None
+    author_id: UUID | None = None
+    publishing_date: date
     price: float
     language: str
     book_size: str
     page_number: int
     book_cover_type: str
-    description: Optional[str] = None
+    description: str
+
+class BookCreate(BookBase):
+    pass
+
+class BookUpdate(BookBase):
+    pass
+
+class BookResponse(BookBase):
+    id: UUID

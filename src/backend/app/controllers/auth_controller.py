@@ -4,8 +4,8 @@ from requests import Session
 from sqlalchemy.ext.asyncio import AsyncSession
 from authlib.integrations.starlette_client import OAuth, OAuthError
 from starlette.requests import Request
-from app.schemas.token import Token
-from app.schemas.account import AccountCreate, EmailVerify
+from app.schemas.token import Token, ResetToken
+from app.schemas.account import AccountCreate, UserEmail, ResetPasswordForm
 from app.utils.security import (
     create_access_token,
     create_refresh_token,
@@ -188,10 +188,10 @@ async def reset_password(
     "/forgot_password", summary="Forgot password", description="Forgot password"
 )
 async def forgot_password(
-    email: EmailVerify, 
+    form_data: UserEmail, 
     db: AsyncSession = Depends(get_db),
 ):
-    account = await get_account_by_email(db, email=email)
+    account = await get_account_by_email(db, email=form_data.email)
     if not account:
         raise HTTPException(
             status_code=404,
@@ -200,19 +200,18 @@ async def forgot_password(
     refresh_token = create_refresh_token(data={"sub": account.username})
     reset_link = f"https://your-frontend-domain.com/reset_password_by_email?token={refresh_token}"
     email_subject = "Reset your Password"
-    await send_email_to_user(email, email_subject, reset_link)
+    await send_email_to_user(form_data.email, email_subject, reset_link)
     return refresh_token
 
 @router.put(
     "/reset_password_by_email", summary = "Reset password by email", description = "Reset password by email"
 )
 async def reset_password_by_email(
-    token: str,
-    new_password: str,
+    form_data: ResetPasswordForm,
     db: AsyncSession = Depends(get_db),
 ):
     try:
-        user_name = decode_token(token)
+        user_name = decode_token(form_data.token)
         account = await get_account_by_username(db, user_name)
 
         if not account:
@@ -220,11 +219,11 @@ async def reset_password_by_email(
                 status_code=404,
                 detail="Account not found",
             )
-        hashed_password = get_password_hash(new_password)
+        hashed_password = get_password_hash(form_data.password)
         
         account.password_hash = hashed_password
         await db.commit()
-        return {"msg": "Password updated successfully!"}, 200
+        return {"msg": "Password updated successfully!"}
     except jwt.ExpiredSignatureError:
         raise HTTPException(
             status_code=400,
