@@ -112,19 +112,19 @@ function SignUp() {
                     <div className={cx('body')}>
                         <div className={cx('input-field')}>
                             <p className={cx('input-label')}>Username</p>
-                            <input className={cx('input-bar')} type="text" name="username" required/>
+                            <input className={cx('input-bar')} type="text" name="username" placeholder="Enter your username" required/>
                         </div>
                         <div className={cx('input-field')}>
                             <p className={cx('input-label')}>Email</p>
-                            <input className={cx('input-bar')} type="email" name="email" required/>
+                            <input className={cx('input-bar')} type="email" name="email" placeholder="Enter your email address" required/>
                         </div>
                         <div className={cx('input-field')}>
                             <p className={cx('input-label')}>Password</p>
-                            <input className={cx('input-bar')} type="password" name="password" required/>
+                            <input className={cx('input-bar')} type="password" name="password" placeholder="Enter your password" required/>
                         </div>
                         <div className={cx('input-field')}>
                             <p className={cx('input-label')}>Confirm Password</p>
-                            <input className={cx('input-bar')} type="password" name="confirm" required/>
+                            <input className={cx('input-bar')} type="password" name="confirm" placeholder="Confirm your password" required/>
                         </div>
                         <Button className={cx('submit-btn')} onClick={handleToast}>Sign Up</Button>
                     </div>
