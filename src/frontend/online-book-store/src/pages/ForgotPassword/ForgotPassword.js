@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import Image from "~/components/Image";
 import images from '~/assets';
-import styles from './SignUp.module.scss';
+import styles from './ForgotPassword.module.scss';
 import Button from "~/components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
@@ -16,26 +16,25 @@ import IncorrectBox from "~/components/IncorrectBox";
 
 const cx = classNames.bind(styles)
 
-function SignUp() {
+function ForgotPassword() {
 
     const [isSuccessfulSignUp, setIsSuccessfulSignup] = useState(false);
     const [toggleToast, setToggleToast] = useState(true);
     const [inCorrectMess, setIncorrectMess] = useState('');
-    const correctMess = "Sign up an account successfully"
+    const correctMess = "Change password successfully"
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
     
         const formData = new FormData(event.target);
-        const signup_data = {
-            username: formData.get('username'),
-            email: formData.get('email'),
+        const reset_password_data = {
+            token: formData.get('token_code'),
             password: formData.get('password')
         };
     
         try {
-            const response = await request.post('auth/sign_up', signup_data, {
+            const response = await request.put('auth/reset_password_by_email', reset_password_data, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -93,9 +92,6 @@ function SignUp() {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('header')}>
-                {/* <Link className={cx('header-item')}>
-                    <FontAwesomeIcon className={cx('header-icon')} icon={faHouse}/>
-                </Link> */}
                 <Link to={config.routes.signin} className={cx('header-item')}>
                     <FontAwesomeIcon className={cx('header-icon', 'sign-in-icon')} icon={faRightToBracket}/>
                 </Link>
@@ -107,24 +103,16 @@ function SignUp() {
             <form className={cx('signin-form')} onSubmit={handleSubmit}>
                 <div className={cx('form-container')}>
                     <div className={cx('title')}>
-                        <p className={cx('label')}>sign up</p>
+                        <p className={cx('label')}>Forgot Password</p>
                     </div>
                     <div className={cx('body')}>
                         <div className={cx('input-field')}>
-                            <p className={cx('input-label')}>Username</p>
-                            <input className={cx('input-bar')} type="text" name="username" required/>
+                            <p className={cx('input-label')}>Token code</p>
+                            <input className={cx('input-bar')} type="text" name="token_code" required/>
                         </div>
                         <div className={cx('input-field')}>
-                            <p className={cx('input-label')}>Email</p>
-                            <input className={cx('input-bar')} type="email" name="email" required/>
-                        </div>
-                        <div className={cx('input-field')}>
-                            <p className={cx('input-label')}>Password</p>
+                            <p className={cx('input-label')}>New password</p>
                             <input className={cx('input-bar')} type="password" name="password" required/>
-                        </div>
-                        <div className={cx('input-field')}>
-                            <p className={cx('input-label')}>Confirm Password</p>
-                            <input className={cx('input-bar')} type="password" name="confirm" required/>
                         </div>
                         <Button className={cx('submit-btn')} onClick={handleToast}>Sign Up</Button>
                     </div>
@@ -136,4 +124,4 @@ function SignUp() {
     )
 }
 
-export default SignUp;
+export default ForgotPassword;

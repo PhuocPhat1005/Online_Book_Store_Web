@@ -5,6 +5,7 @@ const routes = {
     shopbooks: '/shopbooks',
     contact: '/contact',
     about: '/about',
+    forgotpassword: '/signin/forgotpassword',
 };
 
 export default routes;
