@@ -6,7 +6,7 @@ import images from '~/assets';
 import styles from './ForgotPassword.module.scss';
 import Button from "~/components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
+import { faL, faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 
 import { Link, useNavigate } from "react-router-dom";
 import request from "~/utils/request";
@@ -30,6 +30,10 @@ function ForgotPassword() {
     const correctMess = "Change password successfully"
     const navigate = useNavigate();
 
+    const [passwordResult, setPasswordResult] = useState('');
+    const [confirmPasswordResult, setConfirmPasswordResult] = useState('');
+    const equalPassword = passwordResult === confirmPasswordResult;
+
     const currentUrl = window.location.href;
     const reset_token = extractTokenFromUrl(currentUrl); //Dung token o day
 
@@ -38,12 +42,15 @@ function ForgotPassword() {
     
         const formData = new FormData(event.target);
         const reset_password_data = {
-            token: formData.get('token_code'),
+            token: reset_token,
             password: formData.get('password')
         };
-        reset_password_data.token = reset_token;
-        console.log(reset_password_data.token);
+        
         try {
+            if (!equalPassword) {
+                throw new Error('Invalid password');
+            }
+
             const response = await request.put('auth/reset_password_by_email', reset_password_data, {
                 headers: {
                     'Content-Type': 'application/json'
@@ -60,7 +67,11 @@ function ForgotPassword() {
                 console.error('Form submission failed', response.data);
             }
         } catch (error) {
-            if (error.response) {
+            if (error.message === 'Invalid password') {
+                setToggleToast(false);
+                setIncorrectMess('Invalid password');
+            }
+            else if (error.response) {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
                 console.error('Form submission failed', error.response.data);
@@ -117,14 +128,23 @@ function ForgotPassword() {
                     </div>
                     <div className={cx('body')}>
                         <div className={cx('input-field')}>
-                            <p className={cx('input-label')}>Token code</p>
-                            <input className={cx('input-bar')} type="text" name="token_code" required/>
+                            <p className={cx('input-label')}>New password</p>
+                            <input 
+                                className={cx('input-bar')} 
+                                type="text" name="password" 
+                                required
+                                onChange={(e) => setPasswordResult(e.target.value)}/>
                         </div>
                         <div className={cx('input-field')}>
-                            <p className={cx('input-label')}>New password</p>
-                            <input className={cx('input-bar')} type="password" name="password" required/>
+                            <p className={cx('input-label')}>Confirm new password</p>
+                            <input 
+                            className={cx('input-bar')} 
+                            type="password" 
+                            name="confirm_password" 
+                            required
+                            onChange={(e) => setConfirmPasswordResult(e.target.value)}/>
                         </div>
-                        <Button className={cx('submit-btn')} onClick={handleToast}>Sign Up</Button>
+                        <Button className={cx('submit-btn')} onClick={handleToast}>Change password</Button>
                     </div>
                 </div>
             </form>

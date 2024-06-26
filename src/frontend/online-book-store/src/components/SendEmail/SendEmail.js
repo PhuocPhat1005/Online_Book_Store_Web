@@ -6,6 +6,7 @@ import Button from "~/components/Button";
 import config from "~/config";
 import request from "~/utils/request";
 import IncorrectBox from "~/components/IncorrectBox";
+import Loading from "./Loading";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -19,6 +20,7 @@ function SendEmail(props) {
     const [inCorrectMess, setIncorrectMess] = useState('');
     const [toggleToast, setToggleToast] = useState(true);
     const [issuccessfull, setIsSuccessfull] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async(event) => {
         event.preventDefault();
@@ -29,6 +31,7 @@ function SendEmail(props) {
         };
         
         try {
+            setIsLoading(true);
             const response = await request.post('auth/forgot_password', forgotpassword_data, {
                 headers: {
                     'Content-Type': 'application/json'
@@ -40,10 +43,11 @@ function SendEmail(props) {
                 console.log('Form submitted successfully');
                 setIsSuccessfull(true);
                 setToggleToast(true);
-                navigate(config.routes.forgotpassword);
+                setIsLoading(false);
             } else {
                 // Handle errors
                 setIsSuccessfull(false);
+                setIsLoading(false);
                 setToggleToast(false);
                 console.error('Form submission failed', response.data);
             }
@@ -52,6 +56,7 @@ function SendEmail(props) {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
                 setIsSuccessfull(false);
+                setIsLoading(false);
                 setToggleToast(false);
                 setIncorrectMess('Didn\'t find valid Email');
                 console.error('Form submission failed', error.response.data);
@@ -76,13 +81,10 @@ function SendEmail(props) {
         setIncorrectMess('');
     }
 
-    if (issuccessfull) {
-        navigate(config.routes.forgotpassword);
-    }
-
     return (
         <div className={cx('fp-overlay')}>
             <form className={cx('forgot-password-form')} onSubmit={handleSubmit}>
+                {!isLoading && 
                 <div className={cx('fp-container')}>
                     <div className={cx('fp-header')}>
                         <p className={cx('fp-header-label')}>Reset your password?</p>
@@ -90,12 +92,12 @@ function SendEmail(props) {
                     </div>
                     <div className={cx('fp-body')}>
                         <label className={cx('fp-body-label')}>Email</label>
-                        <input className={cx('fp-body-input')} name="email" type="email" placeholder="Your email address" required/>
+                        <input className={cx('fp-body-input')} name="email" type="email" placeholder="e.g, email_name@gmail.com" required/>
                         <Button className={cx('fb-body-btn')} onClick={handleToast}>Send</Button>
                     </div>
-                </div>
+                </div>}
             </form>
-            
+            {isLoading && <Loading className={cx('loading')}/>}
             {!toggleToast && <IncorrectBox mess={inCorrectMess} onClose={closeIncorrectBox}/>}
         </div>
     )

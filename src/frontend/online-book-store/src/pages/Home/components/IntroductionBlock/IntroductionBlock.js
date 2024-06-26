@@ -1,5 +1,4 @@
 import IntroductionItem from '../IntroductionItem';
-import assets from '~/assets'
 
 function IntroductionBlock() {
     const data = [
@@ -16,7 +15,7 @@ function IntroductionBlock() {
             title: 'Hi, We are SIBOOKS',
             paragraph:
                 'SIBOOKS allows you to explore over new and second-hand books across various genres, including new releases, classics, kids\' books, young adult novels,...',
-            video: assets.intro_video,
+            video: 'ZL5A2Qx3y_E',
         },
     ];
 
