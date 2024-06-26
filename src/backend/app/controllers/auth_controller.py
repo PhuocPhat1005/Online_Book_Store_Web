@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from requests import Session
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -197,14 +197,16 @@ async def forgot_password(
             status_code=404,
             detail="Account not found",
         )
-    refresh_token = create_refresh_token(data={"sub": account.username})
-    reset_link = f"https://your-frontend-domain.com/reset_password_by_email?token={refresh_token}"
+    reset_token = create_refresh_token(data={"sub": account.username})
+    reset_link = f"http://localhost:3000/signin/forgotpassword/?token={reset_token}"
     email_subject = "Reset your Password"
     await send_email_to_user(form_data.email, email_subject, reset_link)
-    return refresh_token
+    return reset_token
 
 @router.put(
-    "/reset_password_by_email", summary = "Reset password by email", description = "Reset password by email"
+    "/reset_password_by_email/", 
+    summary="Reset password by email", 
+    description="Reset password by email"
 )
 async def reset_password_by_email(
     form_data: ResetPasswordForm,
@@ -219,18 +221,52 @@ async def reset_password_by_email(
                 status_code=404,
                 detail="Account not found",
             )
+
         hashed_password = get_password_hash(form_data.password)
-        
         account.password_hash = hashed_password
         await db.commit()
         return {"msg": "Password updated successfully!"}
+    
     except jwt.ExpiredSignatureError:
         raise HTTPException(
             status_code=400,
             detail="Token expired",
         )
+    
     except jwt.InvalidTokenError:
         raise HTTPException(
             status_code=400,
             detail="Invalid Token",
         )
+        
+# @router.put(
+#     "/reset_password_by_email/{reset_token}", summary = "Reset password by email", description = "Reset password by email"
+# )
+# async def reset_password_by_email(
+#     form_data: ResetPasswordForm,
+#     db: AsyncSession = Depends(get_db),
+# ):
+#     try:
+#         user_name = decode_token(form_data.token)
+#         account = await get_account_by_username(db, user_name)
+
+#         if not account:
+#             raise HTTPException(
+#                 status_code=404,
+#                 detail="Account not found",
+#             )
+#         hashed_password = get_password_hash(form_data.password)
+        
+#         account.password_hash = hashed_password
+#         await db.commit()
+#         return {"msg": "Password updated successfully!"}
+#     except jwt.ExpiredSignatureError:
+#         raise HTTPException(
+#             status_code=400,
+#             detail="Token expired",
+#         )
+#     except jwt.InvalidTokenError:
+#         raise HTTPException(
+#             status_code=400,
+#             detail="Invalid Token",
+#         )

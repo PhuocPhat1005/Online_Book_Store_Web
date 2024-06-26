@@ -16,6 +16,12 @@ import IncorrectBox from "~/components/IncorrectBox";
 
 const cx = classNames.bind(styles)
 
+function extractTokenFromUrl(url) {
+    const parsedUrl = new URL(url);
+    const params = new URLSearchParams(parsedUrl.search);
+    return params.get('token');
+}
+
 function ForgotPassword() {
 
     const [isSuccessfulSignUp, setIsSuccessfulSignup] = useState(false);
@@ -23,6 +29,9 @@ function ForgotPassword() {
     const [inCorrectMess, setIncorrectMess] = useState('');
     const correctMess = "Change password successfully"
     const navigate = useNavigate();
+
+    const currentUrl = window.location.href;
+    const reset_token = extractTokenFromUrl(currentUrl); //Dung token o day
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -32,7 +41,8 @@ function ForgotPassword() {
             token: formData.get('token_code'),
             password: formData.get('password')
         };
-    
+        reset_password_data.token = reset_token;
+        console.log(reset_password_data.token);
         try {
             const response = await request.put('auth/reset_password_by_email', reset_password_data, {
                 headers: {
