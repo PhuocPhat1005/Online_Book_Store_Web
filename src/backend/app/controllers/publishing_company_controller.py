@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPExceptiona
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.services.publishing_company_service import create_publishing_company, get_publishing_company, update_publishing_company, delete_publishing_company, get_publishing_company_by_name
