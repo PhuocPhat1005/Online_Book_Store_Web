@@ -1,6 +1,6 @@
 :root {
     --search-height: 46px;
-    --search-width: 400px;
+    --search-width: 600px;
     --search-top-spacer: 9px;
     --search-border-radius: 92px;
 }
@@ -28,8 +28,8 @@
 }
 
 .logo {
-    width: 240px;
-    height: 40px;
+    width: 100px;
+    height: 100px;
     object-fit: contain;
 }
 
@@ -42,12 +42,14 @@
 
 .category {
     display: flex;
-    justify-content: center;
     align-items: center;
 }
 
 .label {
     text-decoration: none;
+    padding: 4px 16px;
+    margin-right: 16px;
+    font-size: 1.6rem;
 }
 
 /* Search */
@@ -139,7 +141,19 @@
     font-weight: 400;
 }
 
-/* User */
+/* User - container */
+
+.chat,
+.notification {
+    position: relative;
+    cursor: pointer;
+}
+
+.chat-icon,
+.notification-icon {
+    font-size: 2.4rem;
+    color: var(--primary-color);
+}
 
 .user {
     height: 100%;

@@ -6,7 +6,6 @@ import Slide from '~/components/Slide';
 import ConnectedLine from '~/components/ConnectedLine';
 import IntroductionBlock from './components/IntroductionBlock';
 import EventBlock from './components/EventBlock';
-import Image from '~/components/Image';
 
 const cx = classNames.bind(styles);
 

@@ -105,11 +105,11 @@ function SignIn() {
                     <div className={cx('body')}>
                         <div className={cx('input-field')}>
                             <p className={cx('input-label')}>Username</p>
-                            <input className={cx('input-bar')} type="text" name="username" required/>
+                            <input className={cx('input-bar')} type="text" name="username" placeholder="Enter your username" required/>
                         </div>
                         <div className={cx('input-field')}>
                             <p className={cx('input-label')}>Password</p>
-                            <input className={cx('input-bar')} type="password" name="password" required/>
+                            <input className={cx('input-bar')} type="password" name="password" placeholder="Enter your password" required/>
                         </div>
                         <div className={cx('info')}>
                             <div className={cx('remember-password')}>
