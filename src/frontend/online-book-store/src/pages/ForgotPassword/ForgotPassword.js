@@ -28,16 +28,13 @@ function ForgotPassword() {
         event.preventDefault();
     
         const formData = new FormData(event.target);
-        const signup_data = {
-            username: formData.get('username'),
-            email: formData.get('email'),
+        const reset_password_data = {
+            token: formData.get('token_code'),
             password: formData.get('password')
         };
     
-        // console.log(signup_data);
-    
         try {
-            const response = await request.post('auth/sign_up', signup_data, {
+            const response = await request.put('auth/reset_password_by_email', reset_password_data, {
                 headers: {
                     'Content-Type': 'application/json'
                 }

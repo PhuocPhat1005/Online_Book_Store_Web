@@ -33,8 +33,6 @@ function SignIn() {
             password: formData.get('password')
         };
     
-        console.log(signin_data);
-    
         try {
             const response = await request.post('auth/sign_in', signin_data, {
                 headers: {

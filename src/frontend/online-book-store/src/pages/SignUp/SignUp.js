@@ -34,8 +34,6 @@ function SignUp() {
             password: formData.get('password')
         };
     
-        // console.log(signup_data);
-    
         try {
             const response = await request.post('auth/sign_up', signup_data, {
                 headers: {
