@@ -1,19 +1,15 @@
 import classNames from 'classnames/bind';
+
 import styles from './AboutUs.module.scss';
 import { HeaderContentLayout } from '~/components/Layouts';
 import ConnectedLine from '~/components/ConnectedLine';
 import Image from '~/components/Image';
 import SubHeaderContentLayout from '~/components/Layouts/SubHeaderContentLayout';
 import Member from './components/Member';
-import Slide from '~/components/Slide';
+import Location from './components/Location';
+import Community from './components/Community';
 
 const cx = classNames.bind(styles);
-
-const data = [
-    'https://s2.dmcdn.net/v/U8sk11Z0PHreudG53/x1080',
-    'https://www.desktopbackground.org/p/2011/02/23/161991_stephen-hawking-quotes-wallpapers_1024x658_h.jpg',
-    'https://www.wallpaperflare.com/static/705/61/300/albert-einstein-history-science-quote-wallpaper.jpg',
-];
 
 function AboutUs() {
     return (
@@ -43,15 +39,31 @@ function AboutUs() {
                 <SubHeaderContentLayout title="Our Members" />
                 <div className={cx('members-container')}>
                     <Member
-                        src="https://media.discordapp.net/attachments/1180385796994379798/1241786370469658644/IMG_0338.jpg?ex=664b772d&is=664a25ad&hm=20aeda7d1e6ab6e4da8c91f12fd4c089d082a1dc905d7e349025b382b2c0a843&=&format=webp&width=460&height=613"
+                        src="https://i0.wp.com/katzenworld.co.uk/wp-content/uploads/2019/06/funny-cat.jpeg?fit=1020%2C1020&ssl=1"
                         alt=""
-                        name="Tô Quốc Thanh"
+                        name="Ngô Văn Khải"
                         description="Welcome to our online bookstore, where every click opens the door to a world of literary
                     wonders. Dive into our extensive collection, ranging from thrilling mysteries to
                     heartwarming romances."
                     />
                     <Member
-                        src="https://media.discordapp.net/attachments/1180385796994379798/1241786370469658644/IMG_0338.jpg?ex=664b772d&is=664a25ad&hm=20aeda7d1e6ab6e4da8c91f12fd4c089d082a1dc905d7e349025b382b2c0a843&=&format=webp&width=460&height=613"
+                        src="https://i0.wp.com/katzenworld.co.uk/wp-content/uploads/2019/06/funny-cat.jpeg?fit=1020%2C1020&ssl=1"
+                        alt=""
+                        name="Bùi Lê Khôi"
+                        description="Welcome to our online bookstore, where every click opens the door to a world of literary
+                        wonders. Dive into our extensive collection, ranging from thrilling mysteries to
+                        heartwarming romances."
+                    />
+                    <Member
+                        src="https://i0.wp.com/katzenworld.co.uk/wp-content/uploads/2019/06/funny-cat.jpeg?fit=1020%2C1020&ssl=1"
+                        alt=""
+                        name="Lê Phước Phát"
+                        description="Welcome to our online bookstore, where every click opens the door to a world of literary
+                        wonders. Dive into our extensive collection, ranging from thrilling mysteries to
+                        heartwarming romances."
+                    />
+                    <Member
+                        src="https://i0.wp.com/katzenworld.co.uk/wp-content/uploads/2019/06/funny-cat.jpeg?fit=1020%2C1020&ssl=1"
                         alt=""
                         name="Tô Quốc Thanh"
                         description="Welcome to our online bookstore, where every click opens the door to a world of literary
@@ -59,25 +71,9 @@ function AboutUs() {
                         heartwarming romances."
                     />
                     <Member
-                        src="https://media.discordapp.net/attachments/1180385796994379798/1241786370469658644/IMG_0338.jpg?ex=664b772d&is=664a25ad&hm=20aeda7d1e6ab6e4da8c91f12fd4c089d082a1dc905d7e349025b382b2c0a843&=&format=webp&width=460&height=613"
+                        src="https://i0.wp.com/katzenworld.co.uk/wp-content/uploads/2019/06/funny-cat.jpeg?fit=1020%2C1020&ssl=1"
                         alt=""
-                        name="Tô Quốc Thanh"
-                        description="Welcome to our online bookstore, where every click opens the door to a world of literary
-                        wonders. Dive into our extensive collection, ranging from thrilling mysteries to
-                        heartwarming romances."
-                    />
-                    <Member
-                        src="https://media.discordapp.net/attachments/1180385796994379798/1241786370469658644/IMG_0338.jpg?ex=664b772d&is=664a25ad&hm=20aeda7d1e6ab6e4da8c91f12fd4c089d082a1dc905d7e349025b382b2c0a843&=&format=webp&width=460&height=613"
-                        alt=""
-                        name="Tô Quốc Thanh"
-                        description="Welcome to our online bookstore, where every click opens the door to a world of literary
-                        wonders. Dive into our extensive collection, ranging from thrilling mysteries to
-                        heartwarming romances."
-                    />
-                    <Member
-                        src="https://media.discordapp.net/attachments/1180385796994379798/1241786370469658644/IMG_0338.jpg?ex=664b772d&is=664a25ad&hm=20aeda7d1e6ab6e4da8c91f12fd4c089d082a1dc905d7e349025b382b2c0a843&=&format=webp&width=460&height=613"
-                        alt=""
-                        name="Tô Quốc Thanh"
+                        name="Thái Huyễn Tùng"
                         description="Welcome to our online bookstore, where every click opens the door to a world of literary
                         wonders. Dive into our extensive collection, ranging from thrilling mysteries to
                         heartwarming romances."
@@ -85,7 +81,9 @@ function AboutUs() {
                 </div>
             </div>
             <ConnectedLine />
-            <Slide images={data} />
+            <Location />
+            <ConnectedLine />
+            <Community />
             <ConnectedLine />
             <ConnectedLine />
         </div>

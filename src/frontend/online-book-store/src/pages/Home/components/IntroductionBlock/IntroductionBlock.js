@@ -12,14 +12,15 @@ function IntroductionBlock() {
         {
             image: 'https://www.artnews.com/wp-content/uploads/2022/09/GettyImages-1241066216.jpg?w=1200',
             alt: '',
-            title: 'Pre-Orders',
+            title: 'Hi, We are SIBOOKS',
             paragraph:
-                'Want to pre-order a hotly anticipated title? Check out our Pre-Orders page for a selection of upcoming books.',
+                'SIBOOKS allows you to explore over new and second-hand books across various genres, including new releases, classics, kids\' books, young adult novels,...',
+            video: 'ZL5A2Qx3y_E',
         },
     ];
 
     return data.map((item, index) => (
-        <IntroductionItem image={item.image} alt={item.alt} title={item.title} paragraph={item.paragraph} key={index} />
+        <IntroductionItem image={item.image} alt={item.alt} title={item.title} paragraph={item.paragraph} video={item.video} key={index} />
     ));
 }
 

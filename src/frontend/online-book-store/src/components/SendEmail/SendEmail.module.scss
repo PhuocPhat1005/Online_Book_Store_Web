@@ -1,0 +1,93 @@
+
+
+/* FORGOT PASSWORD */
+
+.fp-overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: block; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+}
+
+.forgot-password-form {
+    position: absolute;
+    top: 50%;
+    bottom: 50%;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 400px;
+    min-height: 264px;
+    background-color: var(--white);
+}
+
+.fp-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 16px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.fp-header-label {
+    font-size: 2.4rem;
+    margin-left: auto;
+}
+
+.fp-close {
+    margin-left: auto;
+    margin-right: 24px;
+    font-size: 2.4rem;
+    padding: 8px;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.fp-body {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 16px;
+}
+
+.fp-body-label {
+    font-size: 1.6rem;
+}
+
+.fp-body-input  {
+    padding: 8px 8px 8px 0;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    font-size: 1.6rem;
+    margin-bottom: 16px;
+}
+
+.fp-paragraph {
+    color: #808080;
+    margin-bottom: 16px;
+}
+
+.fb-body-btn {
+    background-color: #5D3FD3;
+    color: var(--white);
+    font-size: 1.6rem;
+}
+
+.loading {
+    position: absolute;
+    top: 45%;
+    bottom: 50%;
+    left: 47%;
+    right: 50%;
+    transform: translate(-50%, -50%);
+}

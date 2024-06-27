@@ -41,15 +41,17 @@ def create_refresh_token(data: dict) -> str:
     )
     return encoded_jwt
 
-
-def decode_token(token: str):
+def decode_token(token: str) -> str:
     try:
-        payload = jwt.decode(
-            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
-        )
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
-            raise JWTError
+            raise JWTError("Token payload does not contain 'sub'")
         return username
+    except jwt.ExpiredSignatureError:
+        raise JWTError("Token has expired")
+    except jwt.JWTClaimsError:
+        raise JWTError("Token claims are invalid")
     except JWTError:
         raise JWTError("Could not validate credentials")
+    

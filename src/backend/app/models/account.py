@@ -20,9 +20,7 @@ class Account(Base):
     email = Column(String(255), nullable=False, unique=True)
     password_hash = Column(String(255), nullable=False)
     created_at = Column(TIMESTAMP, server_default=func.now(), nullable=False)
-    updated_at = Column(
-        TIMESTAMP, server_default=func.now(), onupdate=func.now(), nullable=False
-    )
+    updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now(), nullable=False)
 
     user = relationship("User", back_populates="account")
 

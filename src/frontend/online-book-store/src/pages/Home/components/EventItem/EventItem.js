@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from './EventItem.module.scss';
 import Button from '~/components/Button';
-import config from '~/config';
 
 const cx = classNames.bind(styles);
 
@@ -13,7 +12,7 @@ function EventItem({ data }) {
                 <p className={cx('title')}>{data.title}</p>
                 <p className={cx('description')}>{data.description}</p>
 
-                <Button to={config.routes.about} className={cx('more-btn')} types="findmore">
+                <Button href={data.route} className={cx('more-btn')} types="findmore">
                     Find Out More
                 </Button>
             </div>

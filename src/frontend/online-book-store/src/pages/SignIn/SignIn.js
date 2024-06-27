@@ -6,6 +6,7 @@ import images from '~/assets';
 import styles from './SignIn.module.scss';
 import Button from "~/components/Button";
 import IncorrectBox from "~/components/IncorrectBox";
+import SendEmail from "~/components/SendEmail";
 
 import { Link, useNavigate } from "react-router-dom";
 import config from "~/config";
@@ -19,8 +20,9 @@ const cx = classNames.bind(styles)
 function SignIn() {
     
     const [toggleToast, setToggleToast] = useState(true);
-    const [inCorrectMess, setIncorrectMess] = useState('')
+    const [inCorrectMess, setIncorrectMess] = useState('');
     const navigate = useNavigate();
+    const [isForgotPassword, setIsForgotPassword] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -30,8 +32,6 @@ function SignIn() {
             username: formData.get('username'),
             password: formData.get('password')
         };
-    
-        console.log(signin_data);
     
         try {
             const response = await request.post('auth/sign_in', signin_data, {
@@ -76,7 +76,11 @@ function SignIn() {
 
     const closeIncorrectBox = () => {
         setToggleToast(true);
-        setIncorrectMess('')
+        setIncorrectMess('');
+    }
+
+    const handleResetPassword = () => {
+        setIsForgotPassword(!isForgotPassword);
     }
 
     return (
@@ -101,18 +105,18 @@ function SignIn() {
                     <div className={cx('body')}>
                         <div className={cx('input-field')}>
                             <p className={cx('input-label')}>Username</p>
-                            <input className={cx('input-bar')} type="text" name="username" required/>
+                            <input className={cx('input-bar')} type="text" name="username" placeholder="Enter your username" required/>
                         </div>
                         <div className={cx('input-field')}>
                             <p className={cx('input-label')}>Password</p>
-                            <input className={cx('input-bar')} type="password" name="password" required/>
+                            <input className={cx('input-bar')} type="password" name="password" placeholder="Enter your password" required/>
                         </div>
                         <div className={cx('info')}>
                             <div className={cx('remember-password')}>
                                 <input className={cx('remember-check')} type="checkbox"/>
                                 <span className={cx('info-text')}>Remember me</span>
                             </div>
-                            <span className={cx('info-text')}>Forgot password?</span>
+                            <span className={cx('info-text')} onClick={handleResetPassword}>Forgot password?</span>
                         </div>
                         <Button className={cx('submit-btn')} onClick={handleToast}>Sign In</Button>
                     </div>
@@ -129,6 +133,7 @@ function SignIn() {
                     </div>
                 </div>
             </form>
+            {isForgotPassword && <SendEmail handleResetPassword={handleResetPassword}/>}
             {!toggleToast && <IncorrectBox mess={inCorrectMess} onClose={closeIncorrectBox}/>}
         </div>
     )

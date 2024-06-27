@@ -24,6 +24,10 @@ function SignUp() {
     const correctMess = "Sign up an account successfully"
     const navigate = useNavigate();
 
+    const [passwordResult, setPasswordResult] = useState('');
+    const [confirmPasswordResult, setConfirmPasswordResult] = useState('');
+    const equalPassword = passwordResult === confirmPasswordResult;
+
     const handleSubmit = async (event) => {
         event.preventDefault();
     
@@ -34,9 +38,11 @@ function SignUp() {
             password: formData.get('password')
         };
     
-        // console.log(signup_data);
-    
         try {
+            if (!equalPassword) {
+                throw new Error('Invalid password');
+            }
+
             const response = await request.post('auth/sign_up', signup_data, {
                 headers: {
                     'Content-Type': 'application/json'
@@ -53,13 +59,17 @@ function SignUp() {
                 console.error('Form submission failed', response.data);
             }
         } catch (error) {
-            if (error.response) {
+            if (error.message === 'Invalid password') {
+                setToggleToast(false);
+                setIncorrectMess('Invalid password');
+            }
+            else if (error.response) {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
                 console.error('Form submission failed', error.response.data);
 
                 setToggleToast(false);
-                setIncorrectMess(error.response.data.detail)
+                setIncorrectMess(error.response.data.detail);
             } else if (error.request) {
                 // The request was made but no response was received
                 console.error('No response received', error.request);
@@ -114,19 +124,31 @@ function SignUp() {
                     <div className={cx('body')}>
                         <div className={cx('input-field')}>
                             <p className={cx('input-label')}>Username</p>
-                            <input className={cx('input-bar')} type="text" name="username" required/>
+                            <input className={cx('input-bar')} type="text" name="username" placeholder="Enter your username" required/>
                         </div>
                         <div className={cx('input-field')}>
                             <p className={cx('input-label')}>Email</p>
-                            <input className={cx('input-bar')} type="email" name="email" required/>
+                            <input className={cx('input-bar')} type="email" name="email" placeholder="Enter your email address" required/>
                         </div>
                         <div className={cx('input-field')}>
                             <p className={cx('input-label')}>Password</p>
-                            <input className={cx('input-bar')} type="password" name="password" required/>
+                            <input 
+                                className={cx('input-bar')} 
+                                type="password" 
+                                name="password" 
+                                placeholder="Enter your password" 
+                                required 
+                                onChange={(e) => setPasswordResult(e.target.value)}/>
                         </div>
                         <div className={cx('input-field')}>
                             <p className={cx('input-label')}>Confirm Password</p>
-                            <input className={cx('input-bar')} type="password" name="confirm" required/>
+                            <input 
+                                className={cx('input-bar')} 
+                                type="password" 
+                                name="confirm" 
+                                placeholder="Confirm your password" 
+                                required
+                                onChange={(e) => setConfirmPasswordResult(e.target.value)}/>
                         </div>
                         <Button className={cx('submit-btn')} onClick={handleToast}>Sign Up</Button>
                     </div>
