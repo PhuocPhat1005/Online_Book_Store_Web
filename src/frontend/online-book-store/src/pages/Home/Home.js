@@ -6,6 +6,7 @@ import Slide from '~/components/Slide';
 import ConnectedLine from '~/components/ConnectedLine';
 import IntroductionBlock from './components/IntroductionBlock';
 import EventBlock from './components/EventBlock';
+import EventsContent from './components/EventsContent';
 
 const cx = classNames.bind(styles);
 
@@ -30,6 +31,9 @@ function Home() {
                     <EventBlock />
                 </div>
                 <ConnectedLine />
+            </div>
+            <div id="EventsContent">
+                <EventsContent />
             </div>
             <ConnectedLine />
             <ConnectedLine />

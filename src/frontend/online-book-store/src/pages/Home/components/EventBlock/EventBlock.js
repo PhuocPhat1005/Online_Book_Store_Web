@@ -2,6 +2,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import EventItem from '../EventItem';
 import { faBookOpen, faHandsAslInterpreting, faMicrophone } from '@fortawesome/free-solid-svg-icons';
 
+import config from '~/config';
+
 function EventBlock() {
     const data = [
         {
@@ -9,6 +11,7 @@ function EventBlock() {
             title: 'Events',
             description: 'Online and in shop, we host book launches, author signings, readings, and panel discussions.',
             color: '#e8898e',
+            route: '#EventsContent',
         },
         {
             icon: <FontAwesomeIcon icon={faBookOpen} />,
@@ -16,6 +19,7 @@ function EventBlock() {
             description:
                 'Our website have been constructed since 16 / 05 / 2024 with a lot of love and stories to supply the best experiences for our users.',
             color: 'var(--primary-color)',
+            route: config.routes.about,
         },
         {
             icon: <FontAwesomeIcon icon={faHandsAslInterpreting} />,
@@ -23,6 +27,7 @@ function EventBlock() {
             description:
                 "We provide meeting space for community groups and resources. And you don't need to be a membership - anyone can join with us.",
             color: '#808080',
+            route: config.routes.about,
         },
     ];
 
