@@ -3,6 +3,7 @@ import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faBell,
+    faBoxesPacking,
     faCartShopping,
     faComments,
     faMagnifyingGlass,
@@ -20,14 +21,19 @@ import Button from '~/components/Button';
 import Image from '~/components/Image';
 import Menu from '~/components/Menu';
 import config from '~/config';
-import assets from '~/assets/'
+import assets from '~/assets/';
 
 const cx = classNames.bind(styles);
 const USER_MENU = [
     {
         icon: <FontAwesomeIcon icon={faUser} />,
         title: 'Profile',
-        to: '/',
+        to: '/home',
+    },
+    {
+        icon: <FontAwesomeIcon icon={faBoxesPacking} />,
+        title: 'Orders',
+        to: '/home',
     },
     {
         icon: <FontAwesomeIcon icon={faRightFromBracket} />,
@@ -60,11 +66,7 @@ function Header() {
     return (
         <header className={cx('wrapper')}>
             <div className={cx('container')}>
-                <img
-                    className={cx('logo')}
-                    src={assets.logo}
-                    alt="logo"
-                />
+                <img className={cx('logo')} src={assets.logo} alt="logo" />
                 <div className={cx('content')}>
                     <div className={cx('category')}>
                         <Button to={config.routes.home} types="primary" className={cx('label')}>
@@ -100,11 +102,11 @@ function Header() {
                     </Tippy>
                 </div>
                 <div className={cx('chat')}>
-                    <FontAwesomeIcon className={cx('chat-icon')} icon={faComments}/>
+                    <FontAwesomeIcon className={cx('chat-icon')} icon={faComments} />
                     <span className={cx('badge')}>99</span>
                 </div>
                 <div className={cx('notification')}>
-                    <FontAwesomeIcon className={cx('notification-icon')} icon={faBell}/>
+                    <FontAwesomeIcon className={cx('notification-icon')} icon={faBell} />
                     <span className={cx('badge')}>99</span>
                 </div>
                 <div>
