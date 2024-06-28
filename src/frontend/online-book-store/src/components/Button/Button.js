@@ -21,6 +21,7 @@ function Button({ to, href, className, types = '', size = '', disabled, leftIcon
 
     const classes = cx('wrapper', {
         [className]: className,
+        text: types.includes('text'),
         primary: types.includes('primary'),
         addtocart: types.includes('addtocart'),
         checkout: types.includes('checkout'),

@@ -120,9 +120,10 @@ async def google_auth(request: Request, db: AsyncSession = Depends(get_db)):
             raise HTTPException(
                 status_code=400, detail="ID token missing in the OAuth token."
             )
-
+            
         request_state = request.query_params.get("state")
         response_state = request.session.get("oauth_state")
+        
         if response_state != request_state:
             raise HTTPException(
                 status_code=400,
