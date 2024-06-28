@@ -91,11 +91,18 @@ def decode_token(id_token):
 
 
 @router.get("/login/google", tags=["Authentication"])
-async def google_login(request: Request):
+async def initiate_google_login(request: Request):
     state = str(uuid4())
     redirect_uri = request.url_for("google_auth")
     request.session["oauth_state"] = state
-    return await oauth.google.authorize_redirect(request, redirect_uri, state=state)
+    google_auth_url = await oauth.google.authorize_redirect(
+        request, redirect_uri, state=state
+    )
+    return {
+        "state": state,
+        "redirect_uri": redirect_uri,
+        "google_auth_url": google_auth_url,
+    }
 
 
 @router.get("/google-callback", name="google_auth", tags=["Authentication"])
