@@ -108,8 +108,20 @@ async def initiate_google_login(request: Request):
 @router.get("/google-callback", name="google_auth", tags=["Authentication"])
 async def google_auth(request: Request, db: AsyncSession = Depends(get_db)):
     try:
+        request_state = request.query_params.get("state")
+        print("Request state: ", request_state)
+        response_state = request.session.get("oauth_state")
+        print("Response state: ", response_state)
+        if response_state != request_state:
+            raise HTTPException(
+                status_code=400,
+                detail="CSRF Warning! State not equal in request and response.",
+            )
+        del request.session["oauth_state"]
+
         token = await oauth.google.authorize_access_token(request)
         print("Token:", token)
+
         if not token:
             raise HTTPException(status_code=400, detail="Missing token from Google.")
 
@@ -120,15 +132,6 @@ async def google_auth(request: Request, db: AsyncSession = Depends(get_db)):
             raise HTTPException(
                 status_code=400, detail="ID token missing in the OAuth token."
             )
-
-        request_state = request.query_params.get("state")
-        response_state = request.session.get("oauth_state")
-        if response_state != request_state:
-            raise HTTPException(
-                status_code=400,
-                detail="CSRF Warning! State not equal in request and response.",
-            )
-        del request.session["oauth_state"]
 
         id_token = token["id_token"]
         access_token = token["access_token"]
