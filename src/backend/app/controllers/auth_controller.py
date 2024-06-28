@@ -96,7 +96,6 @@ async def initiate_google_login(request: Request):
     print(f"Redirect_uri: {redirect_uri}\n")
     request.session["oauth_state"] = state
     print(f"Session after setting state: {request.session.items()}\n")
-    print(f"Session: {dict(request.session)}\n")
     google_auth_url = await oauth.google.authorize_redirect(
         request, redirect_uri, state=state
     )
@@ -151,7 +150,7 @@ async def google_auth(request: Request, db: AsyncSession = Depends(get_db)):
         if decoded_token.get("aud") != settings.GOOGLE_CLIENT_ID:
             raise HTTPException(status_code=400, detail="Invalid audience in ID token.")
 
-        # username = decoded_token["name"]
+        username = decoded_token["name"]
         email = decoded_token["email"]
         password = decoded_token[
             "sub"
@@ -161,7 +160,7 @@ async def google_auth(request: Request, db: AsyncSession = Depends(get_db)):
 
         if not account:
             account_data = AccountCreate(
-                username=email,
+                username=username,
                 email=email,
                 password=get_password_hash(password + "google"),
             )
