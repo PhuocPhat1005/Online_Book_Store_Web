@@ -1,31 +1,42 @@
-from datetime import date
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
-from requests import Session
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from authlib.integrations.starlette_client import OAuth, OAuthError
-from starlette.requests import Request
-from app.schemas.token import Token
-from app.schemas.author import AuthorCreate
-from app.services.author_service import (
-    create_author
-)
+from app.services.crud_service import CRUDService
+from app.schemas.author import AuthorCreate, AuthorUpdate, AuthorResponse
+from app.models.author import Author
 from app.database.database import get_db
-from app.config.config import settings
-import uuid
-from uuid import uuid4
+from uuid import UUID
 
 router = APIRouter()
+author_service = CRUDService[Author, AuthorCreate, AuthorUpdate](Author)
 
-def get_session(request: Request):
-    return request.session
+@router.post("/create_author", summary="Create a new author")
+async def create_author_endpoint(author: AuthorCreate, db: AsyncSession = Depends(get_db)):
+    return await author_service.create(author, db)
 
+@router.get("/get_author/{author_id}", summary="Get a author by ID")
+async def get_author_endpoint(author_id: UUID, db: AsyncSession = Depends(get_db)):
+    author = await author_service.get(author_id, db)
+    if not author:
+        raise HTTPException(status_code=404, detail="author not found")
+    return author
 
-# CRUD operations
+@router.get("/get_author_by_name/{author_name}", summary="Get authors by name")
+async def get_authors_by_name_endpoint(author_name: str, db: AsyncSession = Depends(get_db)):
+    authors = await author_service.get_by_name(author_name, [Author.full_name, Author.pen_name], db)
+    if not authors:
+        raise HTTPException(status_code=404, detail="No authors found with that name")
+    return authors
 
-# Create 
-@router.post("/Create_author")
-async def create_item(author: AuthorCreate, db: AsyncSession = Depends(get_db)):
-    await create_author(db, author)
+@router.put("/update_author/{author_id}", summary="Update a author by ID")
+async def update_author_endpoint(author_id: UUID, author_update: AuthorUpdate, db: AsyncSession = Depends(get_db)):
+    author = await author_service.update(author_id, author_update, db)
+    if not author:
+        raise HTTPException(status_code=404, detail="author not found")
+    return author
+
+@router.delete("/delete_author/{author_id}", summary="Delete a author by ID")
+async def delete_author_endpoint(author_id: UUID, db: AsyncSession = Depends(get_db)):
+    author = await author_service.delete(author_id, db)
+    if not author:
+        raise HTTPException(status_code=404, detail="author not found")
+    return author

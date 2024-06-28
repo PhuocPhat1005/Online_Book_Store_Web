@@ -147,16 +147,18 @@ async def google_auth(request: Request, db: AsyncSession = Depends(get_db)):
         if decoded_token.get("aud") != settings.GOOGLE_CLIENT_ID:
             raise HTTPException(status_code=400, detail="Invalid audience in ID token.")
 
-        username = decoded_token["name"]
+        # username = decoded_token["name"]
         email = decoded_token["email"]
         password = decoded_token[
             "sub"
         ]  # Using 'sub' as a part of password hash to ensure uniqueness
 
-        account = await get_account_by_username(db, username)
+        
+        account = await get_account_by_email(db, email)
+        
         if not account:
             account_data = AccountCreate(
-                username=username,
+                username=email,
                 email=email,
                 password=get_password_hash(password + "google"),
             )
@@ -213,10 +215,12 @@ async def sign_in(
 ):
     user_account = await get_account_by_username(db, username=form_data.username)
     if not user_account:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username",
-            headers={"WWW-Authenticate": "Bearer"},
+        user_account = await get_account_by_email(db, email=form_data.username)
+        if not user_account:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect username",
+                headers={"WWW-Authenticate": "Bearer"},
         )
     if not verify_password(form_data.password, user_account.password_hash):
         raise HTTPException(
