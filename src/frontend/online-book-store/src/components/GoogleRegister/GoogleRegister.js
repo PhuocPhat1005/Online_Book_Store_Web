@@ -1,5 +1,4 @@
 import classNames from 'classnames/bind';
-import { useState } from 'react';
 
 import styles from './GoogleRegister.module.scss';
 import request from '~/utils/request';
@@ -10,8 +9,6 @@ import { useEffect } from 'react';
 const cx = classNames.bind(styles);
 
 function GoogleRegister() {
-    const [registerState, setRegisterState] = useState('');
-
     const handleRegister = async () => {
         try {
             const response = await request.get('auth/login/google');
@@ -19,8 +16,6 @@ function GoogleRegister() {
             if (response.status === 200) {
                 console.log('Register successfully');
                 const googleAuthUrl = response.data.google_auth_url._headers.location;
-
-                setRegisterState(response.data.state);
 
                 googleAuthUrl
                     ? window.open(googleAuthUrl, '_blank')
@@ -40,10 +35,12 @@ function GoogleRegister() {
     };
 
     useEffect(() => {
-        console.log(registerState);
         const handleRegisterCallback = async () => {
             try {
                 const response = await request.get('auth/google-callback');
+
+                const { access_token, refresh_token } = response.data;
+                console.log(access_token, refresh_token);
 
                 if (response.status === 200) {
                     console.log('(callback) Register successfully');
@@ -62,7 +59,7 @@ function GoogleRegister() {
             }
         };
         handleRegisterCallback();
-    }, [registerState]);
+    }, []);
 
     return (
         <div className={cx('gg-signup')}>
