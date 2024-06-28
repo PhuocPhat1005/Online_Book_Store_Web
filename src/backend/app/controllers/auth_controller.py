@@ -153,9 +153,8 @@ async def google_auth(request: Request, db: AsyncSession = Depends(get_db)):
             "sub"
         ]  # Using 'sub' as a part of password hash to ensure uniqueness
 
-        
         account = await get_account_by_email(db, email)
-        
+
         if not account:
             account_data = AccountCreate(
                 username=email,
@@ -221,7 +220,7 @@ async def sign_in(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Incorrect username",
                 headers={"WWW-Authenticate": "Bearer"},
-        )
+            )
     if not verify_password(form_data.password, user_account.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
