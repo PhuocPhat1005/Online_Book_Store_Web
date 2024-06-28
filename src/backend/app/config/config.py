@@ -4,6 +4,7 @@ from dotenv import dotenv_values
 # Load các biến môi trường từ file .env
 env_values = dotenv_values(".env")
 
+
 class Settings(BaseSettings):
     DATABASE_URL: str = (
         f"postgresql+asyncpg://{env_values['DB_USER']}:{env_values['DB_PASSWORD']}@{env_values['DB_HOST']}:{env_values['DB_PORT']}/{env_values['DB_NAME']}"
@@ -23,17 +24,14 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_SECRET: str = env_values.get(
         "GOOGLE_CLIENT_SECRET", "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"
     )
-    # GOOGLE_AUTH_URI: str = "https://accounts.google.com/o/oauth2/auth"
-    # GOOGLE_TOKEN_URI: str = "https://oauth2.googleapis.com/token"
-    # GOOGLE_USER_INFO: str = "https://www.googleapis.com/oauth2/v1/userinfo"
     GOOGLE_SERVER_METADATA_URL: str = (
         "https://accounts.google.com/.well-known/openid-configuration"
     )
-    MAIL_SENDER: str = env_values['MAIL_SENDER']
-    MAIL_PASSWORD: str = env_values['MAIL_PASSWORD_APP']
+    MAIL_SENDER: str = env_values["MAIL_SENDER"]
+    MAIL_PASSWORD: str = env_values["MAIL_PASSWORD_APP"]
+
     class Config:
         case_sensitive = True
 
 
 settings = Settings()
-

@@ -128,7 +128,7 @@ function SignUp() {
                         </div>
                         <div className={cx('input-field')}>
                             <p className={cx('input-label')}>Email</p>
-                            <input className={cx('input-bar')} type="email" name="email" placeholder="Enter your email address" required/>
+                            <input className={cx('input-bar')} type="email" name="email" placeholder="Enter your email address (eg. email_name@gmail.com)" required/>
                         </div>
                         <div className={cx('input-field')}>
                             <p className={cx('input-label')}>Password</p>

@@ -1,5 +1,7 @@
 import classNames from "classnames/bind";
 import { useState } from "react";
+// import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+// import axios from 'axios';
 
 import Image from "~/components/Image";
 import images from '~/assets';
@@ -16,6 +18,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles)
+//const clientId = "803720744889-jp1cs4dufrd7qonbv48fj3fj1h6ue5d6.apps.googleusercontent.com";
 
 function SignIn() {
     
@@ -23,6 +26,7 @@ function SignIn() {
     const [inCorrectMess, setIncorrectMess] = useState('');
     const navigate = useNavigate();
     const [isForgotPassword, setIsForgotPassword] = useState(false);
+    // const [user, setUser] = useState(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -83,6 +87,10 @@ function SignIn() {
         setIsForgotPassword(!isForgotPassword);
     }
 
+    const handleGoogleLogin = () => {
+        window.location.href = 'http://localhost:8000/auth/login/google';
+    }
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('header')}>
@@ -127,7 +135,7 @@ function SignIn() {
                             </Link>
                             <div className={cx('gg-signup')}>
                                 <Image className={cx('gg-logo')} src={images.google_logo}/>
-                                <span className={cx('signup-text')}>Sign Up with Google</span>
+                                <span className={cx('signup-text')} onClick={handleGoogleLogin}>Sign Up with Google</span>
                             </div>
                         </div>
                     </div>

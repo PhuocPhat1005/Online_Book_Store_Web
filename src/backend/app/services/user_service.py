@@ -44,6 +44,7 @@ async def get_account_by_username(db: AsyncSession, username: str):
     print(f"Account: {account}")
     return account
 
+
 async def get_account_by_email(db: AsyncSession, email: str):
     # Find account by email
     query = select(Account).where(Account.email == email)
@@ -52,8 +53,8 @@ async def get_account_by_email(db: AsyncSession, email: str):
     print(f"Account: {account}")
     return account
 
+
 async def create_account(db: AsyncSession, account: AccountCreate):
-    # Create a new account
     new_account = Account(
         username=account.username,
         email=account.email,
@@ -61,27 +62,28 @@ async def create_account(db: AsyncSession, account: AccountCreate):
     )
     db.add(new_account)
     try:
-        # Flush changes to database
-        await db.flush()
         # Commit the transaction
         await db.commit()
+        # Refresh the instance to load the new ID from the database
+        await db.refresh(new_account)
     except Exception as e:
         # Rollback the transaction if an error occurs
         await db.rollback()
         raise RuntimeError(f"Failed to create account: {e}") from e
     return new_account
 
-async def send_email_to_user(receiver_email: str, your_subject: str ,your_msg: str):
+
+async def send_email_to_user(receiver_email: str, your_subject: str, your_msg: str):
     msg = MIMEMultipart()
-    msg['From'] = settings.MAIL_SENDER
-    msg['To'] = receiver_email
-    msg['Subject'] = your_subject
-    
-    msg.attach(MIMEText(your_msg, 'plain'))
-    
+    msg["From"] = settings.MAIL_SENDER
+    msg["To"] = receiver_email
+    msg["Subject"] = your_subject
+
+    msg.attach(MIMEText(your_msg, "plain"))
+
     try:
         # Connect to the Gmail SMTP server
-        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server = smtplib.SMTP("smtp.gmail.com", 587)
         server.starttls()  # Secure the connection
         server.login(settings.MAIL_SENDER, settings.MAIL_PASSWORD)
         text = msg.as_string()

@@ -1,11 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
-from fastapi import APIRouter, Depends, HTTPException, status, Query
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
-from requests import Session
 from sqlalchemy.ext.asyncio import AsyncSession
 from authlib.integrations.starlette_client import OAuth, OAuthError
 from starlette.requests import Request
-from app.schemas.token import Token, ResetToken
+from app.schemas.token import Token
 from app.schemas.account import AccountCreate, UserEmail, ResetPasswordForm
 from app.utils.security import (
     create_access_token,
@@ -28,9 +26,7 @@ import jwt
 from datetime import timedelta
 from fastapi.responses import JSONResponse
 from jose import JWTError, jwt
-from datetime import timedelta
-from fastapi.responses import JSONResponse
-from jose import JWTError, jwt
+import requests
 
 
 router = APIRouter()
@@ -41,6 +37,8 @@ oauth.register(
     client_secret=settings.GOOGLE_CLIENT_SECRET,
     server_metadata_url=settings.GOOGLE_SERVER_METADATA_URL,
     client_kwargs={"scope": "openid email profile"},
+    access_type="offline",
+    prompt="consent",
 )
 
 
@@ -48,32 +46,74 @@ def get_session(request: Request):
     return request.session
 
 
+def get_google_public_keys():
+    url = "https://www.googleapis.com/oauth2/v3/certs"
+    response = requests.get(url)
+    if response.status_code != 200:
+        raise HTTPException(
+            status_code=500, detail="Unable to fetch Google's public keys."
+        )
+    return response.json()
+
+
+def decode_token(id_token):
+    try:
+        # Fetch Google's public keys
+        public_keys = get_google_public_keys()
+
+        # Decode the token header to get the key ID (kid)
+        unverified_header = jwt.get_unverified_header(id_token)
+        kid = unverified_header.get("kid")
+
+        if not kid:
+            raise HTTPException(
+                status_code=400, detail="No 'kid' found in token header."
+            )
+
+        # Find the appropriate public key
+        key = next((key for key in public_keys["keys"] if key["kid"] == kid), None)
+        if not key:
+            raise HTTPException(status_code=400, detail="Public key not found.")
+
+        # Decode the token using the public key
+        decoded_token = jwt.decode(
+            id_token,
+            key,
+            algorithms=["RS256"],
+            audience=settings.GOOGLE_CLIENT_ID,
+            options={"verify_at_hash": False},
+        )
+        return decoded_token
+    except JWTError as e:
+        raise HTTPException(status_code=400, detail=f"JWT Error: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error decoding token: {str(e)}")
+
+
 @router.get("/login/google", tags=["Authentication"])
-async def google_login(request: Request, session: Session = Depends(get_session)):
+async def google_login(request: Request):
     state = str(uuid4())
     redirect_uri = request.url_for("google_auth")
-    session["oauth_state"] = state
+    request.session["oauth_state"] = state
     return await oauth.google.authorize_redirect(request, redirect_uri, state=state)
 
 
 @router.get("/google-callback", name="google_auth", tags=["Authentication"])
-async def google_auth(
-    request: Request,
-    db: AsyncSession = Depends(get_db),
-):
+async def google_auth(request: Request, db: AsyncSession = Depends(get_db)):
     try:
         token = await oauth.google.authorize_access_token(request)
-        print("Token received: ", token)
+        print("Token:", token)
         if not token:
             raise HTTPException(status_code=400, detail="Missing token from Google.")
 
-        # Ensure 'id_token' exists in the token
+        if "access_token" not in token:
+            raise HTTPException(status_code=400, detail="Missing access token.")
+
         if "id_token" not in token:
             raise HTTPException(
                 status_code=400, detail="ID token missing in the OAuth token."
             )
 
-        # Validate state to protect against CSRF attacks
         request_state = request.query_params.get("state")
         response_state = request.session.get("oauth_state")
         if response_state != request_state:
@@ -81,25 +121,29 @@ async def google_auth(
                 status_code=400,
                 detail="CSRF Warning! State not equal in request and response.",
             )
-        # Clear the state from the session
         del request.session["oauth_state"]
 
-        # Use id_token to parse user info
         id_token = token["id_token"]
-        print("ID Token: ", id_token)
-        user_info = jwt.decode(
-            id_token,
-            options={"verify_signature": False},
-            audience=settings.GOOGLE_CLIENT_ID,
-        )
-        print("User info received:", user_info)
-        # Continue with your user handling logic
-        username = user_info["name"]
-        email = user_info["email"]
-        picture = user_info["picture"]
-        password = user_info["aud"]
-        account = await get_account_by_username(db, username)
+        access_token = token["access_token"]
 
+        print("ID Token: ", id_token)
+        print("Access Token: ", access_token)
+
+        # Decode the ID token
+        decoded_token = decode_token(id_token)
+        print("decoded_token: ", decoded_token)
+
+        # Validate the audience
+        if decoded_token.get("aud") != settings.GOOGLE_CLIENT_ID:
+            raise HTTPException(status_code=400, detail="Invalid audience in ID token.")
+
+        username = decoded_token["name"]
+        email = decoded_token["email"]
+        password = decoded_token[
+            "sub"
+        ]  # Using 'sub' as a part of password hash to ensure uniqueness
+
+        account = await get_account_by_username(db, username)
         if not account:
             account_data = AccountCreate(
                 username=username,
@@ -108,12 +152,15 @@ async def google_auth(
             )
             account = await create_account(db, account_data)
 
-        access_token = create_access_token(data={"sub": account.username})
-        refresh_token = create_refresh_token(data={"sub": account.username})
+        custom_access_token = create_access_token(data={"sub": account.username})
+        custom_refresh_token = create_refresh_token(data={"sub": account.username})
 
-        return {"access_token": access_token, "refresh_token": refresh_token}
-    except jwt.InvalidAudienceError:
-        raise HTTPException(status_code=400, detail="Invalid audience in ID token.")
+        return {
+            "access_token": custom_access_token,
+            "refresh_token": custom_refresh_token,
+        }
+    except JWTError as e:
+        raise HTTPException(status_code=400, detail=f"JWT Error: {str(e)}")
     except OAuthError as e:
         return {"error": e.error, "error_description": e.description}
     except Exception as e:
@@ -196,7 +243,7 @@ async def reset_password(
     "/forgot_password", summary="Forgot password", description="Forgot password"
 )
 async def forgot_password(
-    email: str,
+    form_data: UserEmail,
     db: AsyncSession = Depends(get_db),
 ):
     account = await get_account_by_email(db, email=form_data.email)
@@ -205,17 +252,20 @@ async def forgot_password(
             status_code=404,
             detail="Account not found",
         )
-    refresh_token = create_refresh_token(data={"sub": account.username})
-    reset_link = f"https://your-frontend-domain.com/reset_password_by_email?token={refresh_token}"
+    expiration_minute = 5
+    reset_token = create_access_token(
+        data={"sub": account.username},
+        expires_delta=timedelta(minutes=expiration_minute),
+    )
+    reset_link = f"http://localhost:3000/signin/forgotpassword/?token={reset_token}"
     email_subject = "Reset your Password"
-    await send_email_to_user(email, email_subject, reset_link)
-    return {
-        "msg": "Send password reset email to email: " + email + " link: " + reset_link
-    }
+    message = f"Click the link to reset your password: {reset_link}\nYour link will expire in {expiration_minute} minutes.\nIf you did not request this, please ignore this email."
+    await send_email_to_user(form_data.email, email_subject, message)
+    return reset_token
 
 
 @router.put(
-    "/reset_password_by_email",
+    "/reset_password_by_email/",
     summary="Reset password by email",
     description="Reset password by email",
 )
@@ -224,26 +274,56 @@ async def reset_password_by_email(
     db: AsyncSession = Depends(get_db),
 ):
     try:
-        user_name = decode_token(token)
-        account = await get_account_by_username(db, user_name)
+        user_name = decode_token(form_data.token)
+    except JWTError as e:
+        error_message = str(e)
+        if "expired" in error_message:
+            return JSONResponse(status_code=400, content={"detail": "Token expired"})
+        elif "invalid" in error_message or "credentials" in error_message:
+            return JSONResponse(status_code=400, content={"detail": "Invalid Token"})
+        else:
+            return JSONResponse(status_code=400, content={"detail": error_message})
 
-        if not account:
-            raise HTTPException(
-                status_code=404,
-                detail="Account not found",
-            )
-        hashed_password = get_password_hash(new_password)
+    account = await get_account_by_username(db, user_name)
 
-        account.password_hash = hashed_password
-        await db.commit()
-        return {"msg": "Password updated successfully!"}, 200
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(
-            status_code=400,
-            detail="Token expired",
-        )
-    except jwt.InvalidTokenError:
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid Token",
-        )
+    if not account:
+        return JSONResponse(status_code=404, content={"detail": "Account not found"})
+
+    hashed_password = get_password_hash(form_data.password)
+    account.password_hash = hashed_password
+    await db.commit()
+
+    return {"msg": "Password updated successfully!"}
+
+
+# @router.put(
+#     "/reset_password_by_email/{reset_token}", summary = "Reset password by email", description = "Reset password by email"
+# )
+# async def reset_password_by_email(
+#     form_data: ResetPasswordForm,
+#     db: AsyncSession = Depends(get_db),
+# ):
+#     try:
+#         user_name = decode_token(form_data.token)
+#         account = await get_account_by_username(db, user_name)
+
+#         if not account:
+#             raise HTTPException(
+#                 status_code=404,
+#                 detail="Account not found",
+#             )
+#         hashed_password = get_password_hash(form_data.password)
+
+#         account.password_hash = hashed_password
+#         await db.commit()
+#         return {"msg": "Password updated successfully!"}
+#     except jwt.ExpiredSignatureError:
+#         raise HTTPException(
+#             status_code=400,
+#             detail="Token expired",
+#         )
+#     except jwt.InvalidTokenError:
+#         raise HTTPException(
+#             status_code=400,
+#             detail="Invalid Token",
+#         )
