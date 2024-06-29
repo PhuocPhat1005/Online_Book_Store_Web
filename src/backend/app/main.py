@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 
-from app.routes import auth, account, author, book, category, publishing_company, translator
+from app.routes import auth, account, author, book, category, publishing_company, translator, photo
 from app.database.database import Base
 from app.config.config import settings
 
@@ -59,6 +59,7 @@ app.include_router(book.router)
 app.include_router(category.router)
 app.include_router(publishing_company.router)
 app.include_router(translator.router)
+app.include_router(photo.router)
 
 
 def main():
