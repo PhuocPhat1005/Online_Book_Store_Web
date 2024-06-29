@@ -15,6 +15,7 @@ from app.routes import (
     category,
     publishing_company,
     translator,
+    photo
 )
 from app.database.database import Base
 from app.config.config import settings
