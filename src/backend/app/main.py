@@ -36,7 +36,7 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
+    allow_origins=origins,  # Allows all origins
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -52,6 +52,7 @@ async def startup():
 
 # Kết nối các router
 app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
+
 app.include_router(auth.router)
 app.include_router(account.router)
 app.include_router(author.router)
