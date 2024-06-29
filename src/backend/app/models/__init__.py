@@ -31,3 +31,4 @@ from .bank_payment import BankPayment
 from .review import Review
 from .review_photo import ReviewPhoto
 from .review_like import ReviewLike
+from .photo import Photo

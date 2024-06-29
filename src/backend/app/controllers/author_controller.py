@@ -13,7 +13,7 @@ author_service = CRUDService[Author, AuthorCreate, AuthorUpdate](Author)
 async def create_author_endpoint(author: AuthorCreate, db: AsyncSession = Depends(get_db)):
     return await author_service.create(author, db)
 
-@router.get("/get_author/{author_id}", summary="Get a author by ID")
+@router.get("/get_author/{author_id}", summary="Get a Author by ID")
 async def get_author_endpoint(author_id: UUID, db: AsyncSession = Depends(get_db)):
     author = await author_service.get(author_id, db)
     if not author:
@@ -31,12 +31,12 @@ async def get_authors_by_name_endpoint(author_name: str, db: AsyncSession = Depe
 async def update_author_endpoint(author_id: UUID, author_update: AuthorUpdate, db: AsyncSession = Depends(get_db)):
     author = await author_service.update(author_id, author_update, db)
     if not author:
-        raise HTTPException(status_code=404, detail="author not found")
+        raise HTTPException(status_code=404, detail="Author not found")
     return author
 
 @router.delete("/delete_author/{author_id}", summary="Delete a author by ID")
 async def delete_author_endpoint(author_id: UUID, db: AsyncSession = Depends(get_db)):
     author = await author_service.delete(author_id, db)
     if not author:
-        raise HTTPException(status_code=404, detail="author not found")
+        raise HTTPException(status_code=404, detail="Author not found")
     return author

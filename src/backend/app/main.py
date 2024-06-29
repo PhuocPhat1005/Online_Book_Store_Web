@@ -6,12 +6,19 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
-
-from app.routes import auth, account, author, book, category, publishing_company, translator
+import secrets
+from app.routes import (
+    auth,
+    account,
+    author,
+    book,
+    category,
+    publishing_company,
+    translator,
+    photo
+)
 from app.database.database import Base
 from app.config.config import settings
-
-from fastapi.middleware.cors import CORSMiddleware
 
 # Khởi tạo AsyncEngine
 engine = create_async_engine(settings.DATABASE_URL, echo=True)
@@ -28,6 +35,7 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# Cấu hình CORS
 origins = [
     "http://localhost:3000",
     "http://localhost:8080",
@@ -36,11 +44,14 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # Allows all origins
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+secret_key = secrets.token_urlsafe(32)
+# Thêm SessionMiddleware với secret key
+app.add_middleware(SessionMiddleware, secret_key=secret_key)
 
 
 # Khởi tạo các bảng trong cơ sở dữ liệu
@@ -60,11 +71,12 @@ app.include_router(book.router)
 app.include_router(category.router)
 app.include_router(publishing_company.router)
 app.include_router(translator.router)
+app.include_router(photo.router)
 
 
 def main():
     config = uvicorn.Config(
-        "app.main:app", host="0.0.0.0", port=8000, log_level="info", reload=True
+        "main:app", host="0.0.0.0", port=8000, log_level="info", reload=True
     )
     server = uvicorn.Server(config)
 
