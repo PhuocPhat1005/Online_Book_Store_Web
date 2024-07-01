@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Response, Cookie, Depends, HTTPException, status, Query
+from typing import Annotated
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from authlib.integrations.starlette_client import OAuth, OAuthError
@@ -28,6 +29,11 @@ from fastapi.responses import JSONResponse
 from jose import JWTError, jwt
 import requests
 
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 oauth = OAuth()
@@ -106,22 +112,41 @@ async def initiate_google_login(request: Request):
         "google_auth_url": google_auth_url,
     }
 
+@router.get("/a")
+async def set_session(response: Response):
+    state = "abcd1234"
+    response.set_cookie(key = "gfg_cookie_key", value = state, samesite="None", secure=True)
+    return {"state": state}
+
+@router.get("/b")
+def func(request: Request, gfg_cookie_key : Annotated[str | None, Cookie()] = None):
+    request_state = request.query_params.get('state')
+    response_state = gfg_cookie_key
+    
+    print("\n\n")
+    print(request_state, response_state)
+    print("\n\n")
+    
+    if (request_state == response_state):
+        return "OKOK"
+    return "Failed"
 
 @router.get("/google-callback", name="google_auth", tags=["Authentication"])
 async def google_auth(request: Request, db: AsyncSession = Depends(get_db)):
     try:
         request_state = request.query_params.get("state")
         print(f"Request state: {request_state}\n")
-        response_state = request.session.get("oauth_state")
+        response_state = request.session.get("oauth_state", None)
         print(f"Response state: {response_state}\n")
         print(f"Session in callback: {request.session.items()}")
+        
         if response_state != request_state:
             raise HTTPException(
                 status_code=400,
                 detail="CSRF Warning! State not equal in request and response.",
             )
         del request.session["oauth_state"]
-
+        
         token = await oauth.google.authorize_access_token(request)
         print(f"Token: {token}\n")
 
@@ -203,6 +228,9 @@ async def sign_up(account: AccountCreate, db: AsyncSession = Depends(get_db)):
 
 @router.get("/check_session")
 async def check_session(request: Request):
+    print("\n\n")
+    print("Check session: ", dict(request.session))
+    print("\n\n")
     return {"session": dict(request.session)}
 
 
