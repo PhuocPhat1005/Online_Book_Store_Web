@@ -1,12 +1,13 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.services.crud_service import CRUDService
 
-# from app.services.book_service import create_book, get_book, update_book, delete_book, get_books_by_name
-from app.schemas.book import BookCreate, BookUpdate, BookResponse
+from app.services.book_service import get_books_ordered, get_books_filtered
+from app.schemas.book import BookCreate, BookUpdate, BookResponse, BookOrder, BookFilter
 from app.models.book import Book
 from app.database.database import get_db
 from uuid import UUID
+from typing import List, Optional
 
 router = APIRouter()
 book_service = CRUDService[Book, BookCreate, BookUpdate](Book)
@@ -83,3 +84,36 @@ async def delete_book_endpoint(book_id: UUID, db: AsyncSession = Depends(get_db)
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
     return book
+
+@router.get("/get_books_ordered", summary="Get books ordered")
+async def get_books_ordered_endpoint(number_book: int, from_: int = 0, order_by: str = "default", db: AsyncSession = Depends(get_db)):
+    books = await get_books_ordered(db, from_, number_book, order_by)
+    if not books:
+        raise HTTPException(status_code=404, detail="No books found")
+    return books
+
+# @router.get("/get_books_ordered", summary="Get books ordered")
+# async def get_books_ordered_endpoint(order: BookOrder , db: AsyncSession = Depends(get_db)):
+#     books = await get_books_ordered(db, order)
+#     if not books:
+#         raise HTTPException(status_code=404, detail="No books found")
+#     return books
+
+BOOK_PER_PAGE = 5
+
+@router.get("/get_book_per_page/{page_number}", summary="Get books in page number")
+async def get_book_per_page_endpoint(page_number: int, db: AsyncSession = Depends(get_db)):
+    from_ = page_number * BOOK_PER_PAGE
+    to_ = from_ + BOOK_PER_PAGE
+    books = await get_books_ordered(db, from_, to_)
+    if not books:
+        raise HTTPException(status_code=404, detail="No books found")
+    return books
+
+
+# @router.get("/get_books_filtered", summary="Get books filtered")
+# async def get_books_filtered_endpoint(filters: BookFilter, db: AsyncSession = Depends(get_db)):
+#     books = await get_books_filtered(db, filters)
+#     if not books:
+#         raise HTTPException(status_code=404, detail="No books found")
+#     return books

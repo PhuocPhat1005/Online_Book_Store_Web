@@ -6,6 +6,7 @@ from typing import Type, TypeVar, Generic
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from sqlalchemy import Column
+import uuid
 
 ModelType = TypeVar("ModelType")
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
@@ -18,6 +19,7 @@ class CRUDService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     async def create(self, obj_in: CreateSchemaType, db: AsyncSession) -> ModelType:
         obj_in_data = obj_in.dict()
         db_obj = self.model(**obj_in_data)
+        db_obj.id = uuid.uuid4()
         db.add(db_obj)
         try:
             await db.flush()
@@ -35,7 +37,7 @@ class CRUDService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return db_obj
     
     async def get_by_name(self, obj_name: str, name_fields: list[Column], db: AsyncSession) -> list[ModelType]:
-            conditions = [field == obj_name for field in name_fields]
+            conditions = [field.like(f"%{obj_name}%") for field in name_fields]
             query = select(self.model).where(or_(*conditions)).distinct()
             result = await db.execute(query)
             db_objs = result.scalars().all()

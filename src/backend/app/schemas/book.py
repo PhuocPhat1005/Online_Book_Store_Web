@@ -38,3 +38,15 @@ class BookResponse(BookBase):
 
     class Config:
         orm_mode: True
+        
+class BookOrder(BaseModel):
+    fromm: int | None = 0
+    n: int
+    order_by: str | None = "default"
+    
+class BookFilter(BaseModel):
+    publishing_company_id: UUID | None = None
+    category_id: UUID | None = None
+    author_id: UUID | None = None
+    price: int | None = 0
+    book_cover_type: int | None = None
