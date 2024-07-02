@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.services.crud_service import CRUDService
+from app.services.crud_service import CRUDService, query_string_to_dict
 
 from app.schemas.book import BookCreate, BookUpdate, BookResponse, BookOrder, BookFilter
 from app.models.book import Book
@@ -94,3 +94,14 @@ async def get_book_per_page_endpoint(page_number: int, db: AsyncSession = Depend
     if not books:
         raise HTTPException(status_code=404, detail="No books found")
     return await book_service.get_ordered(books, ORDER_BY, True, from_, amount_= BOOK_PER_PAGE)
+
+@router.get("/get_book_by_conditions", description="Input a string to filter book. EX: book_name=string&book_size=string&price=0", summary="Get books with many conditions", )
+async def get_book_by_condition_endpoint(search_params: str, db: AsyncSession = Depends(get_db)):
+    books = await book_service.get_by_many_value(query_string_to_dict(search_params), db, 1)
+    if not books:
+        raise HTTPException(status_code=404, detail="No books found")
+    return await book_service.get_ordered(books, ORDER_BY)
+
+@router.get("/get_all_fields", summary="Get all fields of book")
+async def get_all_fields_endpoint(db: AsyncSession = Depends(get_db)):
+    return await book_service.get_by_one_value('', [Book.book_name], db, 0,limit=1)
