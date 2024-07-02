@@ -7,25 +7,37 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border: 1px solid var(--black);
-    background-color: #e8898e;
-    padding: 8px;
-    cursor: pointer;
+    background-color: var(--white);
 
     position: relative;
 }
 
 .title {
     font-size: 1.8rem;
+    margin-right: 16px;
+    color: #808080;
+}
+
+.current_method {
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.label {
+    margin-right: 16px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--text-color);
 }
 
 .menu-sort {
     width: 200px;
-    background-color: #e8898e;
-    border: 1px solid var(--black);
-
-    position: absolute;
-    top: -14px;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 1px 0 4px #ccc;
 }
 
 .method-list {
@@ -36,18 +48,13 @@
 .method-item {
     padding: 8px 24px;
 
-    &:focus {
-        background-color: #c58283;
-    }
-
     &:hover {
-        background-color: #d0888a;
+        background-color: #f0f0f0;
         cursor: pointer;
     }
 }
 
-.method-item-link {
+.method-item-text {
     font-size: 1.8rem;
     color: var(--text-color);
-    text-decoration: none;
 }

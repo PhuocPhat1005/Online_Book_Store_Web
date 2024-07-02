@@ -16,7 +16,9 @@ function ShopBooks() {
                 <div className={cx('body')}>
                     <BodyHeading />
                     <ConnectedLine />
-                    <BodyContent />
+                    <div className={cx('core')}>
+                        <BodyContent />
+                    </div>
                     <ConnectedLine />
                     <ConnectedLine />
                     <BodyFooter />
