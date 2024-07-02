@@ -50,9 +50,7 @@ async def get_category_endpoint(category_id: UUID, db: AsyncSession = Depends(ge
 async def get_category_by_name_endpoint(
     category_name: str, db: AsyncSession = Depends(get_db)
 ):
-    category = await category_service.get_by_name(
-        category_name, [Category.category_name], db
-    )
+    category = await category_service.get_by_one_value(category_name, [Category.category_name], db, 0)
     if not category:
         raise HTTPException(status_code=404, detail="Category not found")
     return category

@@ -10,31 +10,31 @@ from sqlalchemy import Column
 from typing import Any
 
 
-async def get_books_ordered(db: AsyncSession, from_: int = 0, to_: int = 1, order_by: str = "default") -> list[Book]:
-    order_field_map = {
-        "default": desc(Book.updated_at),     # Default ordering field
-        "random": func.random(),
-        "newer": desc(Book.publishing_date),  # Assuming 'publishing_date' is a column
-        "older": asc(Book.publishing_date),   # Assuming 'publishing_date' is a column
-        "cost": asc(Book.price),              # Assuming 'price' is a column
-        "cheaper": desc(Book.price),          # Assuming 'price' is a column
-        # "rating": desc(Book.rating)         # Assuming 'rating' is a column
-    }
+# async def get_books_ordered(db: AsyncSession, from_: int = 0, to_: int = 1, order_by: str = "default") -> list[Book]:
+#     order_field_map = {
+#         "default": desc(Book.updated_at),     # Default ordering field
+#         "random": func.random(),
+#         "newer": desc(Book.publishing_date),  # Assuming 'publishing_date' is a column
+#         "older": asc(Book.publishing_date),   # Assuming 'publishing_date' is a column
+#         "cost": asc(Book.price),              # Assuming 'price' is a column
+#         "cheaper": desc(Book.price),          # Assuming 'price' is a column
+#         # "rating": desc(Book.rating)         # Assuming 'rating' is a column
+#     }
     
-    if order_by not in order_field_map:
-        raise HTTPException(status_code=400, detail="Invalid order_by value")
+#     if order_by not in order_field_map:
+#         raise HTTPException(status_code=400, detail="Invalid order_by value")
 
-    order_clause = order_field_map[order_by]
+#     order_clause = order_field_map[order_by]
 
-    query = select(Book).order_by(order_clause).offset(from_).limit(to_)
+#     query = select(Book).order_by(order_clause).offset(from_).limit(to_)
     
-    result = await db.execute(query)
-    db_objs = result.scalars().all()
+#     result = await db.execute(query)
+#     db_objs = result.scalars().all()
     
-    if not db_objs:
-        raise HTTPException(status_code=404, detail="Books not found")
+#     if not db_objs:
+#         raise HTTPException(status_code=404, detail="Books not found")
     
-    return db_objs
+#     return db_objs
 
 # async def get_ordered_books(db: AsyncSession,order: BookOrder) -> list[Book]:
 #     order_field_map = {

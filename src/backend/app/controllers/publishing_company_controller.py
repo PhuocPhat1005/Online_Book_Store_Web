@@ -54,7 +54,7 @@ async def get_publishing_company_endpoint(company_id: UUID, db: AsyncSession = D
 
 @router.get("/get_publishing_company_by_name/{company_name}", summary="Get a publishing company by name")
 async def get_publishing_company_by_name_endpoint(company_name: str, db: AsyncSession = Depends(get_db)):
-    company = await publishing_company_service.get_by_name(company_name, [PublishingCompany.publishing_company_name], db)
+    company = await publishing_company_service.get_by_one_value(company_name, [PublishingCompany.publishing_company_name], db, 0)
     if not company:
         raise HTTPException(status_code=404, detail="Publishing company not found")
     return company

@@ -59,7 +59,7 @@ async def show_image(photo_name: str):
 
 # @router.get("/get_photo_by_name/{photo_name}", summary="Get photos by name")
 # async def get_photos_by_name_endpoint(photo_name: str, db: AsyncSession = Depends(get_db)):
-#     photos = await photo_service.get_by_name(photo_name, [Photo.photo_name], db)
+#     photos = await photo_service.get_by_one_value(photo_name, [Photo.photo_name], db)
 #     if not photos:
 #         raise HTTPException(status_code=404, detail="No photos found with that name")
 #     return photos

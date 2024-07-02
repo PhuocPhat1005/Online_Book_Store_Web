@@ -2,11 +2,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, or_
 from uuid import UUID
 from fastapi import HTTPException
-from typing import Type, TypeVar, Generic
+from typing import Type, TypeVar, Generic, Dict
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from sqlalchemy import Column
 import uuid
+from sqlalchemy import asc, desc
+import sys
 
 ModelType = TypeVar("ModelType")
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
@@ -36,14 +38,62 @@ class CRUDService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             raise HTTPException(status_code=404, detail=f"{self.model.__name__} not found")
         return db_obj
     
-    async def get_by_name(self, obj_name: str, name_fields: list[Column], db: AsyncSession) -> list[ModelType]:
+    async def get_by_one_value(self, obj_name: str, name_fields: list[Column], db: AsyncSession, exactly: int = 1) -> list[ModelType]:
+        if exactly:
+            conditions = [field == obj_name for field in name_fields]
+        else:
             conditions = [field.like(f"%{obj_name}%") for field in name_fields]
-            query = select(self.model).where(or_(*conditions)).distinct()
-            result = await db.execute(query)
-            db_objs = result.scalars().all()
-            if not db_objs:
-                raise HTTPException(status_code=404, detail=f"{self.model.__name__} not found")
-            return db_objs
+            
+        query = select(self.model).where(or_(*conditions)).distinct()
+        result = await db.execute(query)
+        db_objs = result.scalars().all()
+        if not db_objs:
+            raise HTTPException(status_code=404, detail=f"{self.model.__name__} not found")
+        return db_objs
+
+    async def get_by_many_value(self, search_params: Dict[str, str], db: AsyncSession, condition: int = 1) -> list[ModelType]:
+        conditions = []
+        
+        for field_name, search_value in search_params.items():
+            field = getattr(self.model, field_name, None)
+            if field is None:
+                raise HTTPException(status_code=400, detail=f"Field {field_name} does not exist on {self.model.__name__}")
+            if condition:
+                conditions.append(field == search_value)
+            else:
+                conditions.append(field.ilike(f"%{search_value}%"))
+            
+        if not conditions:
+            raise HTTPException(status_code=400, detail="At least one search parameter must be provided")
+
+        query = select(self.model).where(or_(*conditions)).distinct()
+        result = await db.execute(query)
+        db_objs = result.scalars().all()
+
+        if not db_objs:
+            raise HTTPException(status_code=404, detail=f"{self.model.__name__} not found")
+
+        return db_objs
+
+    async def get_ordered(self, list_item: list[ModelType], order_by: str = None, desc_order: bool = True, from_: int = 0, amount_: int = sys.maxsize) -> list[ModelType]:
+        if not list_item:
+            raise HTTPException(status_code=404, detail="No items provided")
+
+        if order_by:
+            try:
+                list_item.sort(key=lambda x: getattr(x, order_by), reverse=desc_order)
+            except AttributeError:
+                raise HTTPException(status_code=400, detail=f"Field {order_by} does not exist on {self.model.__name__}")
+
+        if amount_ > 0:
+            list_item = list_item[from_:from_ + amount_]
+        else:
+            list_item = list_item[from_:]
+
+        if not list_item:
+            raise HTTPException(status_code=404, detail=f"No records found in the specified range for {self.model.__name__}")
+
+        return list_item
 
     async def update(self, obj_id: UUID, obj_in: UpdateSchemaType, db: AsyncSession) -> ModelType:
         result = await db.execute(select(self.model).where(self.model.id == obj_id))
