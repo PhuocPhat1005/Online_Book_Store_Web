@@ -25,8 +25,8 @@
     font-size: 1.6rem;
     max-width: 120px;
 
-    caret-color: #ee4d2d;
-    color: #ee4d2d;
+    caret-color: var(--order-color);
+    color: var(--order-color);
 }
 
 .btn {
@@ -34,7 +34,7 @@
     font-weight: bold;
     text-transform: uppercase;
     color: var(--white);
-    background-color: #ee4d2d;
+    background-color: var(--order-color);
     border-radius: 10px;
     padding: 8px;
     margin-left: 8px;

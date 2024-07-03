@@ -1,0 +1,168 @@
+.wrapper {
+    background-color: var(--white);
+    cursor: pointer;
+
+    &:hover .image {
+        transform: scale(1.333, 1.333);
+    }
+
+    &:hover .info {
+        display: flex;
+        animation: fadein 0.3s ease-in;
+    }
+}
+
+.image_container {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.image {
+    width: 100px;
+    height: 150px;
+
+    transition: all 0.5s;
+}
+
+.info {
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 50px;
+    text-align: center;
+
+    position: absolute;
+    bottom: 0;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.text {
+    font-size: 1.6rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.body {
+    padding: 8px 16px;
+}
+
+.title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: justify;
+    text-justify: inter-word;
+    margin-bottom: 8px;
+}
+
+.price {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.new_price {
+    font-size: 2.4rem;
+    font-weight: bold;
+    color: #c72127;
+}
+
+.old_price {
+    color: var(--faded-color);
+    font-size: 1.8rem;
+    text-decoration: line-through;
+}
+
+.discount {
+    padding: 4px 8px;
+    background-color: #c72127;
+    border-radius: 5px;
+    margin-bottom: 8px;
+}
+
+.discount_text {
+    color: var(--white);
+    font-weight: bold;
+    font-size: 1.6rem;
+}
+
+.description_text {
+    color: var(--faded-color);
+    font-size: 1.6rem;
+    height: 140px;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 6; /* Number of lines to show */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.footer {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.stars_container {
+    display: flex;
+    align-items: center;
+}
+
+.star_icon {
+    width: 16px;
+    height: 16px;
+    background-color: var(--white);
+}
+
+.star_icon.filled {
+    background-color: var(--star-color);
+}
+
+.star_icon.aquarter {
+    background: linear-gradient(to right, var(--star-color), var(--star-color) 25%, var(--white) 5px, var(--white));
+}
+
+.star_icon.ahalf {
+    background: linear-gradient(to right, var(--star-color), var(--star-color) 50%, var(--white) 5px, var(--white));
+}
+
+.star_icon.threequarters {
+    background: linear-gradient(to right, var(--star-color), var(--star-color) 75%, var(--white) 5px, var(--white));
+}
+
+.sold {
+    margin-left: 16px;
+    padding-left: 16px;
+    border-left: 1px solid var(--faded-color);
+
+    display: flex;
+    align-items: center;
+}
+
+.sold_text {
+    font-size: 1.6rem;
+    font-weight: bold;
+    margin-right: 16px;
+}
+
+.sold_number {
+    color: var(--discount-color);
+    font-size: 1.6rem;
+    font-weight: bold;
+}

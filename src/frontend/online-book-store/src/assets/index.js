@@ -10,6 +10,7 @@ const images = {
     aboutpage_community_2: require('~/assets/About/About_Community_2.png'),
     aboutpage_community_3: require('~/assets/About/About_Community_3.png'),
     aboutpage_community_4: require('~/assets/About/About_Community_4.png'),
+    star_icon: require('~/assets/Common/StarIcon.png'),
 };
 
 export default images;

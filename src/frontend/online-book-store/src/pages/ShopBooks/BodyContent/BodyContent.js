@@ -10,6 +10,7 @@ import FilterSection from './components/FilterSection';
 import FilterAllMenu from './components/FilterAllMenu';
 import { useState } from 'react';
 import SelectSort from './components/SelectSort';
+import Products from './components/Products';
 
 const cx = classNames.bind(styles);
 
@@ -559,7 +560,13 @@ function BodyContent() {
                             </div>
                         </div>
                     </div>
-                    <div className={cx('core')}></div>
+                    <div className={cx('core')}>
+                        <Products />
+                        <Products />
+                        <Products />
+                        <Products />
+                        <Products />
+                    </div>
                 </div>
             </div>
             {showFilterAll && (

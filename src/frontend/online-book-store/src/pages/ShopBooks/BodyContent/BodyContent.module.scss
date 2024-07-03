@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: baseline;
 
     width: 100%;
 }
@@ -69,9 +70,13 @@
     margin: 0 8px;
 }
 .star_icon {
-    color: #ffea00;
+    color: var(--star-color);
 
     &:nth-last-child(1) {
         color: #ccc;
     }
+}
+
+.core {
+    margin-top: 16px;
 }
