@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faChevronLeft, faChevronRight, faStar } from '@fortawesome/free-solid-svg-icons';
 
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 
@@ -8,7 +8,7 @@ import styles from './BodyContent.module.scss';
 import Category from './components/Category';
 import FilterSection from './components/FilterSection';
 import FilterAllMenu from './components/FilterAllMenu';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SelectSort from './components/SelectSort';
 import Products from './components/Products';
 
@@ -515,6 +515,43 @@ function BodyContent() {
         setShowFillterAll(!showFilterAll);
     };
 
+    const [currentPage, setCurrentPage] = useState(0); // number
+    const [showPages, setShowPages] = useState([1, 2, 3, 4, 5]); // number array
+    // const [books, setBooks] = useState([]); // object array
+
+    const handleBackPage = () => {
+        if (currentPage < 0) return;
+        else if (currentPage === 0 && showPages[0] > 1) {
+            setShowPages(showPages.map((page) => page - 1));
+            return;
+        }
+
+        setCurrentPage((prev) => prev - 1);
+
+        // call API to url
+    };
+
+    const handleNextPage = () => {
+        if (currentPage > 99) return;
+        else if (currentPage === showPages.length - 1) {
+            setShowPages(showPages.map((page) => page + 1));
+            return;
+        }
+
+        setCurrentPage((prev) => prev + 1);
+
+        // call API to url
+    };
+
+    useEffect(() => {
+        // Ensure current page index is valid
+        if (currentPage < 0) {
+            setCurrentPage(0);
+        } else if (currentPage >= showPages.length) {
+            setCurrentPage(showPages.length - 1);
+        }
+    }, [currentPage, showPages]);
+
     return (
         <div>
             <div className={cx('wrapper')}>
@@ -567,8 +604,26 @@ function BodyContent() {
                         <Products />
                         <Products />
                     </div>
+                    <div className={cx('footer')}>
+                        <span className={cx('back_btn')} onClick={handleBackPage}>
+                            <FontAwesomeIcon icon={faChevronLeft} />
+                        </span>
+                        <div className={cx('pages')}>
+                            {showPages.map((item, index) => (
+                                <a className={cx('page_item', { active: index === currentPage })} href="/" key={index}>
+                                    {item}
+                                </a>
+                            ))}
+
+                            <span className={cx('page_item')}>...</span>
+                        </div>
+                        <span className={cx('next_btn')} onClick={handleNextPage}>
+                            <FontAwesomeIcon icon={faChevronRight} />
+                        </span>
+                    </div>
                 </div>
             </div>
+
             {showFilterAll && (
                 <FilterAllMenu
                     deal={FILTER_SECTION_1.items}

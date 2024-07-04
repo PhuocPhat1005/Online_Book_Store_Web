@@ -62,6 +62,7 @@
 }
 
 .title {
+    color: var(--text-color);
     font-size: 1.8rem;
     font-weight: bold;
     text-align: justify;
@@ -79,7 +80,7 @@
 .new_price {
     font-size: 2.4rem;
     font-weight: bold;
-    color: #c72127;
+    color: var(--discount-color);
 }
 
 .old_price {
@@ -90,7 +91,7 @@
 
 .discount {
     padding: 4px 8px;
-    background-color: #c72127;
+    background-color: var(--discount-color);
     border-radius: 5px;
     margin-bottom: 8px;
 }
@@ -158,6 +159,7 @@
 .sold_text {
     font-size: 1.6rem;
     font-weight: bold;
+    color: var(--text-color);
     margin-right: 16px;
 }
 

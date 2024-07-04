@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -101,14 +101,14 @@ function Header() {
                         </div>
                     </Tippy>
                 </div>
-                <div className={cx('chat')}>
+                <Button className={cx('chat')} types="text">
                     <FontAwesomeIcon className={cx('chat-icon')} icon={faComments} />
                     <span className={cx('badge')}>99</span>
-                </div>
-                <div className={cx('notification')}>
+                </Button>
+                <Button className={cx('notification')} types="text">
                     <FontAwesomeIcon className={cx('notification-icon')} icon={faBell} />
                     <span className={cx('badge')}>99</span>
-                </div>
+                </Button>
                 <div>
                     <Menu items={USER_MENU}>
                         <div className={cx('user')}>
@@ -121,10 +121,10 @@ function Header() {
                         </div>
                     </Menu>
                 </div>
-                <div className={cx('cart')}>
+                <Button className={cx('cart')} types="text" to={config.routes.cart}>
                     <FontAwesomeIcon icon={faCartShopping} />
                     <span className={cx('badge')}>99</span>
-                </div>
+                </Button>
             </div>
         </header>
     );

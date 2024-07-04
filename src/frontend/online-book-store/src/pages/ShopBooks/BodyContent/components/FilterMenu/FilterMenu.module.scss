@@ -21,14 +21,9 @@
 
     max-height: 200px;
     overflow-y: scroll;
+    scrollbar-width: thin;
 
     padding: 0 32px;
-
-    &::-webkit-scrollbar {
-        display: none;
-        -ms-overflow-style: none; /* IE and Edge */
-        scrollbar-width: none; /* Firefox */
-    }
 }
 
 .item {

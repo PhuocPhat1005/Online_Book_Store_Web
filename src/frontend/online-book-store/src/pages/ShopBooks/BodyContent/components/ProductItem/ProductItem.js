@@ -1,6 +1,4 @@
 import classNames from 'classnames/bind';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './ProductItem.module.scss';
 import Image from '~/components/Image';
@@ -29,8 +27,8 @@ function ProductItem({ rating }) {
             <div className={cx('body')}>
                 <p className={cx('title')}>Super Idol Ban Tum Lum Ta La, Messi vo dich Euro 2024</p>
                 <div className={cx('price')}>
-                    <p className={cx('new_price')}>99.000 VND</p>
-                    <p className={cx('old_price')}>100.000 VND</p>
+                    <p className={cx('new_price')}>99.000 đ</p>
+                    <p className={cx('old_price')}>100.000 đ</p>
                     <div className={cx('discount')}>
                         <span className={cx('discount_text')}>-1%</span>
                     </div>

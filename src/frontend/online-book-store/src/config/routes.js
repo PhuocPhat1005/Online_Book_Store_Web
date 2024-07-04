@@ -6,6 +6,7 @@ const routes = {
     contact: '/contact',
     about: '/about',
     forgotpassword: '/signin/forgotpassword',
+    cart: '/cart',
 };
 
 export default routes;

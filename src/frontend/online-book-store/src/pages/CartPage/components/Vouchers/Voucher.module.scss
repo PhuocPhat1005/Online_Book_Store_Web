@@ -1,0 +1,57 @@
+:root {
+    --voucher--width: 500px;
+    --voucher-body-width: 376px;
+}
+
+.wrapper {
+    width: var(--voucher--width);
+    background-color: var(--white);
+    border-radius: 5px;
+    padding: 8px 16px;
+    margin-left: 32px;
+}
+
+/* HEADER */
+
+.header {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+}
+
+.voucher_icon {
+    font-size: 3.6rem;
+    margin-right: 16px;
+    color: var(--voucher-color);
+}
+
+.header_title {
+    font-size: 3.6rem;
+    font-weight: bold;
+    color: var(--voucher-color);
+}
+
+/* BODY*/
+
+.body {
+    max-height: var(--voucher-body-width);
+
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}
+
+/* FOOTER */
+
+.footer_title {
+    font-size: 2.4rem;
+    font-weight: bold;
+    color: var(--voucher-color);
+    margin-bottom: 8px;
+}
+
+.footer_text {
+    font-size: 1.8rem;
+    color: var(--text-color);
+}
