@@ -143,6 +143,14 @@
 
 /* User - container */
 
+.notification_container {
+    position: relative;
+}
+
+.notification_wrapper {
+    height: 0;
+}
+
 .chat,
 .notification {
     position: relative;
