@@ -29,7 +29,7 @@ const USER_MENU = [
     {
         icon: <FontAwesomeIcon icon={faUser} />,
         title: 'Profile',
-        to: '/home',
+        to: config.routes.profile,
     },
     {
         icon: <FontAwesomeIcon icon={faBoxesPacking} />,

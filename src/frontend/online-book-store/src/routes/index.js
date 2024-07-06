@@ -6,6 +6,7 @@ import ContactPage from '~/pages/Contact/Contact';
 import AboutUsPage from '~/pages/AboutUs';
 import ForgotPasswordPage from '~/pages/ForgotPassword';
 import CartPage from '~/pages/CartPage';
+import ProfilePage from '~/pages/Profile';
 
 import HeaderOnly from '~/components/Layouts/HeaderOnly';
 
@@ -20,6 +21,7 @@ const publicRoutes = [
     { path: config.routes.contact, component: ContactPage },
     { path: config.routes.about, component: AboutUsPage },
     { path: config.routes.cart, component: CartPage, layout: HeaderOnly },
+    { path: config.routes.profile, component: ProfilePage, layout: HeaderOnly },
 ];
 
 const privateRoutes = [];

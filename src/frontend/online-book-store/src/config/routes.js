@@ -7,6 +7,7 @@ const routes = {
     about: '/about',
     forgotpassword: '/signin/forgotpassword',
     cart: '/cart',
+    profile: '/profile',
 };
 
 export default routes;
