@@ -137,6 +137,9 @@ async def google_auth(request: Request, db: AsyncSession = Depends(get_db)):
         request_state = request.query_params.get("state")
         print(f"Request state: {request_state}\n")
         response_state = request.session.get("oauth_state", None)
+        response_state = request.cookies.get("gfg_cookie_key")
+        # token = await oauth.google.authorize_access_token(request_state)
+        # print(token)
         print(f"Response state: {response_state}\n")
         print(f"Session in callback: {request.session.items()}")
         
