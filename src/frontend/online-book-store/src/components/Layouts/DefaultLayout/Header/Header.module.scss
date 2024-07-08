@@ -52,6 +52,10 @@
     font-size: 1.6rem;
 }
 
+.label:hover {
+    scale: 1.05;
+    font-weight: 700;
+}
 /* Search */
 
 .search-bar,
@@ -141,6 +145,47 @@
     font-weight: 400;
 }
 
+/* Sign In - Sign Up buttons */
+.auth-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.signin,
+.signup {
+    color: var(--black);
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--guest-purple-100-color), var(--guest-cyan-100-color));
+    box-shadow: 0 4px 8px var(--guest-shadow-color);
+    width: 200px;
+    height: 75px;
+    border-radius: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    margin: 0 15px;
+    transition: background 0.5s ease-in-out, color 0.5s ease-in-out, transform 0.5s ease-in-out,
+        box-shadow 0.5s ease-in-out;
+}
+
+.signup {
+    background: linear-gradient(135deg, var(--guest-cyan-100-color), var(--guest-purple-100-color));
+}
+
+/* Hover effects for buttons */
+.signin:hover,
+.signup:hover {
+    background: linear-gradient(315deg, var(--guest-purple-100-color), var(--guest-cyan-100-color));
+    color: var(--white);
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px var(--guest-shadow-color);
+    font-weight: 700;
+}
+
+.signup:hover {
+    background: linear-gradient(315deg, var(--guest-cyan-100-color), var(--guest-purple-100-color));
+}
 /* User - container */
 
 .notification_container {

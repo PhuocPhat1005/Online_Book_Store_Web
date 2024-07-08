@@ -8,6 +8,10 @@ const routes = {
     forgotpassword: '/signin/forgotpassword',
     cart: '/cart',
     profile: '/profile',
+    guesthome: '/guesthome',
+    guestshopbooks: './guestshopbooks',
+    guestcontact: './guestcontact',
+    guestabout: './guestabout',
 };
 
 export default routes;

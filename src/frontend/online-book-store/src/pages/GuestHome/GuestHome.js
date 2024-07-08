@@ -1,12 +1,12 @@
 import classNames from 'classnames/bind';
 
 import { HeaderContentLayout } from '~/components/Layouts';
-import styles from './Home.module.scss';
+import styles from './GuestHome.module.scss';
 import Slide from '~/components/Slide';
 import ConnectedLine from '~/components/ConnectedLine';
-import IntroductionBlock from './components/IntroductionBlock';
-import EventBlock from './components/EventBlock';
-import EventsContent from './components/EventsContent';
+import IntroductionBlock from '../GuestHome/components/GuestIntroductionBlock/GuestIntroductionBlock';
+import GuestEventBlock from '../GuestHome/components/GuestEventBlock/GuestEventBlock';
+import EventsContent from './components/GuestEventsContent';
 import Header from '~/components/Layouts/DefaultLayout/Header/Header';
 
 const cx = classNames.bind(styles);
@@ -17,12 +17,12 @@ const data = [
     'https://cdn.mos.cms.futurecdn.net/jUMGw45Kcj8vgLmnP7HZxP.jpg',
 ];
 
-function Home() {
+function GuestHome() {
     return (
         <>
-            <Header guest={false} />
+            <Header guest={true} />
             <div className={cx('wrapper')}>
-                <HeaderContentLayout title="SIBooks" subtitle="The World of Books" />
+                <HeaderContentLayout title="SIBooks" subtitle="The World of Books" guest />
                 <Slide images={data} />
                 <ConnectedLine />
                 <div className={cx('container')}>
@@ -31,7 +31,7 @@ function Home() {
                     </div>
                     <ConnectedLine />
                     <div className={cx('events')}>
-                        <EventBlock />
+                        <GuestEventBlock />
                     </div>
                     <ConnectedLine />
                 </div>
@@ -45,4 +45,4 @@ function Home() {
     );
 }
 
-export default Home;
+export default GuestHome;
