@@ -15,7 +15,8 @@ from app.routes import (
     category,
     publishing_company,
     translator,
-    photo
+    photo,
+    user
 )
 from app.database.database import Base
 from app.config.config import settings
@@ -72,6 +73,7 @@ app.include_router(category.router)
 app.include_router(publishing_company.router)
 app.include_router(translator.router)
 app.include_router(photo.router)
+app.include_router(user.router)
 
 
 def main():
