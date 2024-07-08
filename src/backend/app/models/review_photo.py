@@ -14,8 +14,6 @@ class ReviewPhoto(Base):
         default=uuid.uuid4(),
     )
     review_id = Column(UUID, ForeignKey("reviews.id"), nullable=False)
-    photo = Column(Text)
-    create_at = Column(TIMESTAMP)
-    update_at = Column(TIMESTAMP)
+    path = Column(Text)
 
     review = relationship("Review", back_populates="photos")

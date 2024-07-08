@@ -30,6 +30,7 @@ class Settings(BaseSettings):
     MAIL_SENDER: str = env_values["MAIL_SENDER"]
     MAIL_PASSWORD: str = env_values["MAIL_PASSWORD_APP"]
 
+    Photo_directory: str = env_values["Photo_directory"]
     class Config:
         case_sensitive = True
 

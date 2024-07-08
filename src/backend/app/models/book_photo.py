@@ -9,8 +9,7 @@ class BookPhoto(Base):
     __tablename__ = "book_photos"
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4())
     book_id = Column(UUID, ForeignKey("books.id"), nullable=False)
-    photo = Column(Text)
-    create_at = Column(TIMESTAMP)
-    update_at = Column(TIMESTAMP)
+    path = Column(Text)
+
 
     book = relationship("Book", back_populates="photos")
