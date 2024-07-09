@@ -4,7 +4,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.services.crud_service import CRUDService
 # from app.services.photo_service import upload_photo
 from app.schemas.photo import PhotoCreate, PhotoUpdate, PhotoResponse
-from app.models.photo import Photo
 from app.models.user_photo import UserPhoto
 from app.models.review_photo import ReviewPhoto
 from app.models.book_photo import BookPhoto
@@ -17,7 +16,6 @@ from app.config.config import settings
 from sqlalchemy import cast
 
 router = APIRouter()
-photo_service = CRUDService[Photo, PhotoCreate, PhotoUpdate](Photo)
 photo_path = settings.Photo_directory
 
 @router.post("uploadfile")
@@ -63,44 +61,3 @@ async def save_photo(photo_name: str, photo_type: str, id_: str, db: AsyncSessio
 @router.get("show_photo")
 async def show_photo(photo_path: str):
     return FileResponse(photo_path)
-
-    
-
-# @router.post("/create_photo", summary="Create a new photo")
-# async def create_photo_endpoint(photo: PhotoCreate,  db: AsyncSession = Depends(get_db)):
-#     return await upload_photo(photo, db)
-
-# #up file trc r goi api dat ten, dia chi,.... sau
-# # @router.post("/create_photo", summary="Create a new photo")
-# # async def create_photo_endpoint(myfile: UploadFile,  db: AsyncSession = Depends(get_db)):
-# #     contents = await myfile.read()
-# #     return
-
-
-# @router.get("/get_photo/{photo_id}", summary="Get a photo by ID")
-# async def get_photo_endpoint(photo_id: UUID, db: AsyncSession = Depends(get_db)):
-#     photo = await photo_service.get(photo_id, db)
-#     if not photo:
-#         raise HTTPException(status_code=404, detail="Photo not found")
-#     return photo
-
-# @router.get("/get_photo_by_name/{photo_name}", summary="Get photos by name")
-# async def get_photos_by_name_endpoint(photo_name: str, db: AsyncSession = Depends(get_db)):
-#     photos = await photo_service.get_by_one_value(photo_name, [Photo.photo_name], db)
-#     if not photos:
-#         raise HTTPException(status_code=404, detail="No photos found with that name")
-#     return photos
-
-# @router.put("/update_photo/{photo_id}", summary="Update a photo by ID")
-# async def update_photo_endpoint(photo_id: UUID, photo_update: PhotoUpdate, db: AsyncSession = Depends(get_db)):
-#     photo = await photo_service.update(photo_id, photo_update, db)
-#     if not photo:
-#         raise HTTPException(status_code=404, detail="Photo not found")
-#     return photo
-
-# @router.delete("/delete_photo/{photo_id}", summary="Delete a photo by ID")
-# async def delete_photo_endpoint(photo_id: UUID, db: AsyncSession = Depends(get_db)):
-#     photo = await photo_service.delete(photo_id, db)
-#     if not photo:
-#         raise HTTPException(status_code=404, detail="photo not found")
-#     return photo

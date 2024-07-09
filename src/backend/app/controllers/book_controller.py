@@ -1,16 +1,24 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.services.crud_service import CRUDService, query_string_to_dict
+from app.services.crud_service import CRUDService, query_string_to_dict, query_in_db_by_id
 
 from app.schemas.book import BookCreate, BookUpdate, BookResponse, BookOrder, BookFilter
+from app.schemas.book_author import Book_Author_Create, Book_Author_Update
+from app.schemas.book_translator import Book_Translator_Create, Book_Translator_Update
 from app.models.book import Book
+from app.models.author import Author
+from app.models.translator import Translator
+from app.models.book_author import BookAuthor
+from app.models.book_translator import BookTranslator
 from app.database.database import get_db
 from uuid import UUID
 from typing import List, Optional
+from sqlalchemy import select
 
 router = APIRouter()
 book_service = CRUDService[Book, BookCreate, BookUpdate](Book)
-
+book_author_service = CRUDService[BookAuthor, Book_Author_Create, Book_Author_Update](BookAuthor)
+book_translator_service = CRUDService[BookTranslator, Book_Translator_Create, Book_Translator_Update](BookTranslator)
 # @router.post("/create_book", summary="Create a new book")
 # async def create_book_endpoint(book: BookCreate, db: AsyncSession = Depends(get_db)):
 #     return await create_book(book, db)
@@ -107,6 +115,48 @@ async def get_book_by_condition_endpoint(and_search_params: str = None, or_searc
         raise HTTPException(status_code=404, detail="No books found")
     return await book_service.get_ordered(books, ORDER_BY)
 
-# @router.get("/get_all_fields", summary="Get all fields of book")
-# async def get_all_fields_endpoint(db: AsyncSession = Depends(get_db)):
-#     return await book_service.get_by_one_value('', [Book.book_name], db, 0,limit=1)
+@router.post("/add_author_to_book", summary="Add author to book")
+async def add_author_to_book_endpoint(book_author: Book_Author_Create, db: AsyncSession = Depends(get_db)):
+    return await book_author_service.create(book_author, db)
+
+@router.get("/get_book_author/{book_id}", summary="Get book author by book ID")
+async def get_book_author_endpoint(book_id: UUID, db: AsyncSession = Depends(get_db)):
+    book_author = await book_author_service.get_by_condition([{'book_id':book_id}], db)
+    if not book_author:
+        raise HTTPException(status_code=404, detail="Book author not found")
+    author_id = book_author[0].author_id
+    db_objs = await query_in_db_by_id(db, Author, author_id)
+    author_data = []
+    for db_obj in db_objs:
+        author_data.append({"Full_name": db_obj.full_name, "Pen_name": db_obj.pen_name})
+    return author_data
+
+@router.delete("/delete_book_author/{book_id}", summary="Delete book author by book ID")
+async def delete_book_author_endpoint(book_id: UUID, db: AsyncSession = Depends(get_db)):
+    book_author = await book_author_service.delete(book_id, db)
+    if not book_author:
+        raise HTTPException(status_code=404, detail="Book author not found")
+    return book_author
+
+@router.post("/add_translator_to_book", summary="Add translator to book")
+async def add_translator_to_book_endpoint(book_translator: Book_Translator_Create, db: AsyncSession = Depends(get_db)):
+    return await book_translator_service.create(book_translator, db)
+
+@router.get("/get_book_translator/{book_id}", summary="Get book translator by book ID")
+async def get_book_translator_endpoint(book_id: UUID, db: AsyncSession = Depends(get_db)):
+    book_translator = await book_translator_service.get_by_condition([{'book_id':book_id}], db)
+    if not book_translator:
+        raise HTTPException(status_code=404, detail="Book translator not found")
+    translator_id = book_translator[0].translator_id
+    db_objs = await query_in_db_by_id(db, Translator, translator_id)
+    translator_data = []
+    for db_obj in db_objs:
+        translator_data.append({"Full_name": db_obj.full_name, "Pen_name": db_obj.pen_name})
+    return translator_data
+
+@router.delete("/delete_book_translator/{book_id}", summary="Delete book translator by book ID")
+async def delete_book_translator_endpoint(book_id: UUID, db: AsyncSession = Depends(get_db)):
+    book_translator = await book_translator_service.delete(book_id, db)
+    if not book_translator:
+        raise HTTPException(status_code=404, detail="Book translator not found")
+    return book_translator

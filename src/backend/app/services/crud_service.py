@@ -203,3 +203,9 @@ def query_string_to_dict(query_string: str) -> dict:
         return converted_values
 
     return {k: convert_value(v) for k, v in parsed_dict.items()}
+
+async def query_in_db_by_id(db: AsyncSession, model: Type[ModelType],id_: UUID)->list[ModelType]:
+    query = select(model).where(model.id == id_)
+    result = await db.execute(query)
+    db_objs = result.scalars().all()
+    return db_objs

@@ -9,7 +9,7 @@ from datetime import datetime
 class UserPhoto(Base):
     __tablename__ = "user_photos"
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4())
-    user_id = Column(UUID, ForeignKey("users.id"), nullable=False)
+    user_id = Column(UUID, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     path = Column(Text)
 
     user = relationship("User", back_populates="photos")

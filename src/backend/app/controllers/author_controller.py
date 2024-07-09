@@ -14,6 +14,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 def check_admin(token: str = Depends(oauth2_scheme)):
     # Simulate an admin check
+    return True
     print(token)
     user_is_admin = True  # Replace with actual check
     if not user_is_admin:
@@ -24,12 +25,13 @@ def check_admin(token: str = Depends(oauth2_scheme)):
 async def create_author_endpoint(
     author: AuthorCreate,
     db: AsyncSession = Depends(get_db),
-    admin_check: None = Depends(check_admin)
+    # admin_check: None = Depends(check_admin)
 ):
-    if(admin_check):
-        return await author_service.create(author, db)
-    else:
-        raise HTTPException(status_code=403, detail="Not authorized")
+    return await author_service.create(author, db)
+    # if(admin_check):
+    #     return await author_service.create(author, db)
+    # else:
+    #     raise HTTPException(status_code=403, detail="Not authorized")
     
 @router.get("/get_author/{author_id}", summary="Get a Author by ID")
 async def get_author_endpoint(author_id: UUID, db: AsyncSession = Depends(get_db)):
