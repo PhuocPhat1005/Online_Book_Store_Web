@@ -43,14 +43,14 @@ async def create_category_endpoint(
 
 @router.get("/get_category/{category_id}", summary="Get a category by ID")
 async def get_category_endpoint(category_id: UUID, db: AsyncSession = Depends(get_db)):
-    return await category_service.get(category_id, db)
+    return await category_service.get_by_condition([{'id':category_id}], db)
 
 
 @router.get("/get_category_by_name/{category_name}", summary="Get a category by name")
 async def get_category_by_name_endpoint(
     category_name: str, db: AsyncSession = Depends(get_db)
 ):
-    category = await category_service.get_by_one_value(category_name, [Category.category_name], db, 0)
+    category = await category_service.get_by_condition([{'category_name':category_name}], db, 0)
     if not category:
         raise HTTPException(status_code=404, detail="Category not found")
     return category

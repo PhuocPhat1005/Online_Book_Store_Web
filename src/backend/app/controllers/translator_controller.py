@@ -15,14 +15,14 @@ async def create_translator_endpoint(translator: TranslatorCreate, db: AsyncSess
 
 @router.get("/get_translator/{translator_id}", summary="Get a translator by ID")
 async def get_translator_endpoint(translator_id: UUID, db: AsyncSession = Depends(get_db)):
-    translator = await translator_service.get(translator_id, db)
+    translator = await translator_service.get_by_condition([{'id':translator_id}], db)
     if not translator:
         raise HTTPException(status_code=404, detail="Translator not found")
     return translator
 
 @router.get("/get_translator_by_name/{translator_name}", summary="Get translators by name")
 async def get_translators_by_name_endpoint(translator_name: str, db: AsyncSession = Depends(get_db)):
-    translators = await translator_service.get_by_one_value(translator_name, [Translator.full_name, Translator.pen_name], db, 0)
+    translators = await translator_service.get_by_condition([{},{'full_name':translator_name, 'pen_name': translator_name}], db, 0)
     if not translators:
         raise HTTPException(status_code=404, detail="No translators found with that name")
     return translators

@@ -22,7 +22,7 @@ class Account(Base):
     created_at = Column(TIMESTAMP, server_default=func.now(), nullable=False)
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now(), nullable=False)
 
-    user = relationship("User", back_populates="account")
+    user = relationship("User", back_populates="account", cascade="all, delete-orphan")
 
 
 @event.listens_for(Account, "before_update")

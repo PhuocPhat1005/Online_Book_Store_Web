@@ -20,6 +20,11 @@ from app.services.user_service import (
     get_current_account,
     send_email_to_user,
 )
+
+from app.schemas.user import UserCreate, UserUpdate, UserResponse
+from app.services.crud_service import CRUDService
+from app.models.user import User
+
 from app.database.database import get_db
 from app.config.config import settings
 from uuid import uuid4
@@ -30,6 +35,8 @@ from jose import JWTError, jwt
 import requests
 
 import logging
+
+user_service = CRUDService[User, UserCreate, UserUpdate](User)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -137,6 +144,9 @@ async def google_auth(request: Request, db: AsyncSession = Depends(get_db)):
         request_state = request.query_params.get("state")
         print(f"Request state: {request_state}\n")
         response_state = request.session.get("oauth_state", None)
+        response_state = request.cookies.get("gfg_cookie_key")
+        # token = await oauth.google.authorize_access_token(request_state)
+        # print(token)
         print(f"Response state: {response_state}\n")
         print(f"Session in callback: {request.session.items()}")
         
@@ -220,9 +230,16 @@ async def sign_up(account: AccountCreate, db: AsyncSession = Depends(get_db)):
             detail="Username already registered",
         )
     account.password = get_password_hash(account.password)
-    await create_account(db, account)
+    new_id = await create_account(db, account)
     access_token = create_access_token(data={"sub": account.username})
     refresh_token = create_refresh_token(data={"sub": account.username})
+    user = UserCreate(
+        account_id = new_id,
+        phone = "none",
+        full_name = "none",
+        gender = "none",
+    )
+    await user_service.create(user, db)
     return {"access_token": access_token, "refresh_token": refresh_token}
 
 

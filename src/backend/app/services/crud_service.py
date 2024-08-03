@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, or_, and_, Column, cast, Integer, Float, Boolean, DateTime, Numeric
+from sqlalchemy import select, or_, and_, Column, cast, Integer, Float, Boolean, DateTime, Numeric, String
 from uuid import UUID
 from fastapi import HTTPException
 from typing import Type, TypeVar, Generic, Dict, Callable
@@ -33,65 +33,101 @@ class CRUDService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             raise RuntimeError(f"Failed to create {self.model.__name__}: {e}") from e
         return db_obj
 
-    async def get(self, obj_id: UUID, db: AsyncSession) -> ModelType:
-        result = await db.execute(select(self.model).where(self.model.id == obj_id))
-        db_obj = result.scalars().first()
-        if not db_obj:
-            raise HTTPException(status_code=404, detail=f"{self.model.__name__} not found")
-        return db_obj
+    # async def get(self, obj_id: UUID, db: AsyncSession) -> ModelType:
+    #     result = await db.execute(select(self.model).where(self.model.id == obj_id))
+    #     db_obj = result.scalars().first()
+    #     if not db_obj:
+    #         raise HTTPException(status_code=404, detail=f"{self.model.__name__} not found")
+    #     return db_obj
     
-    async def get_by_one_value(self, obj_name: str, name_fields: list[Column], db: AsyncSession, exactly: int = 1, offset: int = 0, limit: int = sys.maxsize) -> list[ModelType]:
-        if exactly:
-            conditions = [field == obj_name for field in name_fields]
-        else:
-            conditions = [field.like(f"%{obj_name}%") for field in name_fields]
+    # async def get_by_one_value(self, obj_name: str, name_fields: list[Column], db: AsyncSession, exactly: int = 1, offset: int = 0, limit: int = sys.maxsize) -> list[ModelType]:
+    #     if exactly:
+    #         conditions = [field == obj_name for field in name_fields]
+    #     else:
+    #         conditions = [field.like(f"%{obj_name}%") for field in name_fields]
             
-        query = select(self.model).where(or_(*conditions)).distinct()
-        query = query.limit(limit)
-        query = query.offset(offset)
-        result = await db.execute(query)
-        db_objs = result.scalars().all()
-        if not db_objs:
-            raise HTTPException(status_code=404, detail=f"{self.model.__name__} not found")
-        return db_objs
+    #     query = select(self.model).where(or_(*conditions)).distinct()
+    #     query = query.limit(limit)
+    #     query = query.offset(offset)
+    #     result = await db.execute(query)
+    #     db_objs = result.scalars().all()
+    #     if not db_objs:
+    #         raise HTTPException(status_code=404, detail=f"{self.model.__name__} not found")
+    #     return db_objs
 
-    async def get_by_many_value(self, search_params: Dict[str, any], db: AsyncSession, condition: int = 1, offset: int = 0, limit: int = sys.maxsize) -> list[ModelType]:
+    # async def get_by_condition(self, search_params: Dict[str, any], db: AsyncSession, euqal_condition: int = 1, and_condition: int = 1, offset: int = 0, limit: int = sys.maxsize) -> list[ModelType]:
+    #     conditions = []
+        
+    #     for field_name, search_value in search_params.items():
+    #         field = getattr(self.model, field_name, None)
+    #         if field is None:
+    #             raise HTTPException(status_code=400, detail=f"Field {field_name} does not exist on {self.model.__name__}")
+    #         for value in search_value:
+    #             if euqal_condition:
+    #                 conditions.append(field == value)
+    #             else:
+    #                 conditions.append(cast(field, String).ilike(f"%{value}%"))
+
+            
+    #     if not conditions:
+    #         raise HTTPException(status_code=400, detail="At least one search parameter must be provided")
+
+    #     if and_condition:
+    #         query = select(self.model).where(and_(*conditions)).distinct()
+    #     else:
+    #         query = select(self.model).where(or_(*conditions)).distinct()
+    #     query = query.limit(limit)
+    #     query = query.offset(offset)
+    #     result = await db.execute(query)
+    #     db_objs = result.scalars().all()
+
+    #     if not db_objs:
+    #         raise HTTPException(status_code=404, detail=f"{self.model.__name__} not found")
+
+    #     return db_objs
+    
+    async def get_by_condition(self, list_search_params: list[Dict[str, any]], db: AsyncSession, equal_condition: int = 1, offset: int = 0, limit: int = sys.maxsize) -> list[ModelType]:
         conditions = []
         
-        for field_name, search_value in search_params.items():
-            # if field_name == 'price_lower':
-            #     field = getattr(self.model, 'price', None)
-            #     if field is None:
-            #         raise HTTPException(status_code=400, detail=f"Field price does not exist on {self.model.__name__}")
-            #     else:
-            #         conditions.append(field >= search_value)
-            #     continue
-            # if field_name == 'price_upper':
-            #     field = getattr(self.model, 'price', None)
-            #     if field is None:
-            #         raise HTTPException(status_code=400, detail=f"Field price does not exist on {self.model.__name__}")
-            #     else:
-            #         conditions.append(field <= search_value)
-            #     continue
-            # if field_name == 'publishing_year':
-            #     field = getattr(self.model, 'publishing_date', None)
-            #     if field is None:
-            #         raise HTTPException(status_code=400, detail=f"Field created_at does not exist on {self.model.__name__}")
-            #     else:
-            #         conditions.append(extract('year', field) == search_value)
-            #     continue
-            field = getattr(self.model, field_name, None)
-            if field is None:
-                raise HTTPException(status_code=400, detail=f"Field {field_name} does not exist on {self.model.__name__}")
-            if condition:
-                conditions.append(field == search_value)
+        for i, search_params in enumerate(list_search_params):
+            sub_conditions = []
+            if not search_params:
+                continue
+            for field_name, search_value in search_params.items():
+                field = getattr(self.model, field_name, None)
+                if field is None:
+                    raise HTTPException(status_code=400, detail=f"Field {field_name} does not exist on {self.model.__name__}")
+                if isinstance(search_value, list):
+                    for value in search_value:
+                        if equal_condition:
+                            condition = (field == value)
+                        else:
+                            condition = cast(field, String).ilike(f"%{value}%")
+
+                        sub_conditions.append(condition)
+                else:
+                    if equal_condition:
+                        condition = (field == search_value)
+                    else:
+                        condition = cast(field, String).ilike(f"%{search_value}%")
+                    sub_conditions.append(condition)
+
+            if i == 0:
+                conditions.append(and_(*sub_conditions))
             else:
-                conditions.append(field.ilike(f"%{search_value}%"))
-            
+                conditions.append(or_(*sub_conditions))
+
         if not conditions:
             raise HTTPException(status_code=400, detail="At least one search parameter must be provided")
 
-        query = select(self.model).where(and_(*conditions)).distinct()
+        # Combine all conditions using AND
+        final_condition = and_(*conditions) if len(conditions) > 1 else conditions[0]
+        
+                        
+        if not conditions:
+            raise HTTPException(status_code=400, detail="At least one search parameter must be provided")
+
+        query = select(self.model).where(final_condition).distinct()
         query = query.limit(limit)
         query = query.offset(offset)
         result = await db.execute(query)
@@ -102,7 +138,7 @@ class CRUDService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
         return db_objs
 
-    async def get_ordered(self, list_item: list[ModelType], order_by: str = "id", desc_order: bool = True, from_: int = 0, amount_: int = sys.maxsize) -> list[ModelType]:
+    async def get_ordered(self, list_item: list[ModelType], order_by: str = "id", desc_order: bool = True) -> list[ModelType]:
         if not list_item:
             raise HTTPException(status_code=404, detail="No items provided")
 
@@ -111,11 +147,6 @@ class CRUDService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
                 list_item.sort(key=lambda x: getattr(x, order_by), reverse=desc_order)
             except AttributeError:
                 raise HTTPException(status_code=400, detail=f"Field {order_by} does not exist on {self.model.__name__}")
-
-        if amount_ > 0:
-            list_item = list_item[from_:from_ + amount_]
-        else:
-            list_item = list_item[from_:]
 
         if not list_item:
             raise HTTPException(status_code=404, detail=f"No records found in the specified range for {self.model.__name__}")
@@ -159,12 +190,22 @@ class CRUDService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 def query_string_to_dict(query_string: str) -> dict:
     parsed_dict = parse_qs(query_string)
     
-    def convert_value(value):
-        if value.isdigit():
-            return int(value)
-        try:
-            return float(value)
-        except ValueError:
-            return value
+    def convert_value(values):
+        converted_values = []
+        for value in values:
+            if value.isdigit():
+                converted_values.append(int(value))
+            else:
+                try:
+                    converted_values.append(float(value))
+                except ValueError:
+                    converted_values.append(value)
+        return converted_values
 
-    return {k: convert_value(v[0]) for k, v in parsed_dict.items()}
+    return {k: convert_value(v) for k, v in parsed_dict.items()}
+
+async def query_in_db_by_id(db: AsyncSession, model: Type[ModelType],id_: UUID)->list[ModelType]:
+    query = select(model).where(model.id == id_)
+    result = await db.execute(query)
+    db_objs = result.scalars().all()
+    return db_objs

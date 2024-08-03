@@ -7,7 +7,7 @@ import ConnectedLine from '~/components/ConnectedLine';
 import IntroductionBlock from './components/IntroductionBlock';
 import EventBlock from './components/EventBlock';
 import EventsContent from './components/EventsContent';
-import assets from '~/assets';
+import Header from '~/components/Layouts/DefaultLayout/Header/Header';
 
 const cx = classNames.bind(styles);
 
@@ -15,26 +15,29 @@ const data = [assets.homepage_banner_1, assets.homepage_banner_2, assets.homepag
 
 function Home() {
     return (
-        <div className={cx('wrapper')}>
-            <HeaderContentLayout title="SIBooks" subtitle="The World of Books" />
-            <Slide images={data} />
-            <ConnectedLine />
-            <div className={cx('container')}>
-                <div className={cx('introduction')}>
-                    <IntroductionBlock />
+        <>
+            <Header guest={false} />
+            <div className={cx('wrapper')}>
+                <HeaderContentLayout title="SIBooks" subtitle="The World of Books" />
+                <Slide images={data} />
+                <ConnectedLine />
+                <div className={cx('container')}>
+                    <div className={cx('introduction')}>
+                        <IntroductionBlock />
+                    </div>
+                    <ConnectedLine />
+                    <div className={cx('events')}>
+                        <EventBlock />
+                    </div>
+                    <ConnectedLine />
+                </div>
+                <div id="EventsContent">
+                    <EventsContent />
                 </div>
                 <ConnectedLine />
-                <div className={cx('events')}>
-                    <EventBlock />
-                </div>
                 <ConnectedLine />
             </div>
-            <div id="EventsContent">
-                <EventsContent />
-            </div>
-            <ConnectedLine />
-            <ConnectedLine />
-        </div>
+        </>
     );
 }
 
