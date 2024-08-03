@@ -88,13 +88,13 @@ async def delete_book_endpoint(book_id: UUID, db: AsyncSession = Depends(get_db)
         raise HTTPException(status_code=404, detail="Book not found")
     return book
 
-BOOK_PER_PAGE = 5
+BOOK_PER_PAGE = 25
 ORDER_BY = "created_at"
 
 @router.get("/get_book_per_page/{page_number}", summary="Get books in page number")
 async def get_book_per_page_endpoint(page_number: int, db: AsyncSession = Depends(get_db)):
     from_ = (page_number - 1) * BOOK_PER_PAGE
-    books = await book_service.get_by_condition({'id': ''}, db, 0, 1, from_, BOOK_PER_PAGE)
+    books = await book_service.get_by_condition([{'id': ''}], db, 0, from_, BOOK_PER_PAGE)
     if not books:
         raise HTTPException(status_code=404, detail="No books found")
     return await book_service.get_ordered(books, ORDER_BY, True)

@@ -11,6 +11,7 @@ import FilterAllMenu from './components/FilterAllMenu';
 import { useEffect, useState } from 'react';
 import SelectSort from './components/SelectSort';
 import Products from './components/Products';
+import request from '~/utils/request';
 
 const cx = classNames.bind(styles);
 
@@ -509,6 +510,8 @@ const FILTER_SECTION_2 = {
     ],
 };
 
+const BOOKS_PER_ROW = 5;
+
 function BodyContent() {
     const [showFilterAll, setShowFillterAll] = useState(false);
     const handleFilterAllDisplay = () => {
@@ -517,7 +520,8 @@ function BodyContent() {
 
     const [currentPage, setCurrentPage] = useState(0); // number
     const [showPages, setShowPages] = useState([1, 2, 3, 4, 5]); // number array
-    // const [books, setBooks] = useState([]); // object array
+    const [books, setBooks] = useState([]); // object array
+    const [books2D, setBoks2D] = useState([]);
 
     const handleBackPage = () => {
         if (currentPage < 0) return;
@@ -551,6 +555,35 @@ function BodyContent() {
             setCurrentPage(showPages.length - 1);
         }
     }, [currentPage, showPages]);
+
+    useEffect(() => {
+        const getAllBooks = async () => {
+            try {
+                const response = await request.get(`book/get_book_per_page/${(currentPage + 1).toString()}`);
+                setBooks(response.data);
+            } catch (error) {
+                if (error.response) {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    console.error('Form submission failed', error.response.data);
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    console.error('No response received', error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.error('Error', error.message);
+                }
+            }
+        };
+        getAllBooks();
+    }, [currentPage]);
+
+    // Create an array of Products components
+    const products = [];
+    for (let i = 0; i < books.length; i += BOOKS_PER_ROW) {
+        const booksSlice = books.slice(i, i + BOOKS_PER_ROW);
+        products.push(<Products key={i} data={booksSlice} />);
+    }
 
     return (
         <div className={cx('body-wrapper')}>
@@ -597,13 +630,7 @@ function BodyContent() {
                             </div>
                         </div>
                     </div>
-                    <div className={cx('core')}>
-                        <Products />
-                        <Products />
-                        <Products />
-                        <Products />
-                        <Products />
-                    </div>
+                    <div className={cx('core')}>{products}</div>
                 </div>
                 <div className={cx('footer')}>
                     <span className={cx('back_btn')} onClick={handleBackPage}>

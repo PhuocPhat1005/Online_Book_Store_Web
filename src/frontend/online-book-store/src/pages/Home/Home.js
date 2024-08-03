@@ -8,6 +8,7 @@ import IntroductionBlock from './components/IntroductionBlock';
 import EventBlock from './components/EventBlock';
 import EventsContent from './components/EventsContent';
 import Header from '~/components/Layouts/DefaultLayout/Header/Header';
+import assets from '~/assets';
 
 const cx = classNames.bind(styles);
 

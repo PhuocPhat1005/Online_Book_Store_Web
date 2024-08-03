@@ -53,9 +53,15 @@
 }
 
 .label:hover {
-    scale: 1.05;
+    scale: 1.25;
     font-weight: 700;
+    transition: all 0.5s;
 }
+
+.label:not(:hover) {
+    transition: all 0.5s;
+}
+
 /* Search */
 
 .search-bar,

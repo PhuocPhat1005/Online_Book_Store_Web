@@ -13,7 +13,7 @@ import uuid
 import shutil
 import os
 from app.config.config import settings
-from sqlalchemy import cast
+from sqlalchemy import select
 
 router = APIRouter()
 photo_path = settings.Photo_directory
@@ -59,5 +59,15 @@ async def save_photo(photo_name: str, photo_type: str, id_: str, db: AsyncSessio
         return(f'Error: {e}')
     
 @router.get("show_photo")
-async def show_photo(photo_path: str):
-    return FileResponse(photo_path)
+async def show_photo(id_: str, db: AsyncSession = Depends(get_db)):
+    query = select(BookPhoto).where(BookPhoto.book_id == id_)
+    result = await db.execute(query)
+    db_object = result.scalars().all()
+    
+    photos = []
+    
+    for object in db_object:
+        photos.append(FileResponse(object.path))
+        
+    return photos
+    
