@@ -11,6 +11,7 @@ function Products() {
             <ProductItem />
             <ProductItem />
             <ProductItem />
+            <ProductItem />
         </div>
     );
 }

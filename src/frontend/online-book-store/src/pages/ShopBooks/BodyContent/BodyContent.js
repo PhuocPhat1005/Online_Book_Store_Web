@@ -553,7 +553,7 @@ function BodyContent() {
     }, [currentPage, showPages]);
 
     return (
-        <div>
+        <div className={cx('body-wrapper')}>
             <div className={cx('wrapper')}>
                 <div className={cx('sidebar')}>
                     <p className={cx('title')}>Explore by category</p>
@@ -604,23 +604,23 @@ function BodyContent() {
                         <Products />
                         <Products />
                     </div>
-                    <div className={cx('footer')}>
-                        <span className={cx('back_btn')} onClick={handleBackPage}>
-                            <FontAwesomeIcon icon={faChevronLeft} />
-                        </span>
-                        <div className={cx('pages')}>
-                            {showPages.map((item, index) => (
-                                <a className={cx('page_item', { active: index === currentPage })} href="/" key={index}>
-                                    {item}
-                                </a>
-                            ))}
+                </div>
+                <div className={cx('footer')}>
+                    <span className={cx('back_btn')} onClick={handleBackPage}>
+                        <FontAwesomeIcon icon={faChevronLeft} />
+                    </span>
+                    <div className={cx('pages')}>
+                        {showPages.map((item, index) => (
+                            <a className={cx('page_item', { active: index === currentPage })} href="/" key={index}>
+                                {item}
+                            </a>
+                        ))}
 
-                            <span className={cx('page_item')}>...</span>
-                        </div>
-                        <span className={cx('next_btn')} onClick={handleNextPage}>
-                            <FontAwesomeIcon icon={faChevronRight} />
-                        </span>
+                        <span className={cx('page_item')}>...</span>
                     </div>
+                    <span className={cx('next_btn')} onClick={handleNextPage}>
+                        <FontAwesomeIcon icon={faChevronRight} />
+                    </span>
                 </div>
             </div>
 

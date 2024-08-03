@@ -5,6 +5,9 @@
     align-items: baseline;
 
     width: 100%;
+    position: relative;
+
+    padding: 64px 12px;
 }
 
 .sidebar {
@@ -84,17 +87,25 @@
 /*  FOOTER  */
 
 .footer {
-    margin-top: 64px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+
+    background-color: var(--primary-blue);
+    padding: 16px;
+
+    position: absolute;
+    bottom: calc(-84px);
+    left: 0;
+    right: 0;
 }
 
 .back_btn,
 .next_btn {
     padding: 8px 16px;
     font-size: 2.4rem;
-    color: var(--faded-color);
+    color: var(--white);
     cursor: pointer;
 }
 
@@ -110,7 +121,7 @@
     margin-right: 64px;
     padding: 8px 16px;
     text-decoration: none;
-    color: var(--faded-color);
+    color: var(--white);
 
     &:nth-child(1) {
         margin-left: 64px;

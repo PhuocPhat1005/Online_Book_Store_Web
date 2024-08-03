@@ -1,17 +1,17 @@
 .wrapper {
     padding: 48px 0 24px 0;
-    border-bottom: 1px solid var(--black);
+    border-bottom: 1px solid var(--white);
 }
 
 .title {
     font-size: 2.4rem;
-    color: #2a2a2a;
+    color: var(--white);
     margin-bottom: 8px;
     font-style: italic;
 }
 
 .description {
     font-size: 1.6rem;
-    color: #454545;
+    color: var(--white);
     font-style: italic;
 }

@@ -121,11 +121,7 @@ function Header() {
                 <div>
                     <Menu items={USER_MENU}>
                         <div className={cx('user')}>
-                            <Image
-                                className={cx('avatar')}
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-4jCa0Y7ckqLgBkad10uQ1PWQSshwlUgVZN6GTuvx_Q&s"
-                                alt=""
-                            />
+                            <Image className={cx('avatar')} src={assets.default_avartar} alt="user_avartar" />
                             <span className={cx('name')}>John</span>
                         </div>
                     </Menu>

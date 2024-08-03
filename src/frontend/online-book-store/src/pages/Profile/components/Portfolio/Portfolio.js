@@ -1,17 +1,14 @@
 import classNames from 'classnames/bind';
 import styles from './Portfolio.module.scss';
 import Image from '~/components/Image';
+import assets from '~/assets';
 
 const cx = classNames.bind(styles);
 
 function Portfolio() {
     return (
         <div className={cx('portfolio')}>
-            <Image
-                className={cx('avatar')}
-                src="https://t3.ftcdn.net/jpg/01/93/38/40/360_F_193384026_F34lj9rX9W4ixlVZBrTJmijK010Tdv0j.jpg"
-                alt="avatar"
-            />
+            <Image className={cx('avatar')} src={assets.default_avartar} alt="user_avatar" />
             <div className={cx('portfolio_body')}>
                 <ul className={cx('achievement')}>
                     <li className={cx('achievement_item')}>

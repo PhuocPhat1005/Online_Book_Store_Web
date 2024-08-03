@@ -1,4 +1,5 @@
 import IntroductionItem from '../IntroductionItem';
+import config from '~/config';
 
 function IntroductionBlock() {
     const data = [
@@ -8,19 +9,29 @@ function IntroductionBlock() {
             title: 'Books',
             paragraph:
                 'Fantasy, Fiction, Education, Self-Help, Science, Romance, Healing , Classics, Poetry, Plays, Rare Books, History.',
+            to: config.routes.shopbooks,
         },
         {
             image: 'https://www.artnews.com/wp-content/uploads/2022/09/GettyImages-1241066216.jpg?w=1200',
             alt: '',
             title: 'Hi, We are SIBOOKS',
             paragraph:
-                'SIBOOKS allows you to explore over new and second-hand books across various genres, including new releases, classics, kids\' books, young adult novels,...',
+                "SIBOOKS allows you to explore over new and second-hand books across various genres, including new releases, classics, kids' books, young adult novels,...",
             video: 'ZL5A2Qx3y_E',
+            to: config.routes.about,
         },
     ];
 
     return data.map((item, index) => (
-        <IntroductionItem image={item.image} alt={item.alt} title={item.title} paragraph={item.paragraph} video={item.video} key={index} />
+        <IntroductionItem
+            image={item.image}
+            alt={item.alt}
+            title={item.title}
+            paragraph={item.paragraph}
+            video={item.video}
+            to={item.to}
+            key={index}
+        />
     ));
 }
 
