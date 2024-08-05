@@ -31,6 +31,12 @@ class Settings(BaseSettings):
     MAIL_PASSWORD: str = env_values["MAIL_PASSWORD_APP"]
 
     Photo_directory: str = env_values["Photo_directory"]
+    
+    AWS_ACCESS_KEY_ID: str = env_values["AWS_ACCESS_KEY_ID"]
+    AWS_SECRET_ACCESS_KEY: str = env_values["AWS_SECRET_ACCESS_KEY"]
+    AWS_REGION: str = env_values["AWS_REGION"]
+    AWS_BUCKET_NAME: str = env_values["AWS_BUCKET_NAME"]
+    AWS_LINK: str = f"https://{AWS_BUCKET_NAME}.s3.amazonaws.com/"
     class Config:
         case_sensitive = True
 

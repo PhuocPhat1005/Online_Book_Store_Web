@@ -26,7 +26,7 @@ class User(Base):
         TIMESTAMP, server_default=func.now(), onupdate=func.now(), nullable=False
     )
     description = Column(Text)
-
+    user_ava = Column(String(255), nullable=False)
     account = relationship("Account", back_populates="user")
     photos = relationship("UserPhoto", back_populates="user", cascade="all, delete-orphan")
     reviews = relationship("Review", back_populates="user", cascade="all, delete-orphan")

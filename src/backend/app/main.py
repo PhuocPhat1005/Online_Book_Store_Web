@@ -22,7 +22,7 @@ from app.database.database import Base
 from app.config.config import settings
 
 # Khởi tạo AsyncEngine
-engine = create_async_engine(settings.DATABASE_URL, echo=True)
+engine = create_async_engine(settings.DATABASE_URL, echo=False)
 
 # Khởi tạo session factory
 SessionLocal = sessionmaker(

@@ -19,6 +19,7 @@ class UserUpdate(BaseModel):
     date_of_birth: date | None = None
     gender: str | None = "none"
     description: str | None = None
+    user_ava: str | None = None
     
     
 class UserResponse(UserUpdate):

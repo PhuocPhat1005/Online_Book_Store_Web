@@ -16,7 +16,7 @@ ModelType = TypeVar("ModelType")
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
 UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 
-class CRUDService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
+class CreateService(Generic[ModelType, CreateSchemaType]):
     def __init__(self, model: Type[ModelType]):
         self.model = model
     
@@ -32,60 +32,11 @@ class CRUDService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             await db.rollback()
             raise RuntimeError(f"Failed to create {self.model.__name__}: {e}") from e
         return db_obj
-
-    # async def get(self, obj_id: UUID, db: AsyncSession) -> ModelType:
-    #     result = await db.execute(select(self.model).where(self.model.id == obj_id))
-    #     db_obj = result.scalars().first()
-    #     if not db_obj:
-    #         raise HTTPException(status_code=404, detail=f"{self.model.__name__} not found")
-    #     return db_obj
     
-    # async def get_by_one_value(self, obj_name: str, name_fields: list[Column], db: AsyncSession, exactly: int = 1, offset: int = 0, limit: int = sys.maxsize) -> list[ModelType]:
-    #     if exactly:
-    #         conditions = [field == obj_name for field in name_fields]
-    #     else:
-    #         conditions = [field.like(f"%{obj_name}%") for field in name_fields]
-            
-    #     query = select(self.model).where(or_(*conditions)).distinct()
-    #     query = query.limit(limit)
-    #     query = query.offset(offset)
-    #     result = await db.execute(query)
-    #     db_objs = result.scalars().all()
-    #     if not db_objs:
-    #         raise HTTPException(status_code=404, detail=f"{self.model.__name__} not found")
-    #     return db_objs
+class ReadService(Generic[ModelType]):
+    def __init__(self, model: Type[ModelType]):
+        self.model = model
 
-    # async def get_by_condition(self, search_params: Dict[str, any], db: AsyncSession, euqal_condition: int = 1, and_condition: int = 1, offset: int = 0, limit: int = sys.maxsize) -> list[ModelType]:
-    #     conditions = []
-        
-    #     for field_name, search_value in search_params.items():
-    #         field = getattr(self.model, field_name, None)
-    #         if field is None:
-    #             raise HTTPException(status_code=400, detail=f"Field {field_name} does not exist on {self.model.__name__}")
-    #         for value in search_value:
-    #             if euqal_condition:
-    #                 conditions.append(field == value)
-    #             else:
-    #                 conditions.append(cast(field, String).ilike(f"%{value}%"))
-
-            
-    #     if not conditions:
-    #         raise HTTPException(status_code=400, detail="At least one search parameter must be provided")
-
-    #     if and_condition:
-    #         query = select(self.model).where(and_(*conditions)).distinct()
-    #     else:
-    #         query = select(self.model).where(or_(*conditions)).distinct()
-    #     query = query.limit(limit)
-    #     query = query.offset(offset)
-    #     result = await db.execute(query)
-    #     db_objs = result.scalars().all()
-
-    #     if not db_objs:
-    #         raise HTTPException(status_code=404, detail=f"{self.model.__name__} not found")
-
-    #     return db_objs
-    
     async def get_by_condition(self, list_search_params: list[Dict[str, any]], db: AsyncSession, equal_condition: int = 1, offset: int = 0, limit: int = sys.maxsize) -> list[ModelType]:
         conditions = []
         
@@ -152,6 +103,10 @@ class CRUDService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             raise HTTPException(status_code=404, detail=f"No records found in the specified range for {self.model.__name__}")
 
         return list_item
+    
+class UpdateService(Generic[ModelType, UpdateSchemaType]):
+    def __init__(self, model: Type[ModelType]):
+        self.model = model
 
     async def update(self, obj_id: UUID, obj_in: UpdateSchemaType, db: AsyncSession) -> ModelType:
         result = await db.execute(select(self.model).where(self.model.id == obj_id))
@@ -159,10 +114,8 @@ class CRUDService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         if not db_obj:
             raise HTTPException(status_code=404, detail=f"{self.model.__name__} not found")
 
-        obj_data = obj_in.dict()
-        for field, value in obj_data.items():
+        for field, value in obj_in.dict(exclude_unset=True).items():
             setattr(db_obj, field, value)
-
         try:
             await db.flush()
             await db.commit()
@@ -171,6 +124,10 @@ class CRUDService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             raise RuntimeError(f"Failed to update {self.model.__name__}: {e}") from e
 
         return db_obj
+    
+class DeleteService(Generic[ModelType]):
+    def __init__(self, model: Type[ModelType]):
+        self.model = model
 
     async def delete(self, obj_id: UUID, db: AsyncSession) -> ModelType:
         result = await db.execute(select(self.model).where(self.model.id == obj_id))
@@ -186,6 +143,36 @@ class CRUDService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             raise RuntimeError(f"Failed to delete {self.model.__name__}: {e}") from e
 
         return {"message": f"{self.model.__name__} deleted successfully"}
+class CRUDService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
+    def __init__(self, model: Type[ModelType]):
+        self.model = model
+        self.create_service = CreateService(model)
+        self.read_service = ReadService(model)
+        self.update_service = UpdateService(model)
+        self.delete_service = DeleteService(model)
+    
+    async def create(self, obj_in: CreateSchemaType, db: AsyncSession) -> ModelType:
+        return await self.create_service.create(obj_in, db)
+    
+    async def get_by_condition(self, list_search_params: list[Dict[str, any]], db: AsyncSession, equal_condition: int = 1, offset: int = 0, limit: int = sys.maxsize) -> list[ModelType]:
+        return await self.read_service.get_by_condition(list_search_params, db, equal_condition, offset, limit)
+    
+    async def get_ordered(self, list_item: list[ModelType], order_by: str = "id", desc_order: bool = True) -> list[ModelType]:
+        return await self.read_service.get_ordered(list_item, order_by, desc_order)
+    
+    async def update(self, obj_id: UUID, obj_in: UpdateSchemaType, db: AsyncSession) -> ModelType:
+        return await self.update_service.update(obj_id, obj_in, db)
+    
+    async def delete(self, obj_id: UUID, db: AsyncSession):
+        return await self.delete_service.delete(obj_id, db)
+    
+
+    
+
+
+    
+
+    
 
 def query_string_to_dict(query_string: str) -> dict:
     parsed_dict = parse_qs(query_string)

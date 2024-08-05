@@ -28,6 +28,7 @@ class Book(Base):
     book_size = Column(String(20), nullable=False)
     page_number = Column(Integer, nullable=False)
     book_cover_type = Column(String(10), nullable=False)
+    book_ava = Column(String(255), nullable=False)
     description = Column(Text)
     created_at = Column(TIMESTAMP, server_default=func.now(), nullable=False)
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now(), nullable=False)

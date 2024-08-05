@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.services.crud_service import CRUDService, query_string_to_dict, query_in_db_by_id
+from app.services.crud_service import CRUDService, query_string_to_dict, query_in_db_by_id, ReadService
 
 from app.schemas.book import BookCreate, BookUpdate, BookResponse, BookOrder, BookFilter
 from app.schemas.book_author import Book_Author_Create, Book_Author_Update
@@ -10,15 +10,20 @@ from app.models.author import Author
 from app.models.translator import Translator
 from app.models.book_author import BookAuthor
 from app.models.book_translator import BookTranslator
+from app.models.book_photo import BookPhoto
+
 from app.database.database import get_db
 from uuid import UUID
 from typing import List, Optional
 from sqlalchemy import select
+from app.config.config import settings
 
 router = APIRouter()
 book_service = CRUDService[Book, BookCreate, BookUpdate](Book)
 book_author_service = CRUDService[BookAuthor, Book_Author_Create, Book_Author_Update](BookAuthor)
 book_translator_service = CRUDService[BookTranslator, Book_Translator_Create, Book_Translator_Update](BookTranslator)
+AWS_LINK = settings.AWS_LINK
+
 # @router.post("/create_book", summary="Create a new book")
 # async def create_book_endpoint(book: BookCreate, db: AsyncSession = Depends(get_db)):
 #     return await create_book(book, db)
@@ -72,6 +77,17 @@ async def get_books_by_name_endpoint(book_name: str, db: AsyncSession = Depends(
         raise HTTPException(status_code=404, detail="No books found with that name")
     return books
 
+@router.get("/get_book_overview/{book_id}", summary="Get book overview by ID")
+async def get_book_overview(book_id: UUID, db: AsyncSession = Depends(get_db)):
+    book = await book_service.get_by_condition([{'id':book_id}], db)
+    if not book:
+        raise HTTPException(status_code=404, detail="Book not found")
+    return {
+        'Book_name': book[0].book_name,
+        'Price': book[0].price,
+        'Book_description': book[0].description,
+        'Book_ava': book[0].book_ava
+    }
 
 @router.put("/update_book/{book_id}", summary="Update a book by ID")
 async def update_book_endpoint(book_id: UUID, book_update: BookUpdate, db: AsyncSession = Depends(get_db)):
@@ -88,13 +104,13 @@ async def delete_book_endpoint(book_id: UUID, db: AsyncSession = Depends(get_db)
         raise HTTPException(status_code=404, detail="Book not found")
     return book
 
-BOOK_PER_PAGE = 5
+BOOK_PER_PAGE = 25
 ORDER_BY = "created_at"
 
 @router.get("/get_book_per_page/{page_number}", summary="Get books in page number")
 async def get_book_per_page_endpoint(page_number: int, db: AsyncSession = Depends(get_db)):
     from_ = (page_number - 1) * BOOK_PER_PAGE
-    books = await book_service.get_by_condition({'id': ''}, db, 0, 1, from_, BOOK_PER_PAGE)
+    books = await book_service.get_by_condition([{'id': ''}], db, 0, from_, BOOK_PER_PAGE)
     if not books:
         raise HTTPException(status_code=404, detail="No books found")
     return await book_service.get_ordered(books, ORDER_BY, True)
