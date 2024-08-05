@@ -1,0 +1,26 @@
+/* stars */
+
+.stars_container {
+    display: flex;
+    align-items: center;
+}
+
+.star_icon {
+    background-color: var(--white);
+}
+
+.star_icon.filled {
+    background-color: var(--star-color);
+}
+
+.star_icon.aquarter {
+    background: linear-gradient(to right, var(--star-color), var(--star-color) 25%, var(--white) 5px, var(--white));
+}
+
+.star_icon.ahalf {
+    background: linear-gradient(to right, var(--star-color), var(--star-color) 50%, var(--white) 5px, var(--white));
+}
+
+.star_icon.threequarters {
+    background: linear-gradient(to right, var(--star-color), var(--star-color) 75%, var(--white) 5px, var(--white));
+}

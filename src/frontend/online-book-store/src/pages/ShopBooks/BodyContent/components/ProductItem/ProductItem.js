@@ -1,28 +1,46 @@
+import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 
 import styles from './ProductItem.module.scss';
 import Image from '~/components/Image';
-import assets from '~/assets';
+import config from '~/config';
+import RatingStar from '~/components/RatingStar';
 
 const cx = classNames.bind(styles);
 
 function ProductItem({ data, rating = 0 }) {
+    // if (data.images !== undefined) {
+    //     if (data.images[0] !== undefined) {
+    //         console.log('def');
+    //     }
+    // }
     rating = '4.25';
-    const totalRating = 5;
-    let int = parseInt(rating[0]);
-    let decimal = parseFloat(rating.substr(1));
 
     let newPrice = data.price.toString();
     let oldPrice = '120';
     let discount = Math.round((1 - 100 / 120) * 100);
+    const navigate = useNavigate();
+
+    const fetchProduct = (e) => {
+        e.preventDefault();
+        navigate(config.routes.detailsbook, { state: { bookData: data } });
+
+        // fetch to get authors, translators.
+    };
 
     return (
-        <div className={cx('wrapper')}>
+        <a href={`book/get_book/${data.id}`} className={cx('wrapper')} onClick={(e) => fetchProduct(e)}>
             <div className={cx('image_container')}>
                 <Image
                     className={cx('image')}
-                    src="https://play-lh.googleusercontent.com/gwZxofR0K4lpyeOLB0LjirT5SKpJhAXz8yhp0kfnTzzihlDuR49BFEcKe2PXg4NF1KdB"
-                    alt=""
+                    src={
+                        data.images !== undefined
+                            ? data.images[0] !== undefined
+                                ? 'https://sibookspictures.s3.amazonaws.com/10-suc-manh-cua-thoi-quen-1.jpg'
+                                : 'https://play-lh.googleusercontent.com/gwZxofR0K4lpyeOLB0LjirT5SKpJhAXz8yhp0kfnTzzihlDuR49BFEcKe2PXg4NF1KdB'
+                            : 'https://play-lh.googleusercontent.com/gwZxofR0K4lpyeOLB0LjirT5SKpJhAXz8yhp0kfnTzzihlDuR49BFEcKe2PXg4NF1KdB'
+                    }
+                    alt={data.book_name}
                 />
                 <div className={cx('info')}>
                     <span className={cx('text')}>more information</span>
@@ -39,36 +57,14 @@ function ProductItem({ data, rating = 0 }) {
                 </div>
                 <p className={cx('description_text')}>{data.description}</p>
                 <div className={cx('footer')}>
-                    <div className={cx('stars_container')}>
-                        {Array.from({ length: totalRating }, (_, index) => {
-                            const rate = int / (index + 1);
-
-                            if (index + 1 >= int + 2) {
-                                decimal = 0;
-                            }
-
-                            return (
-                                <Image
-                                    className={cx('star_icon', {
-                                        filled: rate >= 1,
-                                        aquarter: rate < 1 && decimal > 0 && decimal <= 0.25,
-                                        ahalf: rate < 1 && decimal > 0.25 && decimal <= 0.5,
-                                        threequarters: rate < 1 && decimal > 0.5,
-                                    })}
-                                    src={assets.star_icon}
-                                    alt="star_icon"
-                                    key={index}
-                                />
-                            );
-                        })}
-                    </div>
+                    <RatingStar rating={rating} />
                     <div className={cx('sold')}>
                         <p className={cx('sold_text')}>Sold:</p>
                         <p className={cx('sold_number')}>100</p>
                     </div>
                 </div>
             </div>
-        </div>
+        </a>
     );
 }
 

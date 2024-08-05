@@ -8,6 +8,7 @@ const routes = {
     forgotpassword: '/signin/forgotpassword',
     cart: '/cart',
     profile: '/profile',
+    detailsbook: '/details',
     guesthome: '/guesthome',
     guestshopbooks: './guestshopbooks',
     guestcontact: './guestcontact',

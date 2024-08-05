@@ -1,6 +1,7 @@
 .wrapper {
     background-color: var(--white);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    text-decoration: none;
     cursor: pointer;
 
     &:hover .image {
@@ -121,33 +122,6 @@
     margin-top: 8px;
     display: flex;
     align-items: center;
-}
-
-.stars_container {
-    display: flex;
-    align-items: center;
-}
-
-.star_icon {
-    width: 16px;
-    height: 16px;
-    background-color: var(--white);
-}
-
-.star_icon.filled {
-    background-color: var(--star-color);
-}
-
-.star_icon.aquarter {
-    background: linear-gradient(to right, var(--star-color), var(--star-color) 25%, var(--white) 5px, var(--white));
-}
-
-.star_icon.ahalf {
-    background: linear-gradient(to right, var(--star-color), var(--star-color) 50%, var(--white) 5px, var(--white));
-}
-
-.star_icon.threequarters {
-    background: linear-gradient(to right, var(--star-color), var(--star-color) 75%, var(--white) 5px, var(--white));
 }
 
 .sold {

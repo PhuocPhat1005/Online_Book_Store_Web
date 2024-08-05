@@ -16,6 +16,7 @@ const images = {
     star_icon: require('~/assets/Common/StarIcon.png'),
     default_avartar: require('~/assets/Common/defaut_avartar.jpg'),
     default_background: require('~/assets/Common/default_background.jpg'),
+    empty_cart: require('~/assets/Common/empty_cart.png'),
 };
 
 export default images;
