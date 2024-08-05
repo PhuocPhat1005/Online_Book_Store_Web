@@ -4,13 +4,12 @@ import ProductItem from '../ProductItem';
 
 const cx = classNames.bind(styles);
 
-function Products() {
+function Products({ data = [] }) {
     return (
         <div className={cx('wrapper')}>
-            <ProductItem />
-            <ProductItem />
-            <ProductItem />
-            <ProductItem />
+            {data.map((item, index) => {
+                return <ProductItem key={index} data={item} />;
+            })}
         </div>
     );
 }

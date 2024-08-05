@@ -8,6 +8,7 @@ import InputFieldItem from './components/InputFieldItem';
 import SelectFieldItem from './components/SelectFieldItem';
 import { COUNTRY, CITIES } from './components/Address';
 import Portfolio from './components/Portfolio';
+import assets from '~/assets';
 
 const cx = classNames.bind(styles);
 
@@ -38,11 +39,7 @@ function Profile() {
     return (
         <form className={cx('wrapper')} onSubmit={fakeHandleSubmit}>
             {/* <input type="submit" value="Sbubmit Button" /> */}
-            <Image
-                className={cx('background')}
-                src="https://wallpapers.com/images/hd/funny-cat-flying-peacefully-mtd434pqnxc308j4.jpg"
-                alt="background"
-            />
+            <Image className={cx('background')} src={assets.default_background} alt="background" />
             <div className={cx('core')}>
                 <div className={cx('information')}>
                     <div className={cx('infor_header')}>

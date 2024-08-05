@@ -58,11 +58,12 @@
     font-size: 1.6rem;
     font-weight: 700;
 
+    transition: 0.5s ease-in-out;
+
     &:hover {
         border: 4px solid #e8898e;
         color: #e8898e;
         cursor: pointer;
-        animation: appearance ease-in 0.4s;
     }
 }
 
@@ -92,15 +93,6 @@
         background-color: #e3807c;
         color: var(--white);
         animation: appearance ease-in 0.4s;
-    }
-}
-
-@keyframes appearance {
-    from {
-        opacity: 0.8;
-    }
-    to {
-        opacity: 1;
     }
 }
 
