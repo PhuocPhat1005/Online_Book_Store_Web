@@ -36,7 +36,7 @@ function ProductItem({ data, rating = 0 }) {
                     src={
                         data.images !== undefined
                             ? data.images[0] !== undefined
-                                ? 'https://sibookspictures.s3.amazonaws.com/10-suc-manh-cua-thoi-quen-1.jpg'
+                                ? 'https://sibookspictures.s3.amazonaws.com/001-dac-nhan-tam/1-dac-nhan-tam-1.jpg'
                                 : 'https://play-lh.googleusercontent.com/gwZxofR0K4lpyeOLB0LjirT5SKpJhAXz8yhp0kfnTzzihlDuR49BFEcKe2PXg4NF1KdB'
                             : 'https://play-lh.googleusercontent.com/gwZxofR0K4lpyeOLB0LjirT5SKpJhAXz8yhp0kfnTzzihlDuR49BFEcKe2PXg4NF1KdB'
                     }

@@ -9,6 +9,7 @@ const routes = {
     cart: '/cart',
     profile: '/profile',
     detailsbook: '/details',
+    order: '/order',
     guesthome: '/guesthome',
     guestshopbooks: './guestshopbooks',
     guestcontact: './guestcontact',

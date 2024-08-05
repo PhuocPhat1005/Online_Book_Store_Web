@@ -18,8 +18,11 @@
 
 .header {
     font-size: 4.8rem;
+    font-weight: bold;
     color: var(--white);
     text-transform: uppercase;
+
+    margin-bottom: 24px;
 }
 
 .body {

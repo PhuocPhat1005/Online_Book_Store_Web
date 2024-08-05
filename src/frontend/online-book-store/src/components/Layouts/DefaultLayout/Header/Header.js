@@ -36,7 +36,7 @@ const USER_MENU = [
     {
         icon: <FontAwesomeIcon icon={faBoxesPacking} />,
         title: 'Orders',
-        to: config.routes.home,
+        to: config.routes.order,
     },
     {
         icon: <FontAwesomeIcon icon={faRightFromBracket} />,

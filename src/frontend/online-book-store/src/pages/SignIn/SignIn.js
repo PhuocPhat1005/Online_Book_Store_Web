@@ -44,6 +44,7 @@ function SignIn() {
                 // Handle successful form submission
                 setToggleToast(true);
                 console.log('Form submitted successfully');
+                console.log('Tokens:', response.data);
 
                 navigate(config.routes.home);
             } else {
