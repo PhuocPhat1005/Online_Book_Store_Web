@@ -233,12 +233,7 @@ async def sign_up(account: AccountCreate, db: AsyncSession = Depends(get_db)):
     new_id = await create_account(db, account)
     access_token = create_access_token(data={"sub": account.username})
     refresh_token = create_refresh_token(data={"sub": account.username})
-    user = UserCreate(
-        account_id = new_id,
-        phone = "none",
-        full_name = "none",
-        gender = "none",
-    )
+    user = UserCreate(account_id=new_id)
     await user_service.create(user, db)
     return {"access_token": access_token, "refresh_token": refresh_token}
 

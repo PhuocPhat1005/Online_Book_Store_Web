@@ -16,13 +16,13 @@ from app.database.database import get_db
 from uuid import UUID
 from typing import List, Optional
 from sqlalchemy import select
-from app.config.config import settings
+
+from app.controllers.photo_controller import delete_folder_aws #SERVICE
 
 router = APIRouter()
 book_service = CRUDService[Book, BookCreate, BookUpdate](Book)
 book_author_service = CRUDService[BookAuthor, Book_Author_Create, Book_Author_Update](BookAuthor)
 book_translator_service = CRUDService[BookTranslator, Book_Translator_Create, Book_Translator_Update](BookTranslator)
-AWS_LINK = settings.AWS_LINK
 
 # @router.post("/create_book", summary="Create a new book")
 # async def create_book_endpoint(book: BookCreate, db: AsyncSession = Depends(get_db)):
@@ -56,6 +56,13 @@ AWS_LINK = settings.AWS_LINK
 #         raise HTTPException(status_code=404, detail="Book not found")
 #     return book
 
+
+# @router.post("/UPLOAD_ALL_BOOK", summary="Upload all book data")
+# async def upload_all_book_endpoint(db: AsyncSession = Depends(get_db)):
+
+#     # book_author_data = await book_author_service.create(book_author, db)
+#     # book_translator_data = await book_translator_service.create(book_translator, db)
+#     return "Done"
 
 @router.post("/create_book", summary="Create a new book")
 async def create_book_endpoint(book: BookCreate, db: AsyncSession = Depends(get_db)):
@@ -99,6 +106,11 @@ async def update_book_endpoint(book_id: UUID, book_update: BookUpdate, db: Async
 
 @router.delete("/delete_book/{book_id}", summary="Delete a book by ID")
 async def delete_book_endpoint(book_id: UUID, db: AsyncSession = Depends(get_db)):
+    book_name = await book_service.get_by_condition([{'id':book_id}], db)
+    book_name = book_name[0].book_name
+    print(book_name)    
+    delete_folder_aws(book_name)
+    return "DOne"
     book = await book_service.delete(book_id, db)
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")

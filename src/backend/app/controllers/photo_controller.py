@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
 from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.services.crud_service import CRUDService, ReadService, UpdateService
+from app.services.crud_service import CRUDService, ReadService, UpdateService, DeleteService
 # from app.services.photo_service import upload_photo
 from app.services.crud_service import query_in_db_by_id
 from app.schemas.photo import PhotoCreate, PhotoUpdate, PhotoResponse
@@ -36,7 +36,7 @@ s3_client = boto3.client(
     region_name=AWS_REGION
 )
 
-@router.post("uploadfile")
+@router.post("/uploadfile")
 async def upload_image(typee: str, id_: str, is_ava: int = 0, file: UploadFile = File(...), db: AsyncSession = Depends(get_db)):
     try:
         if typee == 'Book':
@@ -68,13 +68,13 @@ async def upload_image(typee: str, id_: str, is_ava: int = 0, file: UploadFile =
                 pass
             if typee == 'Review':
                 pass
-            
+        new_id = uuid.uuid4()
         if typee == "Book":
-            photo = BookPhoto(book_id=id_, path = path)
+            photo = BookPhoto(id = new_id, book_id=id_, path = path)
         if typee == "User":
-            photo = UserPhoto(user_id=id_, path = path)
+            photo = UserPhoto(id = new_id, user_id=id_, path = path)
         if typee == "Review":
-            photo = ReviewPhoto(review_id=id_, path = path)
+            photo = ReviewPhoto(id = new_id, review_id=id_, path = path)
             
         db.add(photo)
         await db.commit()
@@ -88,7 +88,7 @@ def normalization(name):
     name = name.replace(' ', '-')
     return name
 
-@router.get("get_photo")
+@router.get("/get_photo")
 async def get_all_in_folder_endpoint(typee: str, id_: str, db: AsyncSession = Depends(get_db)):
     if typee == "Book":
         photo_read_service = ReadService(BookPhoto)
@@ -103,3 +103,30 @@ async def get_all_in_folder_endpoint(typee: str, id_: str, db: AsyncSession = De
     for photo in photos:
         photo_path.append(photo.path)
     return photo_path
+
+def delete_folder_aws(folder_name: str):
+    s3 = boto3.resource('s3', aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+    bucket = s3.Bucket(AWS_BUCKET_NAME)
+    for obj in bucket.objects.filter(Prefix=normalization(folder_name) + '/'):
+        s3.Object(bucket.name, obj.key).delete()
+            
+@router.delete("/delete_photo")
+async def delete_photo(typee: str, path: str, db: AsyncSession = Depends(get_db)):
+    try:
+        s3_client.delete_object(Bucket=AWS_BUCKET_NAME, Key=path.split(AWS_LINK)[-1])
+        if typee == "Book":
+            photo_read_service = ReadService(BookPhoto)
+            id_ = await photo_read_service.get_by_condition([{'path':path}], db)
+            photo_delete_service = DeleteService(BookPhoto)
+        if typee == "User":
+            photo_read_service = ReadService(UserPhoto)
+            id_ = await photo_read_service.get_by_condition([{'path':path}], db)
+            photo_delete_service = DeleteService(UserPhoto)
+        if typee == "Review":
+            photo_read_service = ReadService(ReviewPhoto)
+            id_ = await photo_read_service.get_by_condition([{'path':path}], db)
+            photo_delete_service = DeleteService(ReviewPhoto)
+        await photo_delete_service.delete(id_[0].id, db)
+        return JSONResponse(content={"message": "File deleted successfully"}, status_code=200)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
