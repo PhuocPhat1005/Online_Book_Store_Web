@@ -95,8 +95,8 @@ function Profile() {
                                 {cityData && (
                                     <SelectFieldItem
                                         _name="province"
-                                        selectLabel={'Select province'}
-                                        label={'Province'}
+                                        selectLabel={'Select District'}
+                                        label={'District'}
                                         data={CITIES}
                                         type="province"
                                         cityData={cityData}
@@ -105,8 +105,8 @@ function Profile() {
                                 {!cityData && (
                                     <SelectFieldItem
                                         _name="province"
-                                        selectLabel={'Select province'}
-                                        label={'Province'}
+                                        selectLabel={'Select District'}
+                                        label={'District'}
                                         data={[]}
                                         type="province"
                                         cityData={cityData}

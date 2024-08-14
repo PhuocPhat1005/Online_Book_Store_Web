@@ -1,0 +1,188 @@
+:root {
+    --checkout-width: 1080px;
+    --checkout-height: 600px;
+}
+
+.wrapper {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba($color: #000000, $alpha: 0.25);
+}
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: var(--checkout-width);
+    max-height: var(--checkout-height);
+
+    font-size: 1.8rem;
+}
+
+.header {
+    background-color: var(--primary-color);
+    border-radius: 10px 10px 0 0;
+    padding: 16px 32px;
+}
+
+.header_user_information {
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 32px;
+}
+
+.information {
+    display: flex;
+    align-self: center;
+    flex-direction: column;
+}
+
+.contact_info {
+    display: flex;
+    align-items: center;
+}
+
+.username {
+    position: relative;
+    margin-right: 16px;
+
+    &::after {
+        content: '';
+        width: 1px;
+        height: 16px;
+        background-color: var(--black);
+        margin-left: 8px;
+
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}
+
+.close_icon {
+    font-size: 2.4rem;
+    cursor: pointer;
+}
+
+.address {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.change_address_btn {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 4px 4px 4px rgba($color: #000000, $alpha: 0.25);
+    color: var(--black);
+    font-size: 1.8rem;
+    font-weight: bold;
+    padding: 8px 32px;
+}
+
+.body {
+    background-color: #fafafa;
+}
+
+.methods {
+    padding: 16px 32px;
+}
+
+.payment_methods,
+.delivery_methods {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.payment_methods {
+    margin-bottom: 16px;
+}
+
+.selection {
+    padding: 8px;
+    width: 240px;
+
+    background-color: #f0f0f0;
+    box-shadow: 4px 4px 4px rgba($color: #000000, $alpha: 0.25);
+    font-size: 1.8rem;
+
+    outline: none;
+    border: none;
+
+    cursor: pointer;
+}
+
+.fees {
+    list-style-type: none;
+    padding: 8px 32px;
+    background-color: #ffffdd;
+}
+
+.fee_item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+
+    &:nth-last-child(1) {
+        margin-bottom: 0;
+    }
+}
+
+.fee_item_value {
+    font-weight: bold;
+}
+
+.fee_item_value.add {
+    color: #009f00;
+}
+
+.fee_item_value.minus {
+    color: #ff0000;
+}
+
+.footer {
+    background-color: var(--primary-color);
+    padding: 16px 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-radius: 0 0 10px 10px;
+}
+
+.total_text {
+    font-size: 2.4rem;
+    font-weight: bold;
+}
+
+.total_price {
+    display: flex;
+    align-items: center;
+}
+
+.price {
+    color: var(--black);
+    font-weight: bold;
+    font-size: 2.4rem;
+    margin-right: 32px;
+}
+
+.buy_now_btn {
+    background-color: var(--discount-color);
+    color: var(--white);
+    font-size: 2.4rem;
+    font-weight: bold;
+    padding: 8px 32px;
+    text-transform: uppercase;
+
+    box-shadow: 4px 4px 4px rgba($color: #000000, $alpha: 0.25);
+}
