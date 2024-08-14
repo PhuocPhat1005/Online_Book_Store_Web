@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,23 +7,18 @@ import {
     faBoxesPacking,
     faCartShopping,
     faComments,
-    faMagnifyingGlass,
     faRightFromBracket,
-    faSpinner,
     faUser,
-    faXmarkCircle,
 } from '@fortawesome/free-solid-svg-icons';
-import Tippy from '@tippyjs/react/headless';
 
 import styles from './Header.module.scss';
-import { Wrapper as PopperWrapper } from '~/components/Popper';
-import BookItem from '~/components/BookItem';
 import Button from '~/components/Button';
 import Image from '~/components/Image';
 import Menu from '~/components/Menu';
 import Notification from '~/components/Notification';
 import config from '~/config';
 import assets from '~/assets/';
+import Search from '~/components/Search';
 
 const cx = classNames.bind(styles);
 
@@ -46,15 +41,8 @@ const USER_MENU = [
 ];
 
 const Header = ({ guest }) => {
-    const [searchResult, setSearchResult] = useState([]);
     const [showNotification, setShowNotification] = useState(false);
     const navigate = useNavigate();
-
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         setSearchResult([1, 2, 3]);
-    //     }, 1000);
-    // }, []);
 
     const handleSignOut = () => {
         navigate(config.routes.guesthome);
@@ -67,18 +55,6 @@ const Header = ({ guest }) => {
             navigate(route);
         }
     };
-
-    const renderSearchResult = (attrs) => (
-        <div className={cx('search-result')} tabIndex="-1" {...attrs}>
-            <PopperWrapper>
-                <h4 className={cx('search-title')}>Products</h4>
-                <BookItem />
-                <BookItem />
-                <BookItem />
-                <BookItem />
-            </PopperWrapper>
-        </div>
-    );
 
     const handleShowNotification = () => {
         setShowNotification(!showNotification);
@@ -128,24 +104,7 @@ const Header = ({ guest }) => {
                             About
                         </Button>
                     </div>
-                    <Tippy
-                        offset={[0, 10]}
-                        visible={searchResult.length > 0}
-                        interactive
-                        placement="bottom"
-                        render={renderSearchResult}
-                    >
-                        <div className={cx('search-bar')}>
-                            <input placeholder="Search..." spellCheck="false" />
-                            <button className={cx('clear')}>
-                                <FontAwesomeIcon icon={faXmarkCircle} />
-                            </button>
-                            <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />
-                            <button className={cx('search-btn')}>
-                                <FontAwesomeIcon icon={faMagnifyingGlass} />
-                            </button>
-                        </div>
-                    </Tippy>
+                    <Search />
                 </div>
                 {guest ? (
                     <div className={cx('auth-buttons')}>

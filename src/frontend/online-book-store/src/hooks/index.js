@@ -1,1 +1,1 @@
-export * from './useScript';
+export { default as useDebounce } from './useDebounce';

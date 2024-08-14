@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import styles from './HeaderContentLayout.module.scss';
+import styles from './HeaderContentlayout.module.scss';
 import ConnectedLine from '~/components/ConnectedLine';
 
 const cx = classNames.bind(styles);
