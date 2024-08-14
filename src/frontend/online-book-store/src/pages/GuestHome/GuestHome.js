@@ -4,18 +4,15 @@ import { HeaderContentLayout } from '~/components/Layouts';
 import styles from './GuestHome.module.scss';
 import Slide from '~/components/Slide';
 import ConnectedLine from '~/components/ConnectedLine';
-import IntroductionBlock from '../GuestHome/components/GuestIntroductionBlock/GuestIntroductionBlock';
+import GuestIntroductionBlock from '../GuestHome/components/GuestIntroductionBlock/GuestIntroductionBlock';
 import GuestEventBlock from '../GuestHome/components/GuestEventBlock/GuestEventBlock';
-import EventsContent from './components/GuestEventsContent';
+import GuestEventsContent from './components/GuestEventsContent';
 import Header from '~/components/Layouts/DefaultLayout/Header/Header';
+import assets from '~/assets';
 
 const cx = classNames.bind(styles);
 
-const data = [
-    'https://morgan-sindall-pztazn5y-media.s3.amazonaws.com/construction/images/OvCe_NCCLibrary_Early-Prieview-09-min.width-1600.jpg',
-    'https://images.alphacoders.com/132/1326370.png',
-    'https://cdn.mos.cms.futurecdn.net/jUMGw45Kcj8vgLmnP7HZxP.jpg',
-];
+const data = [assets.homepage_banner_1, assets.homepage_banner_2, assets.homepage_banner_3];
 
 function GuestHome() {
     return (
@@ -27,7 +24,7 @@ function GuestHome() {
                 <ConnectedLine />
                 <div className={cx('container')}>
                     <div className={cx('introduction')}>
-                        <IntroductionBlock />
+                        <GuestIntroductionBlock />
                     </div>
                     <ConnectedLine />
                     <div className={cx('events')}>
@@ -36,7 +33,7 @@ function GuestHome() {
                     <ConnectedLine />
                 </div>
                 <div id="EventsContent">
-                    <EventsContent />
+                    <GuestEventsContent />
                 </div>
                 <ConnectedLine />
                 <ConnectedLine />

@@ -10,7 +10,7 @@ function GuestEventBlock() {
             icon: <FontAwesomeIcon icon={faMicrophone} />,
             title: 'Events',
             description: 'Online and in shop, we host book launches, author signings, readings, and panel discussions.',
-            color: 'rgba(93, 63, 211, .25)',
+            color: 'rgba(216, 235, 255, 1)',
             route: '#EventsContent',
         },
         {
@@ -18,7 +18,7 @@ function GuestEventBlock() {
             title: 'OUR HISTORY',
             description:
                 'Our website have been constructed since 16 / 05 / 2024 with a lot of love and stories to supply the best experiences for our users.',
-            color: 'rgba(0, 119, 255, .5)',
+            color: 'rgba(137, 196, 255, 1)',
             route: config.routes.about,
         },
         {
@@ -26,7 +26,7 @@ function GuestEventBlock() {
             title: 'OUR COMMUNITY',
             description:
                 "We provide meeting space for community groups and resources. And you don't need to be a membership - anyone can join with us.",
-            color: 'rgba(0, 255, 255, .33)',
+            color: 'rgba(0, 127, 255, .75)',
             route: config.routes.about,
         },
     ];

@@ -161,8 +161,8 @@
 .signup {
     color: var(--black);
     font-weight: 700;
-    background: linear-gradient(135deg, var(--guest-purple-100-color), var(--guest-cyan-100-color));
-    box-shadow: 0 4px 8px var(--guest-shadow-color);
+    background: var(--guest-semi-lightblue-full);
+    box-shadow: 0 4px 8px var(--guest-gray-half);
     width: 200px;
     height: 75px;
     border-radius: 38px;
@@ -175,23 +175,16 @@
         box-shadow 0.5s ease-in-out;
 }
 
-.signup {
-    background: linear-gradient(135deg, var(--guest-cyan-100-color), var(--guest-purple-100-color));
-}
-
 /* Hover effects for buttons */
 .signin:hover,
 .signup:hover {
-    background: linear-gradient(315deg, var(--guest-purple-100-color), var(--guest-cyan-100-color));
+    background: var(--guest-semi-darkblue-full);
     color: var(--white);
     transform: scale(1.05);
     box-shadow: 0 8px 16px var(--guest-shadow-color);
     font-weight: 700;
 }
 
-.signup:hover {
-    background: linear-gradient(315deg, var(--guest-cyan-100-color), var(--guest-purple-100-color));
-}
 /* User - container */
 
 .notification_container {
