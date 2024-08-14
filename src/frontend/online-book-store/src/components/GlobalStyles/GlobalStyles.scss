@@ -23,16 +23,33 @@
     --received-color: #55a999;
 
     // Guest colors
-    --guest-purple-100-color: rgba(93, 63, 211, 1);
-    --guest-purple-50-color: rgba(93, 63, 211, 0.5);
-    --guest-purple-25-color: rgba(93, 63, 211, 0.25);
-    --guest-cyan-100-color: rgba(0, 255, 255, 1);
-    --guest-cyan-50-color: rgba(0, 255, 255, 0.5);
-    --guest-cyan-25-color: rgba(0, 255, 255, 0.25);
-    --guest-blue-100-color: rgba(0, 128, 255, 1);
-    --guest-blue-50-color: rgba(0, 128, 255, 0.5);
-    --guest-blue-25-color: rgba(0, 128, 255, 0.25);
-    --guest-shadow-color: rgba(128, 128, 128, 0.5);
+    --guest-darkblue-full: rgba(0, 30, 59, 1);
+    --guest-darkblue-half: rgba(0, 30, 59, 0.5);
+    --guest-semi-darkblue-full: rgba(0, 69, 137, 1);
+    --guest-semi-darkblue-half: rgba(0, 69, 137, 0.5);
+    --guest-blue-full: rgba(0, 127, 255, 1);
+    --guest-blue-half: rgba(0, 127, 255, 0.5);
+    --guest-semi-lightblue-full: rgba(137, 196, 255, 1);
+    --guest-semi-lightblue-half: rgba(137, 196, 255, 0.5);
+    --guest-lightblue-full: rgba(216, 235, 255, 1);
+    --guest-lightblue-half: rgba(216, 235, 255, 0.5);
+    //--black: #000
+    --guest-darkgray-full: rgba(63, 63, 63, 1);
+    --guest-gray-full: rgba(127, 127, 127, 1);
+    --guest-gray-half: rgba(128, 128, 128, 0.5);
+    --guest-lightgray-full: rgba(191, 191, 191, 1);
+    //--white: #fff
+
+    // --guest-purple-100-color: rgba(93, 63, 211, 1);
+    // --guest-purple-50-color: rgba(93, 63, 211, 0.5);
+    // --guest-purple-25-color: rgba(93, 63, 211, 0.25);
+    // --guest-cyan-100-color: rgba(0, 255, 255, 1);
+    // --guest-cyan-50-color: rgba(0, 255, 255, 0.5);
+    // --guest-cyan-25-color: rgba(0, 255, 255, 0.25);
+    // --guest-blue-100-color: rgba(0, 128, 255, 1);
+    // --guest-blue-50-color: rgba(0, 128, 255, 0.5);
+    // --guest-blue-25-color: rgba(0, 128, 255, 0.25);
+    //
 
     --font-family: 'IBM Plex Sans', Tahoma, Verdana, Arial, sans-serif;
 

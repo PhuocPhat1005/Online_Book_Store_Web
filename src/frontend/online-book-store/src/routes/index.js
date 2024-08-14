@@ -30,10 +30,10 @@ const publicRoutes = [
     { path: config.routes.profile, component: ProfilePage, layout: HeaderOnly },
     { path: config.routes.detailsbook, component: DetailsBookPage },
     { path: config.routes.order, component: OrderPage, layout: HeaderOnly },
-    { path: config.routes.guesthome, component: GuestHome, layout: HeaderOnly },
-    { path: config.routes.guestshopbooks, component: GuestShopBooks, layout: HeaderOnly },
-    { path: config.routes.guestcontact, component: GuestContact, layout: HeaderOnly },
-    { path: config.routes.guestabout, component: GuestAbout, layout: HeaderOnly },
+    { path: config.routes.guesthome, component: GuestHome },
+    { path: config.routes.guestshopbooks, component: GuestShopBooks },
+    { path: config.routes.guestcontact, component: GuestContact },
+    { path: config.routes.guestabout, component: GuestAbout },
 ];
 
 const privateRoutes = [];
