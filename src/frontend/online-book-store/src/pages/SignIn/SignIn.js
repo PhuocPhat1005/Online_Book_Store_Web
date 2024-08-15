@@ -16,13 +16,26 @@ import request from '~/utils/request';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 
+import Cookies from 'universal-cookie';
+import { jwtDecode } from 'jwt-decode';
+
 const cx = classNames.bind(styles);
 
 function SignIn() {
+    const cookies = new Cookies(null, { path: '/' });
+
     const [toggleToast, setToggleToast] = useState(true);
     const [inCorrectMess, setIncorrectMess] = useState('');
-    const navigate = useNavigate();
     const [isForgotPassword, setIsForgotPassword] = useState(false);
+    const navigate = useNavigate();
+
+    const handleSignin = (jwt_token) => {
+        const decoded = jwtDecode(jwt_token);
+
+        cookies.set('jwt_authorization', jwt_token, {
+            expires: new Date(decoded.exp * 1000),
+        });
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -42,9 +55,10 @@ function SignIn() {
 
             if (response.status === 200) {
                 // Handle successful form submission
+                handleSignin(response.data.access_token);
+
                 setToggleToast(true);
                 console.log('Form submitted successfully');
-                console.log('Tokens:', response.data);
 
                 navigate(config.routes.home);
             } else {

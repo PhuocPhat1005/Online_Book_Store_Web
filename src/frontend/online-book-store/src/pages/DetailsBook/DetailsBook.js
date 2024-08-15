@@ -14,7 +14,7 @@ const cx = classNames.bind(styles);
 
 function DetailsBook() {
     const location = useLocation();
-    const data = location.state?.bookData;
+    let data = location.state?.bookData;
 
     const rating = '4.25';
     let new_price = '99.000';
@@ -57,29 +57,17 @@ function DetailsBook() {
                 <div className={cx('images_container')}>
                     <ul className={cx('images')}>
                         <li className={cx('image_item')}>
-                            <Image
-                                className={cx('image')}
-                                src="https://m.media-amazon.com/images/I/71vK0WVQ4rL._AC_UF1000,1000_QL80_.jpg"
-                            />
+                            <Image className={cx('image')} src={data.book_ava} />
                         </li>
                         <li className={cx('image_item')}>
-                            <Image
-                                className={cx('image')}
-                                src="https://m.media-amazon.com/images/I/71vK0WVQ4rL._AC_UF1000,1000_QL80_.jpg"
-                            />
+                            <Image className={cx('image')} src={data.book_ava} />
                         </li>
                         <li className={cx('image_item')}>
-                            <Image
-                                className={cx('image')}
-                                src="https://m.media-amazon.com/images/I/71vK0WVQ4rL._AC_UF1000,1000_QL80_.jpg"
-                            />
+                            <Image className={cx('image')} src={data.book_ava} />
                         </li>
                         <li className={cx('extends')}>+10</li>
                     </ul>
-                    <Image
-                        className={cx('main_image')}
-                        src="https://m.media-amazon.com/images/I/71vK0WVQ4rL._AC_UF1000,1000_QL80_.jpg"
-                    />
+                    <Image className={cx('main_image')} src={data.book_ava} />
                 </div>
                 <div className={cx('description')}>
                     <h1 className={cx('title')}>{data.book_name}</h1>
@@ -91,7 +79,7 @@ function DetailsBook() {
                             </li>
                             <li className={cx('item_section_1')}>
                                 Author:
-                                <span className={cx('item_value')}>Dale Carnegie</span>
+                                <span className={cx('item_value')}>{data.author[0].Full_name}</span>
                             </li>
                             <li className={cx('item_section_1')}>
                                 Translators:
@@ -101,15 +89,15 @@ function DetailsBook() {
                         <ul className={cx('section_2')}>
                             <li className={cx('item_section_2')}>
                                 Cover type:
-                                <span className={cx('item_value')}>Soft cover</span>
+                                <span className={cx('item_value')}>{data.book_cover_type}</span>
                             </li>
                             <li className={cx('item_section_2')}>
                                 Language:
-                                <span className={cx('item_value')}>Vietnamese</span>
+                                <span className={cx('item_value')}>{data.language}</span>
                             </li>
                             <li className={cx('item_section_2')}>
                                 Page numbers:
-                                <span className={cx('item_value')}>500</span>
+                                <span className={cx('item_value')}>{data.page_number}</span>
                             </li>
                         </ul>
                     </div>
@@ -171,11 +159,11 @@ function DetailsBook() {
                         </li>
                         <li className={cx('details_item')}>
                             <span className={cx('details_item_label')}>Title:</span>
-                            <span className={cx('details_item_value')}>How to win friends and influences people.</span>
+                            <span className={cx('details_item_value')}>{data.book_name}</span>
                         </li>
                         <li className={cx('details_item')}>
                             <span className={cx('details_item_label')}>Author:</span>
-                            <span className={cx('details_item_value')}>Dale Carnegie</span>
+                            <span className={cx('details_item_value')}>{data.author[0].Full_name}</span>
                         </li>
                         <li className={cx('details_item')}>
                             <span className={cx('details_item_label')}>Publisher:</span>
@@ -183,15 +171,15 @@ function DetailsBook() {
                         </li>
                         <li className={cx('details_item')}>
                             <span className={cx('details_item_label')}>Size:</span>
-                            <span className={cx('details_item_value')}>10 x 15 cm</span>
+                            <span className={cx('details_item_value')}>{data.book_size} cm</span>
                         </li>
                         <li className={cx('details_item')}>
                             <span className={cx('details_item_label')}>Number of pages</span>
-                            <span className={cx('details_item_value')}>328</span>
+                            <span className={cx('details_item_value')}>{data.page_number}</span>
                         </li>
                         <li className={cx('details_item')}>
                             <span className={cx('details_item_label')}>ISBN</span>
-                            <span className={cx('details_item_value')}>12345678910jqka</span>
+                            <span className={cx('details_item_value')}>{data.isbn}</span>
                         </li>
                     </ul>
                 </div>
@@ -200,16 +188,7 @@ function DetailsBook() {
                         <FontAwesomeIcon className={cx('icon')} icon={faCircleInfo} />
                         <span className={cx('information_text')}>product information</span>
                     </div>
-                    <p className={cx('information_paragraph')}>
-                        Đắc Nhân Tâm - Được lòng người, là cuốn sách đưa ra các lời khuyên về cách thức cư xử, ứng xử và
-                        giao tiếp với mọi người để đạt được thành công trong cuộc sống. Gần 80 năm kể từ khi ra đời, Đắc
-                        Nhân Tâm là cuốn sách gối đầu giường của nhiều thế hệ luôn muốn hoàn thiện chính mình để vươn
-                        tới một cuộc sống tốt đẹp và thành công. Đắc Nhân Tâm, từ một cuốn sách, hôm nay đã trở thành
-                        một danh từ để chỉ một lối sống mà ở đó con người ta cư xử linh hoạt và thấu tình đạt lý. Lý
-                        thuyết muôn thuở vẫn là những quy tắc chết, nhưng Nhân Tâm là sống, là biến đổi. Bạn hãy thử đọc
-                        "Đắc Nhân Tâm" và tự mình chiêm nghiệm những cái đang diễn ra trong đời thực hiện hữu, chắc chắn
-                        bạn sẽ có những bài học cho riêng mình.
-                    </p>
+                    <p className={cx('information_paragraph')}>{data.description}</p>
                 </div>
             </div>
             <div className={cx('ratings_all')}>

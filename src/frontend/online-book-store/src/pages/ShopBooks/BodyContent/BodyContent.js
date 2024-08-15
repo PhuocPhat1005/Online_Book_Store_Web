@@ -514,6 +514,7 @@ const BOOKS_PER_ROW = 5;
 
 function BodyContent() {
     const [showFilterAll, setShowFillterAll] = useState(false);
+
     const handleFilterAllDisplay = () => {
         setShowFillterAll(!showFilterAll);
     };
@@ -521,7 +522,7 @@ function BodyContent() {
     const [currentPage, setCurrentPage] = useState(0); // number
     const [showPages, setShowPages] = useState([1, 2, 3, 4, 5]); // number array
     const [books, setBooks] = useState([]); // object array
-    const [imagesFetched, setImagesFetched] = useState(false);
+    // const [imagesFetched, setImagesFetched] = useState(false);
 
     const handleBackPage = () => {
         if (currentPage < 0) return;
@@ -562,7 +563,7 @@ function BodyContent() {
             try {
                 const response = await request.get(`book/get_book_per_page/${(currentPage + 1).toString()}`);
                 setBooks(response.data);
-                setImagesFetched(false); // Reset the imagesFetched flag
+                // setImagesFetched(false); // Reset the imagesFetched flag
             } catch (error) {
                 if (error.response) {
                     // The request was made and the server responded with a status code
@@ -581,48 +582,48 @@ function BodyContent() {
     }, [currentPage]);
 
     // API for getting book images
-    useEffect(() => {
-        const getBookImages = async (id) => {
-            try {
-                const response = await request.get('photoshow_photo', {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    params: {
-                        id_: id,
-                    },
-                });
-                if (response.status === 200) {
-                    return response.data;
-                }
-                return [];
-            } catch (error) {
-                if (error.response) {
-                    console.error('Form submission failed', error.response.data);
-                } else if (error.request) {
-                    console.error('No response received', error.request);
-                } else {
-                    console.error('Error', error.message);
-                }
-                return [];
-            }
-        };
+    // useEffect(() => {
+    //     const getBookImages = async (id) => {
+    //         try {
+    //             const response = await request.get('photoshow_photo', {
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                 },
+    //                 params: {
+    //                     id_: id,
+    //                 },
+    //             });
+    //             if (response.status === 200) {
+    //                 return response.data;
+    //             }
+    //             return [];
+    //         } catch (error) {
+    //             if (error.response) {
+    //                 console.error('Form submission failed', error.response.data);
+    //             } else if (error.request) {
+    //                 console.error('No response received', error.request);
+    //             } else {
+    //                 console.error('Error', error.message);
+    //             }
+    //             return [];
+    //         }
+    //     };
 
-        const fetchImages = async () => {
-            const updatedBooks = await Promise.all(
-                books.map(async (book) => {
-                    const images = await getBookImages(book.id);
-                    return { ...book, images: images };
-                }),
-            );
-            setBooks(updatedBooks);
-            setImagesFetched(true); // Set the imagesFetched flag to true
-        };
+    //     const fetchImages = async () => {
+    //         const updatedBooks = await Promise.all(
+    //             books.map(async (book) => {
+    //                 const images = await getBookImages(book.id);
+    //                 return { ...book, images: images };
+    //             }),
+    //         );
+    //         setBooks(updatedBooks);
+    //         setImagesFetched(true); // Set the imagesFetched flag to true
+    //     };
 
-        if (books.length > 0 && !imagesFetched) {
-            fetchImages();
-        }
-    }, [books, imagesFetched]);
+    //     if (books.length > 0 && !imagesFetched) {
+    //         fetchImages();
+    //     }
+    // }, [books, imagesFetched]);
 
     // Create an array of Products components
     const products = [];
