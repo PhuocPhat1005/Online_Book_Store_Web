@@ -36,50 +36,59 @@ s3_client = boto3.client(
     region_name=AWS_REGION
 )
 
-@router.post("/uploadfile")
-async def upload_image(typee: str, id_: str, is_ava: int = 0, file: UploadFile = File(...), db: AsyncSession = Depends(get_db)):
+@router.post("/uploadfiles")
+async def upload_files(id_: str, typee: str = 'Book', is_ava: int = 0, files: list[UploadFile] = File(...), db: AsyncSession = Depends(get_db)):
     try:
+        folder_path = ""
         if typee == 'Book':
             book_read_service = ReadService(Book)
-            book = await book_read_service.get_by_condition([{'id':id_}], db)
+            book = await book_read_service.get_by_condition([{'id': id_}], db)
             folder_path = normalization(book[0].book_name) + '/'
-        if typee == 'User':
+        elif typee == 'User':
+            # Handle User specific logic if needed
             pass
-        if typee == 'Review':
+        elif typee == 'Review':
+            # Handle Review specific logic if needed
             pass
-        name_photo = uuid.uuid4()
-        exstension = file.filename.split('.')[-1]
-        key = f'{folder_path}{name_photo}.{exstension}'
         
-        s3_client.upload_fileobj(
-            file.file,
-            AWS_BUCKET_NAME,
-            key,
-            ExtraArgs={"ContentType": file.content_type},
-        )
-        path = AWS_LINK + key
-        if is_ava == 1:
-            if typee == 'Book':
-                book_update_service = UpdateService[Book, BookUpdate](Book)
-                book_update = BookUpdate()
-                book_update.book_ava = path
-                await book_update_service.update(id_, book_update, db)
-            if typee == 'User':
-                pass
-            if typee == 'Review':
-                pass
-        new_id = uuid.uuid4()
-        if typee == "Book":
-            photo = BookPhoto(id = new_id, book_id=id_, path = path)
-        if typee == "User":
-            photo = UserPhoto(id = new_id, user_id=id_, path = path)
-        if typee == "Review":
-            photo = ReviewPhoto(id = new_id, review_id=id_, path = path)
+        file_paths = []
+        for file in files:
+            name_photo = uuid.uuid4()
+            extension = file.filename.split('.')[-1]
+            key = f'{folder_path}{name_photo}.{extension}'
             
-        db.add(photo)
+            s3_client.upload_fileobj(
+                file.file,
+                AWS_BUCKET_NAME,
+                key,
+                ExtraArgs={"ContentType": file.content_type},
+            )
+            path = AWS_LINK + key
+            file_paths.append(path)
+        
+        if is_ava == 1 and typee == 'Book':
+            book_update_service = UpdateService[Book, BookUpdate](Book)
+            book_update = BookUpdate()
+            book_update.book_ava = file_paths[0]  # Assuming the first file is used as the avatar
+            await book_update_service.update(id_, book_update, db)
+        
+        # Add the uploaded file info to the database
+        for path in file_paths:
+            new_id = uuid.uuid4()
+            if typee == "Book":
+                photo = BookPhoto(id=new_id, book_id=id_, path=path)
+            elif typee == "User":
+                photo = UserPhoto(id=new_id, user_id=id_, path=path)
+            elif typee == "Review":
+                photo = ReviewPhoto(id=new_id, review_id=id_, path=path)
+            else:
+                continue
+            
+            db.add(photo)
+        
         await db.commit()
         
-        return JSONResponse(content={"message": "File uploaded successfully"}, status_code=201)
+        return JSONResponse(content={"message": "Files uploaded successfully"}, status_code=201)
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
