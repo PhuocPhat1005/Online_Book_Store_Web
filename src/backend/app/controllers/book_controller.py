@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.services.crud_service import CRUDService, query_string_to_dict, query_in_db_by_id, ReadService
+from app.services.book_service import generate_all_variations
 
 from app.schemas.book import BookCreate, BookUpdate, BookResponse, BookOrder, BookFilter
 from app.schemas.book_author import Book_Author_Create, Book_Author_Update
@@ -76,10 +77,10 @@ async def get_book_endpoint(book_id: UUID, db: AsyncSession = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Book not found")
     return book
 
-
 @router.get("/get_book_by_name/{book_name}", summary="Get books by name")
 async def get_books_by_name_endpoint(book_name: str, db: AsyncSession = Depends(get_db)):
-    books = await book_service.get_by_condition([{'book_name':book_name}], db, 0)
+    name = generate_all_variations(book_name)
+    books = await book_service.get_by_condition([{},{'book_name':name}], db, 0)
     if not books:
         raise HTTPException(status_code=404, detail="No books found with that name")
     return books

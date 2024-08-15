@@ -10,15 +10,7 @@ from fastapi.security import OAuth2PasswordBearer
 router = APIRouter()
 author_service = CRUDService[Author, AuthorCreate, AuthorUpdate](Author)
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-def check_admin(token: str = Depends(oauth2_scheme)):
-    # Simulate an admin check
-    return True
-    print(token)
-    user_is_admin = True  # Replace with actual check
-    if not user_is_admin:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized")
+# oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 @router.post("/create_author", summary="Create a new author")
