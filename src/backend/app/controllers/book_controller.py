@@ -136,6 +136,8 @@ async def get_book_per_page_endpoint(page_number: int, db: AsyncSession = Depend
             equal:  0
             Find book name = "string", have isbn = "string3" or "string4", price = 0
             If your "equal_condition" is 0, it will return value LIKE your condition (string3 LIKE string34)
+            To filter price in range x to y, you can fill in and_ this statement: price_from=x&price_to=y
+            If just want filter price >= x, fill in and_ this statement: price_from=x
             ''',
             summary="Get books conditions", )
 async def get_book_by_condition_endpoint(and_search_params: str = None, or_search_params: str = None, equal_condition: int = 1, db: AsyncSession = Depends(get_db)):
