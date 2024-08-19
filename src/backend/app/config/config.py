@@ -37,6 +37,10 @@ class Settings(BaseSettings):
     AWS_REGION: str = env_values["AWS_REGION"]
     AWS_BUCKET_NAME: str = env_values["AWS_BUCKET_NAME"]
     AWS_LINK: str = f"https://{AWS_BUCKET_NAME}.s3.amazonaws.com/"
+
+    PAYOS_CLIENT_ID: str = env_values["PAYOS_CLIENT_ID"]
+    PAYOS_API_KEY: str = env_values["PAYOS_API_KEY"]
+    PAYOS_CHECKSUM_KEY: str = env_values["PAYOS_CHECKSUM_KEY"]
     class Config:
         case_sensitive = True
 

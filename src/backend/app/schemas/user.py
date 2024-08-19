@@ -10,6 +10,7 @@ class UserBase(BaseModel):
     gender: str | None = "none"
     description: str | None = None
     user_ava: str | None = None
+    cart_id: UUID | None = None
 
 class UserCreate(UserBase):
     pass

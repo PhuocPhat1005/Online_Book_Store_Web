@@ -35,7 +35,7 @@ from jose import JWTError, jwt
 import requests
 
 import logging
-
+import uuid
 user_service = CRUDService[User, UserCreate, UserUpdate](User)
 
 # Configure logging
@@ -234,6 +234,7 @@ async def sign_up(account: AccountCreate, db: AsyncSession = Depends(get_db)):
     access_token = create_access_token(data={"sub": account.username})
     refresh_token = create_refresh_token(data={"sub": account.username})
     user = UserCreate(account_id=new_id)
+    user.cart_id = uuid.uuid4()
     await user_service.create(user, db)
     return {"access_token": access_token, "refresh_token": refresh_token}
 
@@ -350,6 +351,11 @@ async def reset_password_by_email(
     await db.commit()
 
     return {"msg": "Password updated successfully!"}
+
+@router.get("/get_test_access_token", summary="Get test access token", description="Get access token")
+async def get_access_token(username: str):
+    access_token = create_access_token(data={"sub": username})
+    return {"test_access_token": access_token}
 
 
 # @router.put(

@@ -16,7 +16,13 @@ from app.routes import (
     publishing_company,
     translator,
     photo,
-    user
+    user,
+    cart,
+    order,
+    payment,
+    address,
+    shipping,
+    sale_off
 )
 from app.database.database import Base
 from app.config.config import settings
@@ -74,6 +80,12 @@ app.include_router(publishing_company.router)
 app.include_router(translator.router)
 app.include_router(photo.router)
 app.include_router(user.router)
+app.include_router(cart.router)
+app.include_router(order.router)
+app.include_router(payment.router)
+app.include_router(address.router)
+app.include_router(shipping.router)
+app.include_router(sale_off.router)
 
 
 def main():

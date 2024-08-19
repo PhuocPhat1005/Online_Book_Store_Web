@@ -19,7 +19,7 @@ class BookBase(BaseModel):
     book_cover_type: str
     description: str
     book_ava: str | None = None
-
+    sale_off: UUID | None = ""
 
 class BookCreate(BookBase):
     pass
@@ -37,6 +37,7 @@ class BookUpdate(BaseModel):
     book_cover_type: str | None = None
     description: str | None = None
     book_ava: str | None = None
+    sale_off: UUID | None = None
 class BookResponse(BookBase):
     id: UUID
     created_at: date

@@ -111,7 +111,6 @@ async def delete_book_endpoint(book_id: UUID, db: AsyncSession = Depends(get_db)
     book_name = book_name[0].book_name
     print(book_name)    
     delete_folder_aws(book_name)
-    return "DOne"
     book = await book_service.delete(book_id, db)
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
