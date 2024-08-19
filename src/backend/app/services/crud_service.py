@@ -45,6 +45,21 @@ class ReadService(Generic[ModelType]):
             if not search_params:
                 continue
             for field_name, search_value in search_params.items():
+                if field_name == "price_from":
+                    field = getattr(self.model, "price", None)
+                    if field is None:
+                        raise HTTPException(status_code=400, detail=f"Field price does not exist on {self.model.__name__}")
+                    condition = ( field >= float(search_value[0]) )
+                    sub_conditions.append(condition)
+                    continue
+                if field_name == "price_to":
+                    field = getattr(self.model, "price", None)
+                    if field is None:
+                        raise HTTPException(status_code=400, detail=f"Field price does not exist on {self.model.__name__}")
+                    condition = ( field <= float(search_value[0]) )
+                    sub_conditions.append(condition)
+                    continue
+                
                 field = getattr(self.model, field_name, None)
                 if field is None:
                     raise HTTPException(status_code=400, detail=f"Field {field_name} does not exist on {self.model.__name__}")
