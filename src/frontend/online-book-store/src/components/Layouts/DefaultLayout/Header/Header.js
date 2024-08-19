@@ -45,6 +45,8 @@ const Header = ({ guest }) => {
     const navigate = useNavigate();
 
     const handleSignOut = () => {
+        console.log(123);
+
         navigate(config.routes.guesthome);
     };
 

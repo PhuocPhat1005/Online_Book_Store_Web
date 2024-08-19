@@ -5,15 +5,14 @@ import styles from './ProductItem.module.scss';
 import Image from '~/components/Image';
 import config from '~/config';
 import RatingStar from '~/components/RatingStar';
+import request from '~/utils/request';
+import { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
 
 function ProductItem({ data, rating = 0 }) {
-    // if (data.images !== undefined) {
-    //     if (data.images[0] !== undefined) {
-    //         console.log('def');
-    //     }
-    // }
+    const [dataItem, setDataItem] = useState(data);
+
     rating = '4.25';
 
     let newPrice = data.price.toString();
@@ -23,25 +22,35 @@ function ProductItem({ data, rating = 0 }) {
 
     const fetchProduct = (e) => {
         e.preventDefault();
-        navigate(config.routes.detailsbook, { state: { bookData: data } });
+        navigate(config.routes.detailsbook, { state: { bookData: dataItem } });
 
         // fetch to get authors, translators.
     };
 
+    useEffect(() => {
+        const fetchAuthor = async () => {
+            try {
+                const response = await request.get(`book/get_book_author/${data.id}`);
+
+                if (response.status === 200) {
+                    setDataItem({
+                        ...dataItem,
+                        author: response.data,
+                    });
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchAuthor();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data.id]);
+
     return (
         <a href={`book/get_book/${data.id}`} className={cx('wrapper')} onClick={(e) => fetchProduct(e)}>
             <div className={cx('image_container')}>
-                <Image
-                    className={cx('image')}
-                    src={
-                        data.images !== undefined
-                            ? data.images[0] !== undefined
-                                ? 'https://sibookspictures.s3.amazonaws.com/001-dac-nhan-tam/1-dac-nhan-tam-1.jpg'
-                                : 'https://play-lh.googleusercontent.com/gwZxofR0K4lpyeOLB0LjirT5SKpJhAXz8yhp0kfnTzzihlDuR49BFEcKe2PXg4NF1KdB'
-                            : 'https://play-lh.googleusercontent.com/gwZxofR0K4lpyeOLB0LjirT5SKpJhAXz8yhp0kfnTzzihlDuR49BFEcKe2PXg4NF1KdB'
-                    }
-                    alt={data.book_name}
-                />
+                <Image className={cx('image')} src={data.book_ava} alt={data.book_name} />
                 <div className={cx('info')}>
                     <span className={cx('text')}>more information</span>
                 </div>
