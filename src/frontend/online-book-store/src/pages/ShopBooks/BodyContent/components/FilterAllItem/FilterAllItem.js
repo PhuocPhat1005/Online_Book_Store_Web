@@ -3,11 +3,16 @@ import styles from './FilterAllItem.module.scss';
 
 const cx = classNames.bind(styles);
 
-function FilterAllItem({ item, StarIconComponent, stars }) {
+function FilterAllItem({ item, StarIconComponent, stars, checked, onChange }) {
     return (
         <div className={cx('item')}>
             <div className={cx('checkbox_container')}>
-                <input className={cx('input_check')} type="checkbox" />
+                <input
+                    className={cx('input_check')}
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() => onChange(item)}
+                />
                 <span className={cx('checkmark')}></span>
             </div>
             {StarIconComponent && (

@@ -16,6 +16,8 @@ import request from '~/utils/request';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 
+import Loading from './Loading';
+
 import Cookies from 'universal-cookie';
 import { jwtDecode } from 'jwt-decode';
 
@@ -27,6 +29,7 @@ function SignIn() {
     const [toggleToast, setToggleToast] = useState(true);
     const [inCorrectMess, setIncorrectMess] = useState('');
     const [isForgotPassword, setIsForgotPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSignin = (jwt_token) => {
@@ -39,6 +42,7 @@ function SignIn() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setIsLoading(true);
 
         const formData = new FormData(event.target);
         const signin_data = {
@@ -60,6 +64,7 @@ function SignIn() {
                 setToggleToast(true);
                 console.log('Form submitted successfully');
 
+                setIsLoading(false);
                 navigate(config.routes.home);
             } else {
                 // Handle errors
@@ -67,6 +72,8 @@ function SignIn() {
                 console.error('Form submission failed', response.data);
             }
         } catch (error) {
+            setIsLoading(false);
+
             if (error.response) {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
@@ -99,71 +106,81 @@ function SignIn() {
     };
 
     return (
-        <div className={cx('wrapper')}>
-            <div className={cx('header')}>
-                <Link to={config.routes.home} className={cx('header-item')}>
-                    <FontAwesomeIcon className={cx('header-icon')} icon={faHouse} />
-                </Link>
-                <Link to={config.routes.signup} className={cx('header-item')}>
-                    <FontAwesomeIcon className={cx('header-icon')} icon={faRightToBracket} />
-                </Link>
-            </div>
-            <div className={cx('image-container')}>
-                <Image className={cx('background')} src={images.signin} />
-                <div className={cx('overlay')}></div>
-            </div>
-            <form className={cx('signin-form')} onSubmit={handleSubmit}>
-                <div className={cx('form-container')}>
-                    <div className={cx('title')}>
-                        <p className={cx('label')}>sign in</p>
-                    </div>
-                    <div className={cx('body')}>
-                        <div className={cx('input-field')}>
-                            <p className={cx('input-label')}>Username</p>
-                            <input
-                                className={cx('input-bar')}
-                                type="text"
-                                name="username"
-                                placeholder="Enter your username"
-                                required
-                            />
+        <>
+            <div className={cx('wrapper')}>
+                <div className={cx('header')}>
+                    <Link to={config.routes.home} className={cx('header-item')}>
+                        <FontAwesomeIcon className={cx('header-icon')} icon={faHouse} />
+                    </Link>
+                    <Link to={config.routes.signup} className={cx('header-item')}>
+                        <FontAwesomeIcon className={cx('header-icon')} icon={faRightToBracket} />
+                    </Link>
+                </div>
+                <div className={cx('image-container')}>
+                    <Image className={cx('background')} src={images.signin} />
+                    <div className={cx('overlay')}></div>
+                </div>
+                <form className={cx('signin-form')} onSubmit={handleSubmit}>
+                    <div className={cx('form-container')}>
+                        <div className={cx('title')}>
+                            <p className={cx('label')}>sign in</p>
                         </div>
-                        <div className={cx('input-field')}>
-                            <p className={cx('input-label')}>Password</p>
-                            <input
-                                className={cx('input-bar')}
-                                type="password"
-                                name="password"
-                                placeholder="Enter your password"
-                                required
-                            />
-                        </div>
-                        <div className={cx('info')}>
-                            <div className={cx('remember-password')}>
-                                <input className={cx('remember-check')} type="checkbox" />
-                                <span className={cx('info-text')}>Remember me</span>
+                        <div className={cx('body')}>
+                            <div className={cx('input-field')}>
+                                <p className={cx('input-label')}>Username</p>
+                                <input
+                                    className={cx('input-bar')}
+                                    type="text"
+                                    name="username"
+                                    placeholder="Enter your username"
+                                    required
+                                />
                             </div>
-                            <span className={cx('info-text')} onClick={handleResetPassword}>
-                                Forgot password?
-                            </span>
+                            <div className={cx('input-field')}>
+                                <p className={cx('input-label')}>Password</p>
+                                <input
+                                    className={cx('input-bar')}
+                                    type="password"
+                                    name="password"
+                                    placeholder="Enter your password"
+                                    required
+                                />
+                            </div>
+                            <div className={cx('info')}>
+                                <div className={cx('remember-password')}>
+                                    <input className={cx('remember-check')} type="checkbox" />
+                                    <span className={cx('info-text')}>Remember me</span>
+                                </div>
+                                <span className={cx('info-text')} onClick={handleResetPassword}>
+                                    Forgot password?
+                                </span>
+                            </div>
+                            <Button className={cx('submit-btn')} onClick={handleToast}>
+                                Sign In
+                            </Button>
                         </div>
-                        <Button className={cx('submit-btn')} onClick={handleToast}>
-                            Sign In
-                        </Button>
+                        <div className={cx('footer')}>
+                            <div className={cx('footer-container')}>
+                                <Link to={config.routes.signup} className={cx('signup-text')}>
+                                    Don't have an account? Sign Up now
+                                </Link>
+                                <GoogleRegister />
+                            </div>
+                        </div>
                     </div>
-                    <div className={cx('footer')}>
-                        <div className={cx('footer-container')}>
-                            <Link to={config.routes.signup} className={cx('signup-text')}>
-                                Don't have an account? Sign Up now
-                            </Link>
-                            <GoogleRegister />
-                        </div>
+                </form>
+                {isForgotPassword && <SendEmail handleResetPassword={handleResetPassword} />}
+                {!toggleToast && <IncorrectBox mess={inCorrectMess} onClose={closeIncorrectBox} />}
+            </div>
+            {isLoading && (
+                <div className={cx('overlay_loading')}>
+                    <div className={cx('loading_container')}>
+                        <p className={cx('loading_text')}>Loading</p>
+                        <Loading className={cx('loading_circle')} />
                     </div>
                 </div>
-            </form>
-            {isForgotPassword && <SendEmail handleResetPassword={handleResetPassword} />}
-            {!toggleToast && <IncorrectBox mess={inCorrectMess} onClose={closeIncorrectBox} />}
-        </div>
+            )}
+        </>
     );
 }
 

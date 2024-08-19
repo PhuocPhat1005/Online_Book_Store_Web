@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "jwt-decode": "^4.0.0",
     "react-cookie": "^7.2.0",
     "universal-cookie": "^7.2.0"

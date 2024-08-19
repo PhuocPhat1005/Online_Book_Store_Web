@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from './Pricerange.module.scss';
-import Button from '~/components/Button';
+// import Button from '~/components/Button';
 import { useState } from 'react';
 
 const cx = classNames.bind(styles);
@@ -10,29 +10,26 @@ function addDotsToNumber(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
-function PriceRange() {
-    const [minPrice, setMinPrice] = useState('100.000');
-    const [maxPrice, setMaxPrice] = useState('500.000');
+function PriceRange({ onPriceRangeChange }) {
+    const [minPrice, setMinPrice] = useState('0');
+    const [maxPrice, setMaxPrice] = useState('0');
 
-    const handleMinInput = (e) => {
-        let value = e.target.value;
-
+    const handleInput = (value, setValue, type) => {
+        value = value.replace(/^0+/, ''); // Remove leading zeros
         value = value.replace(/\./g, ''); // Remove existing dots
+
         if (!isNaN(value) && value !== '') {
             value = addDotsToNumber(value);
-            setMinPrice(value);
+            setValue(value);
+            onPriceRangeChange(type, value);
+        } else if (value === '') {
+            setValue('0');
+            onPriceRangeChange(type, '0');
         }
     };
 
-    const handleMaxInput = (e) => {
-        let value = e.target.value;
-
-        value = value.replace(/\./g, ''); // Remove existing dots
-        if (!isNaN(value) && value !== '') {
-            value = addDotsToNumber(value);
-            setMaxPrice(value);
-        }
-    };
+    const handleMinInput = (e) => handleInput(e.target.value, setMinPrice, 'min');
+    const handleMaxInput = (e) => handleInput(e.target.value, setMaxPrice, 'max');
 
     return (
         <div className={cx('range')}>
@@ -41,9 +38,9 @@ function PriceRange() {
             <input className={cx('range_input_min')} type="text" value={minPrice} onChange={handleMinInput} />
             <p className={cx('range_text')}>to</p>
             <input className={cx('range_input_max')} type="text" value={maxPrice} onChange={handleMaxInput} />
-            <Button className={cx('btn')} types="text">
+            {/* <Button className={cx('btn')} types="text">
                 find
-            </Button>
+            </Button> */}
         </div>
     );
 }
