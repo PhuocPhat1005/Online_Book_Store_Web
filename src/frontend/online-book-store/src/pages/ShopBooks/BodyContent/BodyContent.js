@@ -19,11 +19,10 @@ const cx = classNames.bind(styles);
 const BOOKS_PER_ROW = 5;
 
 function BodyContent() {
+    // Display & Manage the fillter all
     const [showFilterAll, setShowFillterAll] = useState(false);
-
-    const handleFilterAllDisplay = () => {
-        setShowFillterAll(!showFilterAll);
-    };
+    const [isAppliedFilterAll, setIsAppliedFilterAll] = useState(false);
+    const [conditionProducts, setConditionProducts] = useState([]);
 
     const [currentPage, setCurrentPage] = useState(0); // number
     const [showPages, setShowPages] = useState([1, 2, 3, 4, 5]); // number array
@@ -100,21 +99,99 @@ function BodyContent() {
         setCheckedItems(newCheckedItems);
     };
 
-    // const fectchFillterApply = async () => {
-    //     try {
-    //         const response = await request.get('book/get_book_by_conditions', {
-    //             params: {
-    //                 price: parseInt()
-    //             },
-    //         });
-    //     } catch (error) {}
-    // };
+    // Handle Price query
+    const [priceFromQuery, setPriceFromQuery] = useState('');
+    const [priceToQuery, setPriceToQuery] = useState('');
+    const [rangePrice, setRangePrice] = useState([10e6, -1]);
+
+    useEffect(() => {
+        let minPrice = 10e6;
+        let maxPrice = -1;
+        for (let p of checkedItems.price) {
+            if (p[0] === '<') {
+                minPrice = 0;
+                maxPrice = parseInt(p.slice(1));
+                setPriceFromQuery(minPrice);
+                setPriceToQuery(maxPrice);
+            } else if (p[0] === '>') {
+                minPrice = parseInt(p.slice(1));
+                maxPrice = 10e6;
+                setPriceFromQuery(minPrice);
+                setPriceToQuery(maxPrice);
+            } else {
+                let temp_string_arr = p.split('-');
+                minPrice = parseInt(temp_string_arr[0]);
+                maxPrice = parseInt(temp_string_arr[1]);
+                setPriceFromQuery(minPrice);
+                setPriceToQuery(maxPrice);
+            }
+        }
+        if (checkedItems.price.length !== 0) {
+            minPrice = Math.min(rangePrice[0], minPrice);
+            maxPrice = Math.max(rangePrice[1], maxPrice);
+            setRangePrice([minPrice, maxPrice]);
+        } else {
+            setRangePrice([10e6, -1]);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [priceFromQuery, priceToQuery, checkedItems.price]);
+
+    const fectchFillterApply = async () => {
+        try {
+            let params = new URLSearchParams();
+            params.append('price_from', rangePrice[0]);
+            params.append('price_to', rangePrice[1]);
+
+            const response = await request.get('book/get_book_by_conditions', {
+                params: {
+                    and_search_params: params,
+                },
+            });
+
+            if (response.status === 200) {
+                setConditionProducts(response.data);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        if (isAppliedFilterAll === false) {
+            return;
+        }
+
+        fectchFillterApply();
+        setIsAppliedFilterAll(false);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isAppliedFilterAll]);
+
+    // Display & Manage the fillter all
+
+    const handleFilterAllDisplay = () => {
+        setShowFillterAll(!showFilterAll);
+        setCheckedItems({ deal: [], price: [], rating: [], category: [], publishers: [] });
+    };
+
+    const handleApplyFilterAll = () => {
+        setIsAppliedFilterAll(true);
+        setShowFillterAll(false);
+        setCheckedItems({ deal: [], price: [], rating: [], category: [], publishers: [] });
+    };
 
     // Create an array of Products components
     const products = [];
-    for (let i = 0; i < books.length; i += BOOKS_PER_ROW) {
-        const booksSlice = books.slice(i, i + BOOKS_PER_ROW);
-        products.push(<Products key={i} data={booksSlice} />);
+
+    if (conditionProducts.length !== 0) {
+        for (let i = 0; i < conditionProducts.length; i += BOOKS_PER_ROW) {
+            const booksSlice = conditionProducts.slice(i, i + BOOKS_PER_ROW);
+            products.push(<Products key={i} data={booksSlice} />);
+        }
+    } else {
+        for (let i = 0; i < books.length; i += BOOKS_PER_ROW) {
+            const booksSlice = books.slice(i, i + BOOKS_PER_ROW);
+            products.push(<Products key={i} data={booksSlice} />);
+        }
     }
 
     return (
@@ -162,7 +239,7 @@ function BodyContent() {
                             </div>
                         </div>
                     </div>
-                    <div className={cx('core')}>{products}</div>
+                    <div className={cx('core')}>{products || conditionProducts}</div>
                 </div>
                 <div className={cx('footer')}>
                     <span className={cx('back_btn')} onClick={handleBackPage}>
@@ -191,6 +268,7 @@ function BodyContent() {
                     checkedItems={checkedItems}
                     onCheckedItemsChange={handleCheckedItemsChange}
                     handleFilterAllDisplay={handleFilterAllDisplay}
+                    handleApplyFilterAll={handleApplyFilterAll}
                 />
             )}
         </div>

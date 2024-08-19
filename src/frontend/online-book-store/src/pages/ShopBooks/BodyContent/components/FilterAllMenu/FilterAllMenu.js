@@ -5,17 +5,40 @@ import FilterAllItem from '../FilterAllItem';
 import Button from '~/components/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faXmark } from '@fortawesome/free-solid-svg-icons';
-import PriceRange from '../PriceRange';
+import { useState } from 'react';
+// import PriceRange from '../PriceRange';
 
 const cx = classNames.bind(styles);
+const PRICES = [
+    {
+        title: 'Under 100.000 VND',
+        value: '<100000',
+    },
+    {
+        title: '100.000 - 200.000 VND',
+        value: '100000-200000',
+    },
+    {
+        title: '200.000 - 300.000 VND',
+        value: '200000-300000',
+    },
+    {
+        title: '300.000 - 500.000 VND',
+        value: '300000-500000',
+    },
+    {
+        title: 'Over 500.000 VND',
+        value: '>500000',
+    },
+];
 
 function FilterAllMenu({
     deal = [],
     category = [],
     publishers = [],
-    checkedItems,
     onCheckedItemsChange,
     handleFilterAllDisplay,
+    handleApplyFilterAll,
 }) {
     const handleCheckItem = (category, item) => {
         onCheckedItemsChange((prevCheckedItems) => {
@@ -30,19 +53,15 @@ function FilterAllMenu({
         });
     };
 
-    const handlePriceRangeChange = (type, value) => {
-        onCheckedItemsChange((prevCheckedItems) => ({
-            ...prevCheckedItems,
-            price: {
-                ...prevCheckedItems.price,
-                [type]: value,
-            },
-        }));
-    };
-
-    const handleApplyFilters = () => {
-        console.log('Checked Items:', checkedItems);
-    };
+    // const handlePriceRangeChange = (type, value) => {
+    //     onCheckedItemsChange((prevCheckedItems) => ({
+    //         ...prevCheckedItems,
+    //         price: {
+    //             ...prevCheckedItems.price,
+    //             [type]: value,
+    //         },
+    //     }));
+    // };
 
     return (
         <div className={cx('overlay')}>
@@ -56,12 +75,7 @@ function FilterAllMenu({
                         <p className={cx('label')}>Deal</p>
                         <div className={cx('menu_item_content')}>
                             {deal.map((item, index) => (
-                                <FilterAllItem
-                                    onChange={() => handleCheckItem('deal', item)}
-                                    // name="deal"
-                                    item={item}
-                                    key={index}
-                                />
+                                <FilterAllItem onChange={() => handleCheckItem('deal', item)} item={item} key={index} />
                             ))}
                         </div>
                     </div>
@@ -73,41 +87,26 @@ function FilterAllMenu({
                                 StarIconComponent={() => <FontAwesomeIcon icon={faStar} />}
                                 stars={4}
                                 onChange={() => handleCheckItem('rating', 4)}
-                                // name="rating"
                             />
                             <FilterAllItem
                                 item={'5 stars'}
                                 StarIconComponent={() => <FontAwesomeIcon icon={faStar} />}
                                 stars={5}
                                 onChange={() => handleCheckItem('rating', 5)}
-                                // name="rating"
                             />
                         </div>
                     </div>
                     <div className={cx('menu_item_block')}>
                         <p className={cx('label')}>Price (VND)</p>
                         <div className={cx('menu_item_content')}>
-                            <FilterAllItem
-                                onChange={() => handleCheckItem('price', '<100000')}
-                                // name="price"
-                                item={'Under 100.000 VND'}
-                            />
-                            <FilterAllItem
-                                onChange={() => handleCheckItem('price', '100000-200000')}
-                                // name="price"
-                                item={'100.000 - 200.000 VND'}
-                            />
-                            <FilterAllItem
-                                onChange={() => handleCheckItem('price', '200000-300000')}
-                                // name="price"
-                                item={'200.000 - 300.000 VND'}
-                            />
-                            <FilterAllItem
-                                onChange={() => handleCheckItem('price', '>300000')}
-                                // name="price"
-                                item={'Over 300.000 VND'}
-                            />
-                            <PriceRange onPriceRangeChange={handlePriceRangeChange} />
+                            {PRICES.map((item, index) => (
+                                <FilterAllItem
+                                    key={index}
+                                    onChange={() => handleCheckItem('price', item.value)}
+                                    item={item.title}
+                                />
+                            ))}
+                            {/* <PriceRange onPriceRangeChange={handlePriceRangeChange} /> */}
                         </div>
                     </div>
                     <div className={cx('menu_item_block')}>
@@ -136,7 +135,7 @@ function FilterAllMenu({
                     </div>
                 </div>
                 <div className={cx('footer')}>
-                    <Button className={cx('apply_btn')} onClick={handleApplyFilters}>
+                    <Button className={cx('apply_btn')} onClick={handleApplyFilterAll}>
                         Apply Filter
                     </Button>
                 </div>
