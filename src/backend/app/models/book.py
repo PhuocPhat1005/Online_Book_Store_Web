@@ -30,9 +30,11 @@ class Book(Base):
     book_cover_type = Column(String(10), nullable=False)
     book_ava = Column(String(255), nullable=False)
     description = Column(Text)
+    sale_off = Column(UUID, ForeignKey("sale_offs.id", ondelete="SET NULL"), nullable=True)
     created_at = Column(TIMESTAMP, server_default=func.now(), nullable=False)
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now(), nullable=False)
 
+    sale_offs = relationship("SaleOff", back_populates="books")
     publishing_company = relationship("PublishingCompany", back_populates="books")
     category = relationship("Category", back_populates="books")
     photos = relationship("BookPhoto", back_populates="book", cascade="all, delete-orphan")

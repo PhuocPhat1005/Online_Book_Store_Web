@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 import enum
+from scipy.signal._wavelets import cascade
 
 
 class GenderEnum(enum.Enum):
@@ -27,6 +28,9 @@ class User(Base):
     )
     description = Column(Text)
     user_ava = Column(String(255))
+    cart_id = Column(UUID, nullable=False, default = uuid.uuid4())
+    
+    addresses = relationship("Address", back_populates="user", cascade="all, delete-orphan")
     account = relationship("Account", back_populates="user")
     photos = relationship("UserPhoto", back_populates="user", cascade="all, delete-orphan")
     reviews = relationship("Review", back_populates="user", cascade="all, delete-orphan")

@@ -2,6 +2,7 @@ from sqlalchemy import Column, String, Integer, TIMESTAMP
 from app.database.database import Base
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
 
 
 class SaleOff(Base):
@@ -11,3 +12,6 @@ class SaleOff(Base):
     sale_off = Column(Integer)
     time_start = Column(TIMESTAMP)
     time_end = Column(TIMESTAMP)
+
+    books = relationship("Book", back_populates="sale_offs")
+    
