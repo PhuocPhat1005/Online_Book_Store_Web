@@ -10,6 +10,7 @@ import secrets
 from app.routes import (
     auth,
     account,
+    admin,
     author,
     book,
     category,
@@ -22,7 +23,8 @@ from app.routes import (
     payment,
     address,
     shipping,
-    sale_off
+    sale_off,
+    review
 )
 from app.database.database import Base
 from app.config.config import settings
@@ -73,6 +75,7 @@ app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
 
 app.include_router(auth.router)
 app.include_router(account.router)
+app.include_router(admin.router)
 app.include_router(author.router)
 app.include_router(book.router)
 app.include_router(category.router)
@@ -86,6 +89,7 @@ app.include_router(payment.router)
 app.include_router(address.router)
 app.include_router(shipping.router)
 app.include_router(sale_off.router)
+app.include_router(review.router)
 
 
 def main():

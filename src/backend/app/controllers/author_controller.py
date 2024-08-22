@@ -5,7 +5,6 @@ from app.schemas.author import AuthorCreate, AuthorUpdate, AuthorResponse
 from app.models.author import Author
 from app.database.database import get_db
 from uuid import UUID
-from fastapi.security import OAuth2PasswordBearer
 
 router = APIRouter()
 author_service = CRUDService[Author, AuthorCreate, AuthorUpdate](Author)

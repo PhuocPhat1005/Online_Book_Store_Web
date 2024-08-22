@@ -15,8 +15,6 @@ REFESH_TOKEN_EXPIRE_DAYS=7
 SECRET_KEY = 4605MdCnG_DO6hVWefenXUy-7JmuPCMYKnrWA5pVZh4
 ALGORITHM = HS256 
 
-# --Photo Directory --
-Photo_directory = "app/database/photo"
 
 #AWS
 AWS_ACCESS_KEY_ID="AKIAQKPILYECQCCLGQJB"

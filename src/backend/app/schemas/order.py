@@ -26,5 +26,4 @@ class OrderCreate(OrderBase):
     pass
 
 class OrderUpdate(OrderBase):
-    order_date: str | None = ""
     pass

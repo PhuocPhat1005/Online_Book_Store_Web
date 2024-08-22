@@ -69,7 +69,7 @@ async def show_all_wards_endpoint(district_id: str, db: AsyncSession = Depends(g
 
 @router.post("/create_address", summary="Create a new address")
 async def create_address_endpoint(access_token: str, address_detail: str, ward_id: str, db: AsyncSession = Depends(get_db)):
-    user_obj = await get_user_obj_by_token(access_token, Account, User, db)
+    user_obj = await get_user_obj_by_token(access_token, db)
     if not user_obj:
         raise HTTPException(status_code=404, detail="User not found")
     address = AddressCreate()
@@ -80,7 +80,7 @@ async def create_address_endpoint(access_token: str, address_detail: str, ward_i
 
 @router.get("/get_user_address", summary="Get a address by access token")
 async def get_address_endpoint(access_token: str, db: AsyncSession = Depends(get_db)):
-    user_obj = await get_user_obj_by_token(access_token, Account, User, db)
+    user_obj = await get_user_obj_by_token(access_token, db)
     user_id = user_obj.id
     address = await address_service.get_by_condition([{'user_id':user_id}], db)
     if not address:

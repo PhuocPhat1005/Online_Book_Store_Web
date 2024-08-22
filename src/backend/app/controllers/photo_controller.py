@@ -12,8 +12,6 @@ from app.schemas.book import BookUpdate
 from app.database.database import get_db
 from uuid import UUID
 import uuid
-import shutil
-import os
 from app.config.config import settings
 from sqlalchemy import cast
 import boto3
@@ -43,14 +41,15 @@ async def upload_files(id_: str, typee: str = 'Book', is_ava: int = 0, files: li
         if typee == 'Book':
             book_read_service = ReadService(Book)
             book = await book_read_service.get_by_condition([{'id': id_}], db)
-            folder_path = normalization(book[0].book_name) + '/'
+            folder_path = "Book/" + normalization(book[0].book_name) + '/'
         elif typee == 'User':
-            # Handle User specific logic if needed
-            pass
+            user_read_service = ReadService(User)
+            user = await user_read_service.get_by_condition([{'id': id_}], db)
+            folder_path = f"User/User_{user[0].id}/"
         elif typee == 'Review':
-            # Handle Review specific logic if needed
-            pass
-        
+            review_read_service = ReadService(Review)
+            review = await review_read_service.get_by_condition([{'id': id_}], db)
+            folder_path = f"User/User_{review[0].user_id}/Review_{review[0].create_at}/"
         file_paths = []
         for file in files:
             name_photo = uuid.uuid4()

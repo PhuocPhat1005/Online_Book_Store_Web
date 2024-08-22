@@ -30,8 +30,6 @@ class Settings(BaseSettings):
     MAIL_SENDER: str = env_values["MAIL_SENDER"]
     MAIL_PASSWORD: str = env_values["MAIL_PASSWORD_APP"]
 
-    Photo_directory: str = env_values["Photo_directory"]
-    
     AWS_ACCESS_KEY_ID: str = env_values["AWS_ACCESS_KEY_ID"]
     AWS_SECRET_ACCESS_KEY: str = env_values["AWS_SECRET_ACCESS_KEY"]
     AWS_REGION: str = env_values["AWS_REGION"]
