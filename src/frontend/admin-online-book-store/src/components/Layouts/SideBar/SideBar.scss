@@ -1,0 +1,28 @@
+.wrapper {
+    height: 100%;
+    width: 300px;
+    display: flex;
+    // justify-content: center;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    background-color: #405189;
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    padding: 10px 10px;
+}
+
+.website-name {
+    position: fixed;
+    left: 120px;
+    top: 42.5px;
+    font-size: 1.6rem;
+    color: white;
+}

@@ -1,11 +1,7 @@
-import reactDom from 'react-dom';
-// import './components/Layouts/DefaultLayout/Header/Header.js';\
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { DefaultLayout } from './components/Layouts';
 import { Fragment } from 'react';
-import { privateRoutes } from './routes';
-import Dashboard from './Dashboard';
-import './App.css';
+import { publicRoutes } from './routes';
 
 // function App() {
 //   return (
@@ -29,42 +25,42 @@ import './App.css';
 
 function App() {
   return (
-      <Router>
-          <div className="App">
-              <Routes>
-                  <Route path="/" element={<Navigate to="/signin" />} />
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Navigate to="/dashboard" />} />
 
-                  {privateRoutes.map((route, index) => {
-                      const Page = route.component;
-                      let Layout = DefaultLayout;
+          {publicRoutes.map((route, index) => {
+            const Page = route.component;
+            let Layout = DefaultLayout;
 
-                      if (route.layout) Layout = route.layout;
-                      else if (route.layout === null) Layout = Fragment;
+            if (route.layout) Layout = route.layout;
+            else if (route.layout === null) Layout = Fragment;
 
-                      return (
-                          <Route
-                              key={index}
-                              path={route.path}
-                              element={
-                                  <Layout>
-                                      <Page />
-                                  </Layout>
-                              }
-                          />
-                      );
-                  })}
-              </Routes>
-          </div>
-      </Router>
+            return (
+              <Route
+                key={index}
+                path={route.path}
+                element={
+                  <Layout>
+                      <Page />
+                  </Layout>
+                }
+              />
+            );
+          })}
+        </Routes>
+      </div>
+    </Router>
   );
 }
-function Page(){
-  return (
-    <div>
-      {/* <Header /> */}
-      <Dashboard />
-    </div>
-  );
-};
+// function Page(){
+//   return (
+//     <div>
+//       {/* <Header /> */}
+//       <Dashboard />
+//     </div>
+//   );
+// };
 // reactDom.render(<Page />, document.getElementById('root'));
 export default App;
