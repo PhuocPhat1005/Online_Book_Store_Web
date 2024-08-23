@@ -28,3 +28,4 @@ env
 .env
 __pycache__
 src/backend/.env
+/.vscode
