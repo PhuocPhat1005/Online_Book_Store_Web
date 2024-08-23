@@ -11,9 +11,9 @@ const routes = {
     detailsbook: '/details',
     order: '/order',
     guesthome: '/guesthome',
-    guestshopbooks: './guestshopbooks',
-    guestcontact: './guestcontact',
-    guestabout: './guestabout',
+    guestshopbooks: '/guestshopbooks',
+    guestcontact: '/guestcontact',
+    guestabout: '/guestabout',
 };
 
 export default routes;

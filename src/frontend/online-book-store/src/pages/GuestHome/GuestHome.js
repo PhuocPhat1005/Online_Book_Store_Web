@@ -8,6 +8,7 @@ import GuestIntroductionBlock from '../GuestHome/components/GuestIntroductionBlo
 import GuestEventBlock from '../GuestHome/components/GuestEventBlock/GuestEventBlock';
 import GuestEventsContent from './components/GuestEventsContent';
 import Header from '~/components/Layouts/DefaultLayout/Header/Header';
+import GuestFooter from '~/components/Layouts/DefaultLayout/GuestFooter';
 import assets from '~/assets';
 
 const cx = classNames.bind(styles);
@@ -38,6 +39,7 @@ function GuestHome() {
                 <ConnectedLine />
                 <ConnectedLine />
             </div>
+            <GuestFooter />
         </>
     );
 }
