@@ -1,10 +1,10 @@
 import SignInPage from '../pages/SignIn';
-import Dashboard from '../pages/Dashboard';
+import Dashboards from '../pages/Dashboards';
 import config from '../config';
 
 const publicRoutes = [
     { path: config.routes.signin, component: SignInPage, layout: null },
-    { path: config.routes.dashboard, component: Dashboard }
+    { path: config.routes.dashboard, component: Dashboards }
 ];
 
 const privateRoutes = [];

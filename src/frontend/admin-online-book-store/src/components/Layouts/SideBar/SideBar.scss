@@ -1,4 +1,7 @@
-.wrapper {
+:root {
+    --top: 60px;
+}
+.side-bar-space {
     height: 100%;
     width: 300px;
     display: flex;
@@ -13,6 +16,7 @@
 }
 
 .logo {
+    position: fixed;
     width: 100px;
     height: 100px;
     object-fit: contain;
@@ -25,4 +29,91 @@
     top: 42.5px;
     font-size: 1.6rem;
     color: white;
+}
+
+.menu-tag {
+    position: relative;
+    left: 20px;
+    top: 130px;
+    font-size: 0.8rem;
+    color: #838FB9;
+}
+
+.dashboards-button {
+    position: absolute;
+    left: 0px;
+    top: 170px;
+    font-size: 1.6rem;
+    color: white;
+}
+
+.notification-button {
+    position: absolute;
+    left: 0px;
+    top: 230px;
+    font-size: 1.6rem;
+    color: white;
+}
+
+.events-button {
+    position: absolute;
+    left: 0px;
+    top: 290px;
+    font-size: 1.6rem;
+    color: white;
+}
+
+.pages-tag {
+    position: absolute;
+    left: 20px;
+    top: 380px;
+    font-size: 0.8rem;
+    color: #838FB9;
+}
+
+.book-settings-button {
+    position: absolute;
+    left: 0px;
+    top: 420px;
+    font-size: 1.6rem;
+    color: white;
+}
+
+.order-settings-button {
+    position: absolute;
+    left: 0px;
+    top: 480px;
+    font-size: 1.6rem;
+    color: white;
+}
+
+.user-management-button {
+    position: absolute;
+    left: 0px;
+    top: 540px;
+    font-size: 1.6rem;
+    color: white;
+}
+
+.authentication-tag {
+    position: absolute;
+    left: 20px;
+    top: 630px;
+    font-size: 0.8rem;
+    color: #838FB9;
+}
+
+.sign-out-button {
+    position: absolute;
+    left: 0px;
+    top: 670px;
+    font-size: 1.6rem;
+    color: white;
+}
+
+.button-name {
+    position: fixed;
+    font-size: 1.2rem;
+    color: white;
+    padding: 3px 7px;
 }

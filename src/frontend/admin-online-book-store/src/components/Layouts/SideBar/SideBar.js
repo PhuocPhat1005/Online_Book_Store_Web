@@ -4,6 +4,12 @@ import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faUser,
+    faDashboard,
+    faBell,
+    faCalendar,
+    faBook,
+    faGear,
+    faSignOut,
 } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './SideBar.scss';
@@ -45,12 +51,44 @@ const SideBar = ({ admin }) => {
     };
 
     return (
-        <header className={cx('wrapper')}>
+        <header className={cx('side-bar-space')}>
             <div className={cx('container')}>
                 <img className={cx('logo')} src={assets.logo} alt="logo" />
                 <div className={cx('website-name')}>SIBOOKS WEB</div>
             </div>
-            <Button className={cx('dashboard')} types="text" to={config.routes.dashboard}>
+            
+            <span className={cx('menu-tag')}>MENU</span>
+            <Button className={cx('dashboards-button')} types="text" to={config.routes.dashboard}>
+                <FontAwesomeIcon icon={faDashboard} />
+                <span className={cx('button-name')}>Dashboards</span>
+            </Button>
+            <Button className={cx('notification-button')} types="text" to={config.routes.dashboard}>
+                <FontAwesomeIcon icon={faBell} />
+                <span className={cx('button-name')}>Notification</span>
+            </Button>
+            <Button className={cx('events-button')} types="text" to={config.routes.dashboard}>
+                <FontAwesomeIcon icon={faCalendar} />
+                <span className={cx('button-name')}>Events</span>
+            </Button>
+            
+            <span className={cx('pages-tag')}>PAGES</span>
+            <Button className={cx('book-settings-button')} types="text" to={config.routes.dashboard}>
+                <FontAwesomeIcon icon={faBook} />
+                <span className={cx('button-name')}>Book Settings</span>
+            </Button>
+            <Button className={cx('order-settings-button')} types="text" to={config.routes.dashboard}>
+                <FontAwesomeIcon icon={faGear} />
+                <span className={cx('button-name')}>Order Settings</span>
+            </Button>
+            <Button className={cx('user-management-button')} types="text" to={config.routes.dashboard}>
+                <FontAwesomeIcon icon={faUser} />
+                <span className={cx('button-name')}>User Management</span>
+            </Button>
+            
+            <span className={cx('authentication-tag')}>AUTHENTICATION</span>
+            <Button className={cx('sign-out-button')} types="text" to={config.routes.dashboard}>
+                <FontAwesomeIcon icon={faSignOut} />
+                <span className={cx('button-name')}>Sign Out</span>
             </Button>
         </header>
     );
