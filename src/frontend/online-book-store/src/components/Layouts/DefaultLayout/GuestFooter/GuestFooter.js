@@ -1,14 +1,14 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import styles from './Footer.module.scss';
+import styles from './GuestFooter.module.scss';
 import { faDiscord, faFacebook, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faCopyright } from '@fortawesome/free-regular-svg-icons';
 import Button from '~/components/Button';
 
 const cx = classNames.bind(styles);
 
-function Footer() {
+function GuestFooter() {
     return (
         <footer className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -79,4 +79,4 @@ function Footer() {
     );
 }
 
-export default Footer;
+export default GuestFooter;
