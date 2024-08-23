@@ -21,6 +21,7 @@ class BookBase(BaseModel):
     book_ava: str | None = None
     sale_off: UUID | None = ""
     amount_sell: int | None = 0
+    rate: int | None = 5
 class BookCreate(BookBase):
     pass
 
