@@ -127,7 +127,7 @@ function SignIn() {
                         </div>
                         <div className={cx('body')}>
                             <div className={cx('input-field')}>
-                                <p className={cx('input-label')}>Username</p>
+                                <p className={cx('input-label')}>Admin username</p>
                                 <input
                                     className={cx('input-bar')}
                                     type="text"
@@ -151,22 +151,24 @@ function SignIn() {
                                     <input className={cx('remember-check')} type="checkbox" />
                                     <span className={cx('info-text')}>Remember me</span>
                                 </div>
-                                <span className={cx('info-text')} onClick={handleResetPassword}>
-                                    Forgot password?
-                                </span>
+                                <div className={cx('remember-password')}>
+                                    <span className={cx('info-text')} onClick={handleResetPassword}>
+                                        Forgot password?
+                                    </span>
+                                </div>
                             </div>
                             <Button className={cx('submit-btn')} onClick={handleToast}>
                                 Sign In
                             </Button>
                         </div>
-                        <div className={cx('footer')}>
+                        {/* <div className={cx('footer')}>
                             <div className={cx('footer-container')}>
                                 <Link to={config.routes.signup} className={cx('signup-text')}>
                                     Don't have an account? Sign Up now
                                 </Link>
                                 <GoogleRegister />
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </form>
                 {isForgotPassword && <SendEmail handleResetPassword={handleResetPassword} />}
