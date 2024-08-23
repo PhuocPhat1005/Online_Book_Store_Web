@@ -57,7 +57,7 @@ def check_payment_status_with_timeout(orderId: int, timeout_minutes: int = 1):
             description="Create new order, payment method is COD or QR", 
             summary="Create new order, payment method is COD or QR")
 async def create_order_endpoint(access_token: str, payment_method: str, address_id: str = None, shipping_id: str = None, db: AsyncSession = Depends(get_db)):
-    user_obj = await get_user_obj_by_token(access_token, Account, User, db)
+    user_obj = await get_user_obj_by_token(access_token, db)
     user_id = user_obj.id
     cart_id = user_obj.cart_id
     order = OrderCreate()
@@ -121,7 +121,7 @@ async def create_order_endpoint(access_token: str, payment_method: str, address_
 
 @router.get("/show_order", summary="Show all order by User ID")
 async def show_order_endpoint(access_token: str, db: AsyncSession = Depends(get_db)):
-    user_obj = await get_user_obj_by_token(access_token, Account, User, db)
+    user_obj = await get_user_obj_by_token(access_token, db)
     user_id = user_obj.id
     order = await order_service.get_by_condition([{'user_id':user_id}], db)
     if not order:

@@ -1,18 +1,15 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, or_, and_, Column, cast, Integer, Float, Boolean, DateTime, Numeric, String
+from sqlalchemy import select, or_, and_, cast, String
 from uuid import UUID
-from fastapi import HTTPException, Depends
-from typing import Type, TypeVar, Generic, Dict, Callable
-from sqlalchemy.orm import Session
+from fastapi import HTTPException
+from typing import Type, TypeVar, Generic, Dict
 from pydantic import BaseModel
 import uuid
-from sqlalchemy import asc, desc
 import sys
 from urllib.parse import parse_qs
-from datetime import datetime
-from sqlalchemy import extract
 from app.utils.security import decode_token
-from app.database.database import get_db
+from app.models.account import Account
+from app.models.user import User
 
 ModelType = TypeVar("ModelType")
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
@@ -157,6 +154,8 @@ class UpdateService(Generic[ModelType, UpdateSchemaType]):
         db_objs = result.scalars().all()
         for obj in db_objs:
             for field_name, value in obj_in.dict().items():
+                if value == "" or value is None or value == [] or value == {} or value == "string" or value == 0:
+                    continue
                 setattr(obj, field_name, value)
             try:
                 await db.commit()
@@ -241,14 +240,14 @@ async def query_in_db_by_id(db: AsyncSession, model: Type[ModelType],id_: UUID)-
     db_objs = result.scalars().all()
     return db_objs
 
-async def get_user_obj_by_token(token: str, account_Model: any, user_Model: any, db: AsyncSession):
+async def get_user_obj_by_token(token: str, db: AsyncSession):
     user_name = decode_token(token)
-    read_account_service = ReadService[account_Model](account_Model)
+    read_account_service = ReadService[Account](Account)
     account = await read_account_service.get_by_condition([{"username": user_name}], db)
     if not account:
         raise HTTPException(status_code=404, detail="Account not found")
     account_id = account[0].id
-    read_user_service = ReadService[user_Model](user_Model)
+    read_user_service = ReadService[User](User)
     user = await read_user_service.get_by_condition([{"account_id": account_id}], db)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")

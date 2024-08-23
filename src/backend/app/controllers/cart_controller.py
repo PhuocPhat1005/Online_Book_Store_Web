@@ -13,7 +13,7 @@ cart_service = CRUDService[Cart, CartCreate, CartUpdate](Cart)
 read_user_service = ReadService[User](User)
 
 async def get_cart_id_by_token(access_token: str, db: AsyncSession):
-    user_obj = await get_user_obj_by_token(access_token, Account, User, db)
+    user_obj = await get_user_obj_by_token(access_token, db)
     user_id = user_obj.id
     user = await read_user_service.get_by_condition([{"id": user_id}], db)
     if user is None:

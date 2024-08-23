@@ -20,24 +20,12 @@ class BookBase(BaseModel):
     description: str
     book_ava: str | None = None
     sale_off: UUID | None = ""
-
+    amount_sell: int | None = 0
 class BookCreate(BookBase):
     pass
 
-class BookUpdate(BaseModel):
-    book_name: str | None = None
-    isbn: str | None = None
-    publishing_company_id: UUID | None = None
-    category_id: UUID | None = None
-    publishing_date: date | None = None
-    price: float | None = None
-    language: str | None = None
-    book_size: str | None = None
-    page_number: int | None = None
-    book_cover_type: str | None = None
-    description: str | None = None
-    book_ava: str | None = None
-    sale_off: UUID | None = None
+class BookUpdate(BookBase):
+    pass
 class BookResponse(BookBase):
     id: UUID
     created_at: date
