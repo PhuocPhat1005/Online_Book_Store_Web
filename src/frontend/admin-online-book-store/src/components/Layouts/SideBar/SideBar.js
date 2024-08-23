@@ -23,11 +23,16 @@ import Search from '../../../components/Search';
 
 const cx = classNames.bind(styles);
 
-const USER_MENU = [
+const ADMIN_MENU = [
     {
-        icon: <FontAwesomeIcon icon={faUser} />,
+        icon: <FontAwesomeIcon icon={faDashboard} />,
         title: 'Profile',
-        to: config.routes.profile,
+        to: config.routes.dashboard,
+    },
+    {
+        icon: <FontAwesomeIcon icon={faSignOut} />,
+        title: 'Sign out',
+        to: config.routes.signin,
     },
 ];
 
@@ -56,8 +61,21 @@ const SideBar = ({ admin }) => {
                 <img className={cx('logo')} src={assets.logo} alt="logo" />
                 <div className={cx('website-name')}>SIBOOKS WEB</div>
             </div>
-            
-            <span className={cx('menu-tag')}>MENU</span>
+            <nav>
+                <div class="vertical-menu">
+                    <span className={cx('vertical-menu-tag')}>MENU</span>
+                    <a href="#"><FontAwesomeIcon icon={faDashboard}/> Dashboards</a>
+                    <a href="notification"><FontAwesomeIcon icon={faBell}/> Notification</a>
+                    <a href="events"><FontAwesomeIcon icon={faCalendar}/> Events</a>
+                    <span className={cx('vertical-menu-tag')}>PAGES</span>
+                    <a href="book-settings"><FontAwesomeIcon icon={faBook}/> Book Settings</a>
+                    <a href="order-settings"><FontAwesomeIcon icon={faGear}/> Order Settings</a>
+                    <a href="user-management"><FontAwesomeIcon icon={faUser}/> User Management</a>
+                    <span className={cx('vertical-menu-tag')}>AUTHENTICATION</span>
+                    <a href="signin"><FontAwesomeIcon icon={faSignOut}/> Sign Out</a>
+                </div>
+            </nav>
+            {/* <span className={cx('menu-tag')}>MENU</span>
             <Button className={cx('dashboards-button')} types="text" to={config.routes.dashboard}>
                 <FontAwesomeIcon icon={faDashboard} />
                 <span className={cx('button-name')}>Dashboards</span>
@@ -89,7 +107,7 @@ const SideBar = ({ admin }) => {
             <Button className={cx('sign-out-button')} types="text" to={config.routes.dashboard}>
                 <FontAwesomeIcon icon={faSignOut} />
                 <span className={cx('button-name')}>Sign Out</span>
-            </Button>
+            </Button> */}
         </header>
     );
 };
