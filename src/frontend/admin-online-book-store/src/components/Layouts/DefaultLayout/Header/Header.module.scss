@@ -1,0 +1,158 @@
+:root {
+    --search-height: 46px;
+    --search-width: 600px;
+    --search-top-spacer: 9px;
+    --search-border-radius: 92px;
+}
+
+.wrapper {
+    height: var(--header-height);
+    box-shadow: 0px 1px 1px rgb(0 0 0 / 12%);
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    background-color: var(--white);
+}
+
+.container {
+    height: 100%;
+    width: var(--header-width);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
+.content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.category {
+    display: flex;
+    align-items: center;
+}
+
+.label {
+    text-decoration: none;
+    padding: 4px 16px;
+    margin-right: 16px;
+    font-size: 1.6rem;
+}
+
+.label:hover {
+    scale: 1.25;
+    font-weight: 700;
+    transition: all 0.5s;
+}
+
+.label:not(:hover) {
+    transition: all 0.5s;
+}
+
+/* Sign In - Sign Up buttons */
+.auth-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.signin,
+.signup {
+    color: var(--black);
+    font-weight: 700;
+    background: var(--guest-semi-lightblue-full);
+    box-shadow: 0 4px 8px var(--guest-gray-half);
+    width: 200px;
+    height: 75px;
+    border-radius: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    margin: 0 15px;
+    transition: background 0.5s ease-in-out, color 0.5s ease-in-out, transform 0.5s ease-in-out,
+        box-shadow 0.5s ease-in-out;
+}
+
+/* Hover effects for buttons */
+.signin:hover,
+.signup:hover {
+    background: var(--guest-semi-darkblue-full);
+    color: var(--white);
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px var(--guest-shadow-color);
+    font-weight: 700;
+}
+
+/* User - container */
+
+.notification_container {
+    position: relative;
+}
+
+.notification_wrapper {
+    height: 0;
+}
+
+.chat,
+.notification {
+    position: relative;
+    cursor: pointer;
+}
+
+.chat-icon,
+.notification-icon {
+    font-size: 2.8rem;
+    color: var(--primary-color);
+}
+
+.user {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 999px;
+    object-fit: cover;
+    margin-right: 16px;
+}
+
+.name {
+    font-size: 1.8rem;
+    color: var(--text-color);
+}
+
+.cart {
+    font-size: 2.8rem;
+    color: var(--primary-color);
+    position: relative;
+    cursor: pointer;
+}
+
+.badge {
+    font-size: 1.4rem;
+    color: var(--white);
+    background-color: #e8898e;
+    padding: 2px 8px;
+    border-radius: 99px;
+    position: absolute;
+    top: -5px;
+    right: 5px;
+}
