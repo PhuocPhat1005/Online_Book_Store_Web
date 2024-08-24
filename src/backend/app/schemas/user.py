@@ -4,24 +4,24 @@ from datetime import date
 
 class UserBase(BaseModel):
     account_id: UUID
-    phone: str | None = None
-    full_name: str | None = None
+    phone: str | None = ""
+    full_name: str | None = ""
     date_of_birth: date | None = None
     gender: str | None = "none"
-    description: str | None = None
-    user_ava: str | None = None
+    description: str | None = ""
+    user_ava: str | None = ""
     cart_id: UUID | None = None
 
 class UserCreate(UserBase):
     pass
 
 class UserUpdate(BaseModel):
-    phone: str | None = None
-    full_name: str | None = None
+    phone: str | None = ""
+    full_name: str | None = ""
     date_of_birth: date | None = None
     gender: str | None = "none"
-    description: str | None = None
-    user_ava: str | None = None
+    description: str | None = ""
+    user_ava: str | None = ""
     
     
 class UserResponse(UserUpdate):

@@ -2,15 +2,12 @@ from pydantic import BaseModel
 from datetime import date
 from uuid import UUID
 
-from pydantic import BaseModel
-from datetime import date
-from uuid import UUID
-
-class BookBase(BaseModel):
+class BookCreate(BaseModel):
     book_name: str
     isbn: str
-    publishing_company_id: UUID | None = "" 
-    category_id: UUID | None = "" 
+    publishing_company_id: str | None = "empty_uuid" 
+    category_id: str | None = "empty_uuid" 
+    sale_off: str | None = "empty_uuid"
     publishing_date: date
     price: float
     language: str
@@ -18,31 +15,27 @@ class BookBase(BaseModel):
     page_number: int
     book_cover_type: str
     description: str
-    book_ava: str | None = None
-    sale_off: UUID | None = ""
+    book_ava: str | None = ""
     amount_sell: int | None = 0
-    rate: int | None = 5
-class BookCreate(BookBase):
-    pass
+    amount_rate: int | None = 0
+    rate: float | None = 5
 
-class BookUpdate(BookBase):
-    pass
-class BookResponse(BookBase):
-    id: UUID
-    created_at: date
-    updated_at: date
+class BookUpdate(BaseModel):
+    book_name: str | None = ""
+    isbn: str | None = ""
+    publishing_company_id: str | None = "" 
+    category_id: str | None = "" 
+    sale_off: str | None = ""
+    publishing_date: date | None = None
+    price: float | None = -1
+    language: str | None = ""
+    book_size: str | None = ""
+    page_number: int | None = -1
+    book_cover_type: str | None = ""
+    description: str | None = ""
+    book_ava: str | None = ""
+    amount_sell: int | None = -1
+    amount_rate: int | None = -1
+    rate: float | None = -1
 
-    class Config:
-        orm_mode: True
-        
-class BookOrder(BaseModel):
-    fromm: int | None = 0
-    n: int
-    order_by: str | None = "default"
-    
-class BookFilter(BaseModel):
-    publishing_company_id: UUID | None = None
-    category_id: UUID | None = None
-    author_id: UUID | None = None
-    price: int | None = 0
-    book_cover_type: int | None = None
+

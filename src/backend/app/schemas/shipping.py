@@ -2,14 +2,13 @@ from pydantic import BaseModel
 from uuid import UUID
 
 class ShippingBase(BaseModel):
-    shipping_method: str | None = None
-    shipping_company: str | None = None
-    cost_unit: float | None = None
+    shipping_method: str | None = ""
+    shipping_company: str | None = ""
     
 class ShippingCreate(ShippingBase):
-    pass
+    cost_unit: float | None = 0
 
 class ShippingUpdate(ShippingBase):
-    pass
+    cost_unit: float | None = -1
 
 

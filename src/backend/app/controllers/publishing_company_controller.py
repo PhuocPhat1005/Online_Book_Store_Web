@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 # from app.services.publishing_company_service import create_publishing_company, get_publishing_company, update_publishing_company, delete_publishing_company, get_publishing_company_by_name
 from app.services.crud_service import CRUDService
-from app.schemas.publishing_company import PublishingCompanyCreate, PublishingCompanyUpdate, PublishingCompanyResponse
+from app.schemas.publishing_company import PublishingCompanyCreate, PublishingCompanyUpdate
 from app.models.publishing_company import PublishingCompany
 from app.database.database import get_db
 from uuid import UUID

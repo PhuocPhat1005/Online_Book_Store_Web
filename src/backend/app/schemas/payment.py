@@ -2,13 +2,14 @@ from pydantic import BaseModel
 from uuid import UUID
 
 class PaymentBase(BaseModel):
-    id: UUID | None = ""
-    payment_method: str | None = None
+    id: str | None = "empty_uuid"
+    payment_method: str | None = ""
     payment_status: str | None = "Pending"
-    amount: float | None = -1
 
 class PaymentCreate(PaymentBase):
+    amount: float | None = 0
     pass
 
 class PaymentUpdate(PaymentBase):
+    amount: float | None = -1
     pass
