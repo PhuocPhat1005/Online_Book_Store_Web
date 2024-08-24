@@ -1,8 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.services.crud_service import CRUDService, get_user_obj_by_token
+from app.services.crud_service import CRUDService, get_user_obj_by_token, UpdateService, ReadService
 from app.schemas.review import ReviewCreate, ReviewUpdate
 from app.models.review import Review
+from app.models.book import Book
+from app.models.order import Order
+from app.models.order_detail import OrderDetail
+from app.schemas.order import OrderDetailUpdate
+from app.schemas.book import BookUpdate
 from app.database.database import get_db
 from uuid import UUID
 
@@ -13,8 +18,29 @@ review_service = CRUDService[Review, ReviewCreate, ReviewUpdate](Review)
 @router.post("/create_review", summary="Create a new review")
 async def create_review(access_token: str, review: ReviewCreate, db: AsyncSession = Depends(get_db)):
     user_obj = await get_user_obj_by_token(access_token, db)
+    reviews = await review_service.get_by_condition([{'user_id': user_obj.id, 'book_id': review.book_id}], db)
+    if reviews:
+        raise HTTPException(status_code=404, detail="You can't review a book twice")
     review.user_id = user_obj.id
-    return await review_service.create(review, db)
+    update_book_service = UpdateService[Book, BookUpdate](Book)
+    read_book_service = ReadService[Book](Book)
+    book = await read_book_service.get_by_condition([{'id': review.book_id}], db)
+    if not book:
+        raise HTTPException(status_code=404, detail="Book not found")
+    read_order_service = ReadService[Order](Order)
+    orders = await read_order_service.get_by_condition([{'user_id': user_obj.id, 'status': 'Done'}], db)
+    if not orders:
+        raise HTTPException(status_code=404, detail="You can't review a book you haven't bought")
+    read_order_details_service = ReadService[OrderDetail](OrderDetail)
+    for order in orders:
+        order_details = await read_order_details_service.get_by_condition([{'order_id': order.id, 'book_id': review.book_id}], db)
+        if order_details:
+            book_update = BookUpdate()
+            book_update.rate = (book[0].rate * book[0].amount_rate + review.rating) / (book[0].amount_rate + 1)
+            book_update.amount_rate = book[0].amount_rate + 1
+            await update_book_service.update({'id': review.book_id}, book_update, db)
+            return await review_service.create(review, db)
+    raise HTTPException(status_code=404, detail="You can't review a book you haven't bought")
 
 @router.get("/get_review/{review_id}", summary="Get a review by ID")
 async def get_review(review_id: UUID, db: AsyncSession = Depends(get_db)):

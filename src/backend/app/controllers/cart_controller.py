@@ -27,6 +27,7 @@ async def create_book_cart_endpoint(access_token: str, book_id: UUID, db: AsyncS
     cart = CartCreate()
     cart.id = cart_id
     cart.book_id = book_id
+    cart.amount = 1
     book_in_cart = await cart_service.get_by_condition([{'id':cart_id, 'book_id':book_id}], db)
     if book_in_cart:
         cart_update = CartUpdate()

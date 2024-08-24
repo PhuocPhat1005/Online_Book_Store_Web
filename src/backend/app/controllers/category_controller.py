@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 # from app.services.category_service import create_category, get_category, update_category, delete_category, get_category_by_name
 from app.services.crud_service import CRUDService
-from app.schemas.category import CategoryCreate, CategoryUpdate, CategoryResponse
+from app.schemas.category import CategoryCreate, CategoryUpdate
 from app.models.category import Category
 from app.database.database import get_db
 from uuid import UUID

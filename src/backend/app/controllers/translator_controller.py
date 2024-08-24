@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.services.crud_service import CRUDService
-from app.schemas.translator import TranslatorCreate, TranslatorUpdate, TranslatorResponse
+from app.schemas.translator import TranslatorCreate, TranslatorUpdate
 from app.models.translator import Translator
 from app.database.database import get_db
 from uuid import UUID

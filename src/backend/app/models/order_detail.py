@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, DECIMAL
+from sqlalchemy import Column, ForeignKey, Integer, DECIMAL, Boolean
 from app.database.database import Base
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID

@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.services.crud_service import CRUDService, ReadService, UpdateService, DeleteService
 # from app.services.photo_service import upload_photo
 from app.services.crud_service import query_in_db_by_id
-from app.schemas.photo import PhotoCreate, PhotoUpdate, PhotoResponse
+from app.schemas.photo import PhotoCreate, PhotoUpdate
 from app.models.user_photo import UserPhoto
 from app.models.review_photo import ReviewPhoto
 from app.models.book_photo import BookPhoto

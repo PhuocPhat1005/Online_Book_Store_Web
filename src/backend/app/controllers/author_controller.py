@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.services.crud_service import CRUDService
-from app.schemas.author import AuthorCreate, AuthorUpdate, AuthorResponse
+from app.schemas.author import AuthorCreate, AuthorUpdate
 from app.models.author import Author
 from app.database.database import get_db
 from uuid import UUID

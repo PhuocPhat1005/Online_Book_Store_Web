@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.services.crud_service import CRUDService, query_string_to_dict, query_in_db_by_id, ReadService
+from app.services.crud_service import CRUDService, query_string_to_dict, query_in_db_by_id
 from app.services.book_service import generate_all_variations
 
-from app.schemas.book import BookCreate, BookUpdate, BookResponse, BookOrder, BookFilter
+from app.schemas.book import BookCreate, BookUpdate
 from app.schemas.book_author import Book_Author_Create, Book_Author_Update
 from app.schemas.book_translator import Book_Translator_Create, Book_Translator_Update
 from app.models.book import Book
@@ -15,8 +15,6 @@ from app.models.book_photo import BookPhoto
 
 from app.database.database import get_db
 from uuid import UUID
-from typing import List, Optional
-from sqlalchemy import select
 
 from app.controllers.photo_controller import delete_folder_aws #SERVICE
 
@@ -99,7 +97,7 @@ async def get_book_overview(book_id: UUID, db: AsyncSession = Depends(get_db)):
 
 @router.put("/update_book/{book_id}", summary="Update a book by ID")
 async def update_book_endpoint(book_id: UUID, book_update: BookUpdate, db: AsyncSession = Depends(get_db)):
-    book = await book_service.update(book_id, book_update, db)
+    book = await book_service.update({'id':book_id}, book_update, db)
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
     return book

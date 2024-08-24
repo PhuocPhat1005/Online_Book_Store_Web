@@ -1,13 +1,3 @@
-# from sqlalchemy.future import select
-# from sqlalchemy.ext.asyncio import AsyncSession
-# from app.models.book import Book
-# from app.schemas.book import BookCreate, BookUpdate, BookResponse, BookOrder
-# from fastapi import Depends, HTTPException
-# from app.config.config import settings
-# from app.database.database import get_db
-# from sqlalchemy import func, asc, desc
-# from sqlalchemy import Column
-# from typing import Any
 from itertools import product
 
 # Danh sách các ký tự có dấu và không có dấu

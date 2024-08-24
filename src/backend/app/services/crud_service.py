@@ -21,9 +21,14 @@ class CreateService(Generic[ModelType, CreateSchemaType]):
     
     async def create(self, obj_in: CreateSchemaType, db: AsyncSession, flag: int = 1) -> ModelType:
         obj_in_data = obj_in.dict()
+        for field, value in obj_in_data.items():
+            if value == 'empty_uuid':
+                obj_in_data[field] = None
+                
         db_obj = self.model(**obj_in_data)
         if flag:
             db_obj.id = uuid.uuid4()
+        id_ = db_obj.id
         db.add(db_obj)
         try:
             await db.flush()
@@ -31,7 +36,7 @@ class CreateService(Generic[ModelType, CreateSchemaType]):
         except Exception as e:
             await db.rollback()
             raise RuntimeError(f"Failed to create {self.model.__name__}: {e}") from e
-        return db_obj
+        return f"Created obj in {self.model.__name__} with ID {id_}"
     
 class ReadService(Generic[ModelType]):
     def __init__(self, model: Type[ModelType]):
@@ -154,7 +159,7 @@ class UpdateService(Generic[ModelType, UpdateSchemaType]):
         db_objs = result.scalars().all()
         for obj in db_objs:
             for field_name, value in obj_in.dict().items():
-                if value == "" or value is None or value == [] or value == {} or value == "string" or value == 0:
+                if value == "" or value is None or value == [] or value == {} or value == "string" or value == -1 or value == "empty_uuid":
                     continue
                 setattr(obj, field_name, value)
             try:
