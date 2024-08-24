@@ -7,6 +7,8 @@ from app.schemas.book import BookCreate, BookUpdate
 from app.schemas.book_author import Book_Author_Create, Book_Author_Update
 from app.schemas.book_translator import Book_Translator_Create, Book_Translator_Update
 from app.models.book import Book
+from app.models.category import Category
+from app.models.publishing_company import PublishingCompany
 from app.models.author import Author
 from app.models.translator import Translator
 from app.models.book_author import BookAuthor
@@ -47,6 +49,22 @@ async def find_book_translator(book_id: str, db: AsyncSession):
             translator_data.append({"Full_name": db_obj.full_name, "Pen_name": db_obj.pen_name})
     return translator_data
 
+async def find_book_catrgory(category_id: str, db: AsyncSession):
+    category = await query_in_db_by_id(db, Category, category_id)
+    if not category:
+        return "Can not find category of this book"
+    else:
+        category = category[0].category_name
+    return category
+
+async def find_publishing_company(publishing_company_id: str, db: AsyncSession):
+    publishing_company = await query_in_db_by_id(db, PublishingCompany, publishing_company_id)
+    if not publishing_company:
+        return "Can not find publishing company of this book"
+    else:
+        publishing_company = publishing_company[0].publishing_company_name
+    return publishing_company
+
 async def find_book_sale_off(sale_off_id: str, db: AsyncSession):
     sale_off = await query_in_db_by_id(db, SaleOff, sale_off_id)
     if not sale_off:
@@ -68,7 +86,9 @@ async def get_book_endpoint(book_id: UUID, db: AsyncSession = Depends(get_db)):
     book_translator = await find_book_translator(book_id, db)
     book_author = await find_book_author(book_id, db)
     book_sale_off = await find_book_sale_off(book[0].sale_off, db)
-    return {'Book': book[0], 'Book_author': book_author, 'Book_translator': book_translator, 'Sale_off': book_sale_off}
+    book_category = await find_book_catrgory(book[0].category_id, db)
+    book_publishing_company = await find_publishing_company(book[0].publishing_company_id, db)
+    return {'Book': book[0], 'Author': book_author, 'Translator': book_translator, 'Category': book_category, 'Publishing_company': book_publishing_company, 'Sale_off': book_sale_off}
 
 @router.get("/get_book_by_name/{book_name}", summary="Get books by name")
 async def get_books_by_name_endpoint(book_name: str, db: AsyncSession = Depends(get_db)):
