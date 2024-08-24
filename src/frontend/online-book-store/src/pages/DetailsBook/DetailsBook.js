@@ -10,15 +10,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faCircleInfo, faHeart } from '@fortawesome/free-solid-svg-icons';
 import assets from '~/assets';
 
+import Cookies from 'universal-cookie';
+import request from '~/utils/request';
+
 const cx = classNames.bind(styles);
+
+function addDotsToNumber(number) {
+    // Convert the number to a string and use a regular expression to add dots
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
 
 function DetailsBook() {
     const location = useLocation();
     let data = location.state?.bookData;
 
-    const rating = '4.25';
-    let new_price = '99.000';
-    let old_price = '100.000';
+    let discount_percentage = 10;
+    const rating = data.rate.toString();
+    let old_price = addDotsToNumber(data.price).toString();
+    let new_price = addDotsToNumber(Math.round((data.price * (100 - discount_percentage)) / 100)).toString();
 
     const [quantityValue, setQuantityValue] = useState(0);
     const [isAddToCart, setIsAddToCart] = useState(false);
@@ -38,8 +47,28 @@ function DetailsBook() {
         setQuantityValue(value);
     };
 
-    const handleClickAddToCart = () => {
-        setIsAddToCart(!isAddToCart);
+    const fetchAddToCart = async () => {
+        const cookies = new Cookies();
+        const access_token = cookies.get('jwt_authorization');
+        const book_id = data.id;
+
+        try {
+            const response = await request.post(
+                `cart/add_to_cart?access_token=${access_token}&book_id=${book_id}`,
+                null,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            );
+
+            if (response.status === 200) {
+                setIsAddToCart(true);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     useEffect(() => {
@@ -106,9 +135,9 @@ function DetailsBook() {
                         <span className={cx('rating_text')}>{rating} stars</span>
                     </div>
                     <div className={cx('prices')}>
-                        <span className={cx('new_price')}>{new_price}</span>
-                        <span className={cx('old_price')}>{old_price}</span>
-                        <span className={cx('discount')}>-1%</span>
+                        <span className={cx('new_price')}>{new_price} đ</span>
+                        <span className={cx('old_price')}>{old_price} đ</span>
+                        <span className={cx('discount')}>-{discount_percentage}%</span>
                     </div>
                     <div className={cx('quantity')}>
                         <label className={cx('quantity_label')} htmlFor="quantity_input">
@@ -139,7 +168,7 @@ function DetailsBook() {
                 </div>
             </div>
             <div className={cx('payment_buttons')}>
-                <Button className={cx('add_to_cart_btn')} types="text" onClick={handleClickAddToCart}>
+                <Button className={cx('add_to_cart_btn')} types="text" onClick={fetchAddToCart}>
                     Add to cart
                 </Button>
                 <Button className={cx('buy_now_btn')} types="text">
@@ -202,7 +231,7 @@ function DetailsBook() {
                             <p className={cx('ratings_rate_value')}>{rating}</p>
                             <p className={cx('ratings_rate_subvalue')}>/5</p>
                         </div>
-                        <p className={cx('ratings_rate_based')}>based on 203 reviews</p>
+                        <p className={cx('ratings_rate_based')}>based on {data.amount_rate} reviews</p>
                         <RatingStar rating={rating} width={32} height={32} />
                     </div>
                     <div className={cx('rating_rate_section_2')}>

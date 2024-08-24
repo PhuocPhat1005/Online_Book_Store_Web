@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 
 import styles from './CartPage.module.scss';
@@ -9,15 +9,80 @@ import Image from '~/components/Image';
 import assets from '~/assets';
 import Checkout from './components/Checkout';
 
+import request from '~/utils/request';
+import Cookies from 'universal-cookie';
+import BasicSpinner from '~/components/BasicSpinner';
+
 const cx = classNames.bind(styles);
 
-function CartPage({ products_list = [] }) {
-    const isEmptyCart = products_list.length === 0;
+function CartPage() {
+    const [isEmptyCart, setIsEmptyCart] = useState(false);
     const [isCheckout, setIsCheckout] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleCheckout = () => {
         setIsCheckout(!isCheckout);
     };
+
+    const cookies = new Cookies();
+    const access_token = cookies.get('jwt_authorization');
+
+    const [booksIdInCart, setBooksIdInCart] = useState([]);
+    const [booksInCart, setBooksInCart] = useState([]);
+
+    const fetchBooksIdInCart = async () => {
+        setIsLoading(true);
+        try {
+            const response = await request.get('cart/show_book_in_cart', {
+                params: {
+                    access_token: access_token,
+                },
+            });
+            if (response.status === 200) {
+                if (response.data) {
+                    setBooksIdInCart(response.data);
+                    setIsEmptyCart(false);
+                } else {
+                    setIsEmptyCart(true);
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const fetchBooksInCart = async (item) => {
+        try {
+            const response = await request.get(`book/get_book/${item.book_id}`);
+
+            if (response.status === 200) {
+                response.data.Book.amount = item.amount;
+                return response.data;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        fetchBooksIdInCart();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // Fetch the book details when booksIdInCart is updated
+    useEffect(() => {
+        const fetchAllBooksInCart = async () => {
+            const books = await Promise.all(booksIdInCart.map((item) => fetchBooksInCart(item)));
+            setBooksInCart(books);
+            setIsLoading(false);
+        };
+
+        if (booksIdInCart.length > 0) {
+            fetchAllBooksInCart();
+        }
+    }, [booksIdInCart]);
+
+    // console.log(booksInCart);
 
     return (
         <>
@@ -38,14 +103,11 @@ function CartPage({ products_list = [] }) {
                                 <p className={cx('products_price')}>Price</p>
                             </div>
                             <div className={cx('core')}>
+                                {isLoading && <BasicSpinner color="#808080" />}
                                 {isEmptyCart && <Image className={cx('empty_cart_img')} src={assets.empty_cart} />}
-                                {/* <CartItem />
-                                <CartItem />
-                                <CartItem />
-                                <CartItem />
-                                <CartItem />
-                                <CartItem />
-                                <CartItem /> */}
+                                {!isEmptyCart &&
+                                    !isLoading &&
+                                    booksInCart.map((data_item, index) => <CartItem key={index} data={data_item} />)}
                             </div>
                         </div>
                         <div className={cx('payment')}>

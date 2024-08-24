@@ -36,10 +36,12 @@
 .products_header {
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    padding: 12px 0;
+    justify-content: space-between;
+    padding: 12px 260px 12px 12px;
     border-radius: 5px;
     background-color: var(--white);
+
+    position: relative;
 }
 
 .select_all {
@@ -65,12 +67,20 @@
     outline: none;
 }
 
-.products_amount,
-.products_price {
+.products_amount {
     font-size: 1.6rem;
+    width: 100px;
+    text-align: center;
+}
+
+.products_price {
+    position: absolute;
+    right: 110px;
 }
 
 .core {
+    position: relative;
+
     margin-top: 16px;
     background-color: var(--white);
     border-radius: 5px;
