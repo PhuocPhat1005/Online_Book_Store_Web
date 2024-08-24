@@ -1,8 +1,11 @@
 import SignInPage from '../pages/SignIn';
+import Dashboards from '../pages/Dashboards';
 import config from '../config';
 
-const privateRoutes = [
-    { path: config.routes.signin, component: SignInPage, layout: null }
+const publicRoutes = [
+    { path: config.routes.signin, component: SignInPage, layout: null },
+    { path: config.routes.dashboard, component: Dashboards }
 ];
 
-export { privateRoutes };
+const privateRoutes = [];
+export { publicRoutes, privateRoutes };

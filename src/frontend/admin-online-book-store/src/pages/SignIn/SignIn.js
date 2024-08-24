@@ -18,13 +18,13 @@ import { faHouse, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 
 import Loading from './Loading';
 
-// import Cookies from 'universal-cookie';
-// import { jwtDecode } from 'jwt-decode';
+import Cookies from 'universal-cookie';
+import { jwtDecode } from 'jwt-decode';
 
 const cx = classNames.bind(styles);
 
 function SignIn() {
-    // const cookies = new Cookies(null, { path: '/' });
+    const cookies = new Cookies(null, { path: '/' });
 
     const [toggleToast, setToggleToast] = useState(true);
     const [inCorrectMess, setIncorrectMess] = useState('');
@@ -32,13 +32,13 @@ function SignIn() {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
-    // const handleSignin = (jwt_token) => {
-    //     const decoded = jwtDecode(jwt_token);
+    const handleSignin = (jwt_token) => {
+        const decoded = jwtDecode(jwt_token);
 
-    //     cookies.set('jwt_authorization', jwt_token, {
-    //         expires: new Date(decoded.exp * 1000),
-    //     });
-    // };
+        cookies.set('jwt_authorization', jwt_token, {
+            expires: new Date(decoded.exp * 1000),
+        });
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -59,13 +59,13 @@ function SignIn() {
 
             if (response.status === 200) {
                 // Handle successful form submission
-                // handleSignin(response.data.access_token);
+                handleSignin(response.data.access_token);
 
                 setToggleToast(true);
                 console.log('Form submitted successfully');
 
                 setIsLoading(false);
-                navigate(config.routes.home);
+                navigate(config.routes.dashboard);
             } else {
                 // Handle errors
                 setToggleToast(false);
@@ -109,7 +109,7 @@ function SignIn() {
         <>
             <div className={cx('wrapper')}>
                 <div className={cx('header')}>
-                    <Link to={config.routes.home} className={cx('header-item')}>
+                    <Link to={config.routes.dashboard} className={cx('header-item')}>
                         <FontAwesomeIcon className={cx('header-icon')} icon={faHouse} />
                     </Link>
                     <Link to={config.routes.signup} className={cx('header-item')}>
@@ -151,22 +151,24 @@ function SignIn() {
                                     <input className={cx('remember-check')} type="checkbox" />
                                     <span className={cx('info-text')}>Remember me</span>
                                 </div>
-                                <span className={cx('info-text')} onClick={handleResetPassword}>
-                                    Forgot password?
-                                </span>
+                                <div className={cx('remember-password')}>
+                                    <span className={cx('info-text')} onClick={handleResetPassword}>
+                                        Forgot password?
+                                    </span>
+                                </div>
                             </div>
                             <Button className={cx('submit-btn')} onClick={handleToast}>
                                 Sign In
                             </Button>
                         </div>
-                        <div className={cx('footer')}>
+                        {/* <div className={cx('footer')}>
                             <div className={cx('footer-container')}>
                                 <Link to={config.routes.signup} className={cx('signup-text')}>
                                     Don't have an account? Sign Up now
                                 </Link>
                                 <GoogleRegister />
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </form>
                 {isForgotPassword && <SendEmail handleResetPassword={handleResetPassword} />}
