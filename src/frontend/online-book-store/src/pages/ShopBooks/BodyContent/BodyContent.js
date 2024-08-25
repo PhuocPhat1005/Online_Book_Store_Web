@@ -13,6 +13,7 @@ import SelectSort from './components/SelectSort';
 import Products from './components/Products';
 import request from '~/utils/request';
 import { GENRES, CATEGORY, FILTER_SECTION_1, FILTER_SECTION_2 } from './components/Filter_Category';
+import BasicSpinner from '~/components/BasicSpinner';
 
 const cx = classNames.bind(styles);
 
@@ -28,6 +29,8 @@ function BodyContent() {
     const [showPages, setShowPages] = useState([1, 2, 3, 4, 5]); // number array
     const [books, setBooks] = useState([]); // object array
     // const [imagesFetched, setImagesFetched] = useState(false);
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleBackPage = () => {
         if (currentPage < 0) return;
@@ -66,8 +69,12 @@ function BodyContent() {
     useEffect(() => {
         const getAllBooks = async () => {
             try {
+                setIsLoading(true);
+
                 const response = await request.get(`book/get_book_per_page/${(currentPage + 1).toString()}`);
+
                 setBooks(response.data);
+                setIsLoading(false);
                 // setImagesFetched(false); // Reset the imagesFetched flag
             } catch (error) {
                 if (error.response) {
@@ -239,7 +246,10 @@ function BodyContent() {
                             </div>
                         </div>
                     </div>
-                    <div className={cx('core')}>{products || conditionProducts}</div>
+                    <div className={cx('core')}>
+                        {!isLoading && (products || conditionProducts)}
+                        {isLoading && <BasicSpinner color="#808080" />}
+                    </div>
                 </div>
                 <div className={cx('footer')}>
                     <span className={cx('back_btn')} onClick={handleBackPage}>
