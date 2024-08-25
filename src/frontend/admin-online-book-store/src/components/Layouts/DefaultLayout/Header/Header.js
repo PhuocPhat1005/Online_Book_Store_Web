@@ -62,11 +62,12 @@ const Header = ({ admin }) => {
                     </Menu>
                 </div>
                 <Button
-                    className={cx('social-contact')}
+                    className={cx('social-contact-button')}
                     types="primary"
                     onClick={handleShowSocialContact}
                 >
                     <p><FontAwesomeIcon icon={faSquareShareNodes}/></p>
+                    <SocialContact showSocialContact={showSocialContact} />
                 </Button>
             </div>
         </header>
