@@ -38,7 +38,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 15px 350px;
+    padding: 15px 330px;
 }
 
 .label {
@@ -94,25 +94,6 @@
 
 /* User - container */
 
-.notification_container {
-    position: relative;
-}
-
-.notification_wrapper {
-    height: 0;
-}
-
-.chat,
-.notification {
-    position: relative;
-    cursor: pointer;
-}
-
-.chat-icon,
-.notification-icon {
-    font-size: 2.8rem;
-    color: var(--primary-color);
-}
 
 .user {
     height: 100%;
@@ -124,31 +105,23 @@
 }
 
 .avatar {
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
     border-radius: 999px;
     object-fit: cover;
 }
 
 .name {
+    margin-top: 7px;
+    margin-left: 5px;
     font-size: 1.8rem;
     color: var(--text-color);
 }
 
-.cart {
-    font-size: 2.8rem;
-    color: var(--primary-color);
-    position: relative;
-    cursor: pointer;
-}
-
-.badge {
-    font-size: 1.4rem;
-    color: var(--white);
-    background-color: #e8898e;
-    padding: 2px 8px;
-    border-radius: 99px;
-    position: absolute;
-    top: -5px;
-    right: 5px;
+.social-contact {
+    position: fixed;
+    font-size: 3.2rem;
+    color: black;
+    top: 30px;
+    left: 1550px;
 }

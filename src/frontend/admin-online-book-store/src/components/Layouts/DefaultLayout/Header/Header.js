@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+    faSquareShareNodes,
     faUser,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -56,10 +57,6 @@ const Header = ({ admin }) => {
                     </div>
                 ) : (
                     <>
-                        {/* <Button className={cx('chat')} types="text">
-                            <FontAwesomeIcon className={cx('chat-icon')} icon={faComments} />
-                            <span className={cx('badge')}>99</span>
-                        </Button> */}
                         <div>
                             <Menu items={USER_MENU} onSignOut={handleSignOut}>
                                 <div className={cx('user')}>
@@ -68,10 +65,9 @@ const Header = ({ admin }) => {
                                 </div>
                             </Menu>
                         </div>
-                        {/* <Button className={cx('cart')} types="text" to={config.routes.cart}>
-                            <FontAwesomeIcon icon={faCartShopping} />
-                            <span className={cx('badge')}>99</span>
-                        </Button> */}
+                        <Button className={cx('social-contact')} types="primary">
+                            <FontAwesomeIcon icon={faSquareShareNodes} />
+                        </Button>
                     </>
                 )}
             </div>

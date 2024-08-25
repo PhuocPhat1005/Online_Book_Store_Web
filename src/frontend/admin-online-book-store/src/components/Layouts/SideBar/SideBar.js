@@ -85,6 +85,7 @@ const SideBar = ({ admin }) => {
                         // By default it will navigate to guest pages.
                     }
                 </div>
+                
                 <p className={cx('vertical-menu-tag')}>MENU</p>
                 <Button
                     to={config.routes.dashboards}
@@ -94,14 +95,17 @@ const SideBar = ({ admin }) => {
                 >
                     <p>&nbsp;&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faDashboard}/> Dashboards</p>
                 </Button>
-                <Button
-                    // to={config.routes.dashboards}
-                    types="primary"
-                    className={cx('menu-choice')}
-                    // onClick={() => handleNavigate(config.routes.dashboards)}
-                >
-                    <p>&nbsp;&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faBell}/> Notification</p>
-                </Button>
+                <div>
+                    <Button
+                        // to={"#"}
+                        types="primary"
+                        className={cx('menu-choice-noti')}
+                        onClick={handleShowNotification}
+                    >
+                        <p><FontAwesomeIcon icon={faBell}/> Notification</p>
+                    </Button>
+                    <Notification showNotification={showNotification} />
+                </div>
                 <Button
                     to={config.routes.events}
                     types="primary"
@@ -110,6 +114,7 @@ const SideBar = ({ admin }) => {
                 >
                     <p>&nbsp;&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faCalendar}/> Events</p>
                 </Button>
+                
                 <p className={cx('vertical-menu-tag')}>PAGES</p>
                 <Button
                     to={config.routes.bookSettings}
@@ -135,6 +140,7 @@ const SideBar = ({ admin }) => {
                 >
                     <p>&nbsp;&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faUser}/> User Management</p>
                 </Button>
+                
                 <p className={cx('vertical-menu-tag')}>AUTHENTICATION</p>
                 <Button
                     to={config.routes.signin}
