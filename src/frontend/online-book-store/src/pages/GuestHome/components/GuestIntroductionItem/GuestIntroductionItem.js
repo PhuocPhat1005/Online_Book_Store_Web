@@ -22,7 +22,7 @@ function GuestIntroductionItem({ image, alt, title, paragraph, video }) {
             <div className={cx('content')}>
                 <p className={cx('title')}>{title}</p>
                 <p className={cx('paragraph')}>{paragraph}</p>
-                <Button to={config.routes.shopbooks} types="findmore">
+                <Button to={config.routes.guestshopbooks} types="findmore" className={cx('findMoreButton')}>
                     Find Out More
                 </Button>
             </div>

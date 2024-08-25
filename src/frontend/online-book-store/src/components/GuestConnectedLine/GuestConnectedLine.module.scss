@@ -1,0 +1,12 @@
+.connected-line {
+    width: 4px;
+    height: 75px;
+    background-color: var(--guest-darkblue-full);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.connected-line:hover {
+    background-color: var(--guest-lightblue-full);
+    transition: background 0.25s ease-in-out;
+}
