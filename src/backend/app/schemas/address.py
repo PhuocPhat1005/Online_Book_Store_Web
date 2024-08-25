@@ -14,6 +14,7 @@ class AddressUpdate(BaseModel):
     address_detail: str | None = ""
 
 class ProvinceBase(BaseModel):
+    id: str | None = "empty_uuid"
     province_name: str | None = ""
     country_id: str | None = "empty_uuid"
     
@@ -24,6 +25,7 @@ class ProvinceUpdate(ProvinceBase):
     pass
 
 class DistrictBase(BaseModel):
+    id: str | None = "empty_uuid"
     district_name: str | None = ""
     province_id: str | None = "empty_uuid"
     
@@ -44,6 +46,7 @@ class WardUpdate(WardBase):
     pass
 
 class CountryBase(BaseModel):
+    id: str | None = "empty_uuid"
     country_name: str | None = ""
     
 class CountryCreate(CountryBase):
