@@ -149,21 +149,21 @@
     background-color: #6076be; /* Add a green color to the "active/current" link */
 }
 
-.vertical-menu a.unhover {
-    color: #838FB9;
-    font-size: 0.8rem;
-}
-
-.vertical-menu a.unhover:hover {
-    color: #838FB9;
-    font-size: 0.8rem;
-}
-
 .vertical-menu-tag {
     // position: static;
-    padding: 20px;
-    top: 20px;
-    bottom: 20px;
+    padding: 0px 20px;
     font-size: 0.8rem;
     color: #838FB9;
+}
+
+.menu-box {
+    padding: 120px 0px;
+}
+
+.menu-choice {
+    // margin-top: 16px;
+    display: inline;
+    padding: 0px 0px 0px 0px;
+    font-size: 1.2rem;
+    color: white;
 }
