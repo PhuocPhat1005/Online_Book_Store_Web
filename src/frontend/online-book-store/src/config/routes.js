@@ -14,6 +14,7 @@ const routes = {
     guestshopbooks: '/guestshopbooks',
     guestcontact: '/guestcontact',
     guestabout: '/guestabout',
+    guestdetailsbook: '/guestdetailsbook',
 };
 
 export default routes;

@@ -1,0 +1,14 @@
+.body {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.core {
+    background-color: var(--guest-semi-lightblue-full);
+    width: 100%;
+    // padding: 64px 16px;
+    margin-bottom: 64px;
+}
