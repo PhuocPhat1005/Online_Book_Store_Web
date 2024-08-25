@@ -36,7 +36,9 @@ oauth.register(
     client_id=settings.GOOGLE_CLIENT_ID,
     client_secret=settings.GOOGLE_CLIENT_SECRET,
     server_metadata_url=settings.GOOGLE_SERVER_METADATA_URL,
-    client_kwargs={"scope": "openid profile email"},
+    client_kwargs={"scope": "openid email profile"},
+    access_type="offline",
+    prompt="consent",
 )
 
 
@@ -91,17 +93,18 @@ def decode_token(id_token):
 @router.get("/login/google", tags=["Authentication"])
 async def initiate_google_login(request: Request):
     state = str(uuid4())
-    print(f"State: {state}\n")
+    print(f"State: {state}\n\n")
     redirect_uri = request.url_for("google_auth")
-    print(f"Redirect_uri: {redirect_uri}\n")
+    print(f"Redirect uri: {redirect_uri}\n\n")
     request.session["oauth_state"] = state
-    print(f"Session after setting state: {request.session.items()}\n")
+    print(f"Request Session: {dict(request.session.items())}\n\n")
+    print(f"Request: {dict(request.items())}\n\n")
     google_auth_url = await oauth.google.authorize_redirect(
         request, redirect_uri, state=state
     )
-    print(f"Google auth url: {google_auth_url}\n")
+    print(f"Google Auth Url: {google_auth_url}\n\n")
     return {
-        "state": state,
+        "state": request.session.get("oauth_state"),
         "redirect_uri": redirect_uri,
         "google_auth_url": google_auth_url,
     }
@@ -110,11 +113,14 @@ async def initiate_google_login(request: Request):
 @router.get("/google-callback", name="google_auth", tags=["Authentication"])
 async def google_auth(request: Request, db: AsyncSession = Depends(get_db)):
     try:
+        print("Check 00\n\n")
         request_state = request.query_params.get("state")
-        print(f"Request state: {request_state}\n")
+        print(f"Request state: {request_state}\n\n")
+        print(f"Request: {request.items()}\n\n")
+        print(f"Request Session 01: {dict(request.session.items())}\n\n")
         response_state = request.session.get("oauth_state")
-        print(f"Response state: {response_state}\n")
-        print(f"Session in callback: {request.session.items()}")
+        print(f"Response state: {response_state}\n\n")
+        print(f"Request Session 02: {dict(request.session.items())}\n\n")
         if response_state != request_state:
             raise HTTPException(
                 status_code=400,
@@ -122,8 +128,11 @@ async def google_auth(request: Request, db: AsyncSession = Depends(get_db)):
             )
         del request.session["oauth_state"]
 
+        print("Check 01\n\n")
+
         token = await oauth.google.authorize_access_token(request)
-        print(f"Token: {token}\n")
+        print("Check 02\n\n")
+        print("Token:", token)
 
         if not token:
             raise HTTPException(status_code=400, detail="Missing token from Google.")
@@ -139,12 +148,12 @@ async def google_auth(request: Request, db: AsyncSession = Depends(get_db)):
         id_token = token["id_token"]
         access_token = token["access_token"]
 
-        print(f"ID Token: {id_token}\n")
-        print(f"Access Token: {access_token}\n")
+        print("ID Token: ", id_token)
+        print("Access Token: ", access_token)
 
         # Decode the ID token
         decoded_token = decode_token(id_token)
-        print(f"Decoded_token: {decoded_token}\n")
+        print("decoded_token: ", decoded_token)
 
         # Validate the audience
         if decoded_token.get("aud") != settings.GOOGLE_CLIENT_ID:
