@@ -1,0 +1,83 @@
+:root {
+    --notification-width: 600px;
+    --notification-height: 400px;
+}
+
+.wrapper {
+    position: absolute;
+    top: 200px;
+    left: 300px;
+
+    width: var(--notification-width);
+    height: 0;
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    transition: height 0.25s, opacity 101ms 4s, visibility 101ms 0.25s;
+}
+
+.wrapper.active {
+    width: var(--notification-width);
+    height: var(--notification-height);
+    background-color: var(--white);
+    box-shadow: 0 0 10px #ccc;
+
+    visibility: visible;
+    opacity: 1;
+    background-color: white;
+
+    transition: height 0.25s;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-wrap: nowrap;
+    padding: 8px;
+}
+
+.header_info,
+.header_options {
+    display: flex;
+    align-items: center;
+}
+
+.header_title {
+    font-size: 2.4rem;
+    font-weight: bold;
+}
+
+.header_notinum {
+    font-size: 1.6rem;
+    font-weight: bold;
+    padding: 4px 8px;
+    background-color: var(--discount-color);
+    border-radius: 5px;
+    color: var(--white);
+    margin-left: 8px;
+}
+
+.header_option {
+    font-size: 1.6rem;
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    padding: 4px 8px;
+    margin-right: 8px;
+
+    &:hover {
+        opacity: 0.8;
+        cursor: pointer;
+    }
+}
+
+.header_option.active {
+    background-color: var(--order-color);
+    color: var(--white);
+}
+
+.body {
+    height: calc(var(--notification-height) - 52px);
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}

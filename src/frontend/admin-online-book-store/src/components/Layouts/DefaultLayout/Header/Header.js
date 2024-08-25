@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,6 +11,7 @@ import styles from './Header.module.scss';
 import Button from '../../../../components/Button';
 import Image from '../../../../components/Image';
 import Menu from '../../../../components/Menu';
+import SocialContact from './SocialContact';
 import config from '../../../../config';
 import assets from '../../../../assets/';
 import Search from '../../../../components/Search';
@@ -25,6 +27,7 @@ const USER_MENU = [
 ];
 
 const Header = ({ admin }) => {
+    const [showSocialContact, setShowSocialContact] = useState(false);
     const navigate = useNavigate();
 
     const handleSignOut = () => {
@@ -39,37 +42,32 @@ const Header = ({ admin }) => {
         }
     };
 
+    const handleShowSocialContact = () => {
+        setShowSocialContact(!showSocialContact);
+    };
+
+
     return (
         <header className={cx('wrapper')}>
             <div className={cx('container')}>
-                {/* <img className={cx('logo')} src={assets.logo} alt="logo" /> */}
                 <div className={cx('search-bar')}>
                     <Search />
                 </div>
-                {admin ? (
-                    <div className={cx('auth-buttons')}>
-                        <Button className={cx('signin')} types="primary" to={config.routes.signin}>
-                            Sign In
-                        </Button>
-                        <Button className={cx('signup')} types="primary" to={config.routes.signup}>
-                            Sign Up
-                        </Button>
-                    </div>
-                ) : (
-                    <>
-                        <div>
-                            <Menu items={USER_MENU} onSignOut={handleSignOut}>
-                                <div className={cx('user')}>
-                                    <Image className={cx('avatar')} src={assets.default_avartar} alt="" />
-                                    <span className={cx('name')}>John</span>
-                                </div>
-                            </Menu>
+                <div>
+                    <Menu items={USER_MENU} onSignOut={handleSignOut}>
+                        <div className={cx('user')}>
+                            <Image className={cx('avatar')} src={assets.default_avartar} alt="" />
+                            <span className={cx('name')}>John</span>
                         </div>
-                        <Button className={cx('social-contact')} types="primary">
-                            <FontAwesomeIcon icon={faSquareShareNodes} />
-                        </Button>
-                    </>
-                )}
+                    </Menu>
+                </div>
+                <Button
+                    className={cx('social-contact')}
+                    types="primary"
+                    onClick={handleShowSocialContact}
+                >
+                    <p><FontAwesomeIcon icon={faSquareShareNodes}/></p>
+                </Button>
             </div>
         </header>
     );

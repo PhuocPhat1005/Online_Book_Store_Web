@@ -14,13 +14,9 @@ import {
 
 import styles from './SideBar.scss';
 import Button from '../../../components/Button';
-import Image from '../../../components/Image';
-import Menu from '../../../components/Menu';
 import Notification from '../../../components/Notification';
 import config from '../../../config';
 import assets from '../../../assets/';
-import Search from '../../../components/Search';
-
 const cx = classNames.bind(styles);
 
 const ADMIN_MENU = [
@@ -97,7 +93,6 @@ const SideBar = ({ admin }) => {
                 </Button>
                 <div>
                     <Button
-                        // to={"#"}
                         types="primary"
                         className={cx('menu-choice-noti')}
                         onClick={handleShowNotification}
@@ -148,7 +143,7 @@ const SideBar = ({ admin }) => {
                     className={cx('menu-choice')}
                     onClick={() => handleNavigate(config.routes.signin)}
                 >
-                    <p>&nbsp;&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faSignOut}/> Sign In</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faSignOut}/> Sign Out</p>
                 </Button>
             </div>
             {/* <nav>
