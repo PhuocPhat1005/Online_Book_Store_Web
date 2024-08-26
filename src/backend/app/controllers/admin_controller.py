@@ -60,13 +60,14 @@ async def View_revenue(db: AsyncSession = Depends(get_db)):
             book_count[order_detail.book_id] = order_detail.quantity if book_count.get(order_detail.book_id) is None else book_count[order_detail.book_id] + order_detail.quantity
     return {'revenue': revenue, 'user_count': user_count, 'book_count': book_count}
 
-@router.get("/Show Top best selling books", summary="Show Top best selling books")
+@router.get("/Show Top 10 best selling books", summary="Show Top 10 best selling books")
 async def Show_Top_best_selling_books(db: AsyncSession = Depends(get_db)):
     read_book_service = ReadService[Book](Book)
-    books = await read_book_service.get_by_condition([{'id': ''}], db, 0)
+    books = await read_book_service.get_by_condition([{'id': ''}], db, 0, 0, 10, 'amount_sell')
     if not books:
         raise HTTPException(status_code=404, detail="Books not found")
-    return await read_book_service.get_ordered(books, "amount_sell")
+    # return await read_book_service.get_ordered(books, "amount_sell")
+    return books
 
 @router.get("/Show List Users", summary="Show list users")
 async def show_list_users(db: AsyncSession = Depends(get_db)):

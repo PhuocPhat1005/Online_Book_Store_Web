@@ -640,7 +640,7 @@ async def get_book_endpoint(book_id: UUID, db: AsyncSession = Depends(get_db)):
 @router.get("/get_book_by_name/{book_name}", summary="Get books by name")
 async def get_books_by_name_endpoint(book_name: str, db: AsyncSession = Depends(get_db)):
     name = generate_all_variations(book_name)
-    books = await book_service.get_by_condition([{},{'book_name':name}], db, 0)
+    books = await book_service.get_by_condition([{},{'book_name':name}], db, 0, 0, 5)
     if not books:
         raise HTTPException(status_code=404, detail="No books found with that name")
     book_data = []
@@ -681,7 +681,7 @@ async def update_book_endpoint(book_id: UUID, book_update: BookUpdate, db: Async
 async def delete_book_endpoint(book_id: UUID, db: AsyncSession = Depends(get_db)):
     book_name = await book_service.get_by_condition([{'id':book_id}], db)
     book_name = book_name[0].book_name
-    print(book_name)    
+    # print(book_name)    
     delete_folder_aws(book_name)
     book = await book_service.delete(book_id, db)
     if not book:
