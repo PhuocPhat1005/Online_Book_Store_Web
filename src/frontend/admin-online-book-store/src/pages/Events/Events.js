@@ -7,15 +7,16 @@ import request from '../../utils/request';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
+import Search from '../../components/Search';
 
 const cx = classNames.bind(styles);
 
 function Events() {
   return (
-    <>
-      <div className={cx('events')}>
-      </div>
-    </>
+      <>
+        <div className={cx('events')}>
+        </div>
+      </>
   );
 }
 

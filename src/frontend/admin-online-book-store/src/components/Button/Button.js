@@ -23,6 +23,7 @@ function Button({ to, href, className, types = '', size = '', disabled, leftIcon
         [className]: className,
         text: types.includes('text'),
         primary: types.includes('primary'),
+        primary1: types.includes('primary1'),
         addtocart: types.includes('addtocart'),
         checkout: types.includes('checkout'),
         submit: types.includes('submit'),

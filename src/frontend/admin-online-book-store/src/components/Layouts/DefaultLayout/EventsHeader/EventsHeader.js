@@ -7,11 +7,10 @@ import {
     faUser,
 } from '@fortawesome/free-solid-svg-icons';
 
-import styles from './Header.module.scss';
+import styles from './EventsHeader.scss';
 import Button from '../../../../components/Button';
 import Image from '../../../../components/Image';
 import Menu from '../../../../components/Menu';
-import SocialContact from './SocialContact';
 import config from '../../../../config';
 import assets from '../../../../assets/';
 import Search from '../../../../components/Search';
@@ -27,7 +26,6 @@ const USER_MENU = [
 ];
 
 const Header = ({ admin }) => {
-    const [showSocialContact, setShowSocialContact] = useState(false);
     const navigate = useNavigate();
 
     const handleSignOut = () => {
@@ -42,35 +40,20 @@ const Header = ({ admin }) => {
         }
     };
 
-    const handleShowSocialContact = () => {
-        setShowSocialContact(!showSocialContact);
-    };
-
-
     return (
-        <header className={cx('wrapper')}>
-            <div className={cx('container')}>
+        <header className={cx('wrapper-header')}>
+            <div className={cx('container-header')}>
+                <Button
+                    // class="btn btn-success"
+                    className={cx('new-event')}
+                    types="primary"
+                    // onClick={handleShowSocialContact}
+                >
+                    <p>New</p>
+                </Button>
                 <div className={cx('search-bar')}>
                     <Search />
                 </div>
-                <div>
-                    <Menu items={USER_MENU} onSignOut={handleSignOut}>
-                        <div className={cx('user')}>
-                            <Image className={cx('avatar')} src={assets.default_avartar} alt="" />
-                            <span className={cx('name')}>John</span>
-                        </div>
-                    </Menu>
-                </div>
-                <Button
-                    // class="btn btn-success"
-                    className={cx('social-contact')}
-                    types="primary1"
-                    onClick={handleShowSocialContact}
-                    title="Social Contact"
-                >
-                    <p><FontAwesomeIcon icon={faSquareShareNodes}/></p>
-                    <SocialContact showSocialContact={showSocialContact} />
-                </Button>
             </div>
         </header>
     );
