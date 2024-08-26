@@ -13,6 +13,7 @@ import GuestHome from '../pages/GuestHome/GuestHome';
 import GuestShopBooks from '../pages/GuestShopBooks/GuestShopBooks';
 import GuestContact from '../pages/GuestContact/GuestContact';
 import GuestAbout from '../pages/GuestAbout/GuestAbout';
+import GuestDetailsBook from '~/pages/GuestDetailsBook/GuestDetailsBook';
 
 import HeaderOnly from '~/components/Layouts/HeaderOnly';
 
@@ -34,6 +35,7 @@ const publicRoutes = [
     { path: config.routes.guestshopbooks, component: GuestShopBooks },
     { path: config.routes.guestcontact, component: GuestContact },
     { path: config.routes.guestabout, component: GuestAbout },
+    { path: config.routes.guestdetailsbook, component: GuestDetailsBook },
 ];
 
 const privateRoutes = [];

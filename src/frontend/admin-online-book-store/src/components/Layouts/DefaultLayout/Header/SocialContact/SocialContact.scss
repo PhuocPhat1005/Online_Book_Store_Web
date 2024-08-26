@@ -1,0 +1,75 @@
+:root {
+    --social-contact-width: 300px;
+    --social-contact-height: 190px;
+}
+
+.social-contact-box {
+    position: absolute;
+    top: 50px;
+    right: 10px;
+
+    width: var(--social-contact-width);
+    // width: 0;
+    height: 0;
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    background-color: white;
+    box-shadow: 0 0 10px #ccc;
+    
+    transition: height 0.25s, opacity 101ms 4s, visibility 101ms 0.25s;
+}
+
+.social-contact-box.active {
+    width: var(--social-contact-width);
+    height: var(--social-contact-height);
+    background-color: var(--white);
+    box-shadow: 0 0 10px #ccc;
+
+    visibility: visible;
+    opacity: 1;
+
+    transition: height 0.25s;
+}
+
+.header {
+    display: flex;
+    text-wrap: nowrap;
+    width: 200px;
+    width: var(--social-contact-width);
+    margin-left: 15px;
+    margin-top: 7px;
+}
+
+.title{
+    font-size: 18px;
+    color: black;
+}
+
+.social-contact-line {
+    position: relative;
+    height: 1px;
+    width: 100%;
+    background-color: #cccccc;
+}
+
+.contact {
+    font-size: 18px;
+    // background-color: white;
+    color: black;
+    display: inline-block;
+    width: 100%;
+    text-align: left;
+}
+
+a:link { 
+    text-decoration: none; 
+} 
+
+a:visited { 
+    text-decoration: none; 
+} 
+
+a:active { 
+    text-decoration: none; 
+}

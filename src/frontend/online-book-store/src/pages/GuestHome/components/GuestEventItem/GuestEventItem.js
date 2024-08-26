@@ -14,7 +14,6 @@ function GuestEventItem({ data }) {
     const handleButtonClick = () => {
         setIsPopUpVisible(true);
     };
-    // Function to close the PopUp
     const handleClosePopUp = () => {
         setIsPopUpVisible(false);
     };

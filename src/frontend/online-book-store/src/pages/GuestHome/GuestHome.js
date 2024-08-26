@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import { HeaderContentLayout } from '~/components/Layouts';
 import styles from './GuestHome.module.scss';
 import Slide from '~/components/Slide';
-import ConnectedLine from '~/components/ConnectedLine';
+import GuestConnectedLine from '~/components/GuestConnectedLine';
 import GuestIntroductionBlock from '../GuestHome/components/GuestIntroductionBlock/GuestIntroductionBlock';
 import GuestEventBlock from '../GuestHome/components/GuestEventBlock/GuestEventBlock';
 import GuestEventsContent from './components/GuestEventsContent';
@@ -20,24 +20,23 @@ function GuestHome() {
         <>
             <Header guest={true} />
             <div className={cx('wrapper')}>
-                <HeaderContentLayout title="SIBooks" subtitle="The World of Books" guest />
+                <HeaderContentLayout title="SIBooks" subtitle="The World of Books" />
                 <Slide images={data} />
-                <ConnectedLine />
+                <GuestConnectedLine />
                 <div className={cx('container')}>
                     <div className={cx('introduction')}>
                         <GuestIntroductionBlock />
                     </div>
-                    <ConnectedLine />
+                    <GuestConnectedLine />
                     <div className={cx('events')}>
                         <GuestEventBlock />
                     </div>
-                    <ConnectedLine />
+                    <GuestConnectedLine />
                 </div>
                 <div id="EventsContent">
                     <GuestEventsContent />
                 </div>
-                <ConnectedLine />
-                <ConnectedLine />
+                <GuestConnectedLine />
             </div>
             <GuestFooter />
         </>
