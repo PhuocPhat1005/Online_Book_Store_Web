@@ -6,13 +6,15 @@
 .wrapper {
     position: absolute;
     top: 200px;
-    left: 300px;
+    left: 250px;
 
     width: var(--notification-width);
     height: 0;
     opacity: 0;
     visibility: hidden;
     overflow: hidden;
+    background-color: white;
+
     transition: height 0.25s, opacity 101ms 4s, visibility 101ms 0.25s;
 }
 
@@ -24,7 +26,6 @@
 
     visibility: visible;
     opacity: 1;
-    background-color: white;
 
     transition: height 0.25s;
 }

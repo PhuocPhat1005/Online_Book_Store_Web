@@ -16,17 +16,17 @@ function GuestFooter() {
                     <div className={cx('social-media')}>
                         <p className={cx('title')}>Social Media</p>
                         <Button
-                            href="/"
+                            href="https://www.facebook.com/sibooksbookstore"
                             className={cx('icon-btn')}
                             leftIcon={<FontAwesomeIcon icon={faFacebook} />}
                         ></Button>
                         <Button
-                            href="/"
+                            href="https://discord.gg/tFmw7XYEAu"
                             className={cx('icon-btn')}
                             leftIcon={<FontAwesomeIcon icon={faDiscord} />}
                         ></Button>
                         <Button
-                            href="/"
+                            href="https://x.com/sibookstore"
                             className={cx('icon-btn')}
                             leftIcon={<FontAwesomeIcon icon={faTwitter} />}
                         ></Button>
@@ -71,7 +71,7 @@ function GuestFooter() {
                 <div className={cx('copyright-information')}>
                     <p className={cx('copyright')}>
                         <FontAwesomeIcon icon={faCopyright} />
-                        <span className={cx('text')}>2024 by SIBooks. Find Out More</span>
+                        <span className={cx('text')}>2024 by SIBooks.</span>
                     </p>
                 </div>
             </div>

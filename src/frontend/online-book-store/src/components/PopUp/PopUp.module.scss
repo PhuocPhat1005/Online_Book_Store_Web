@@ -4,18 +4,18 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .popup {
-    background: var(--guest-darkblue-half);
+    background: rgba(0, 0, 0, 0.5);
     width: 600px;
     padding: 0;
     color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
 }
 
@@ -64,13 +64,13 @@
 }
 
 .body a {
-    color: var(--guest-semi-lightblue-full);
+    color: var(--guest-blue-full);
     font-weight: 700;
     text-decoration: none;
 }
 
 .body a:hover {
-    color: var(--guest-lightblue-full);
+    color: var(--guest-semi-lightblue-full);
 }
 
 .continueButton {

@@ -299,7 +299,7 @@ function GuestDetailsBook() {
                     <div className={cx('post_comments')}>
                         <div className={cx('post_commnets_header')}>
                             <Image className={cx('user_avatar')} src={assets.default_avartar} />
-                            <span className={cx('user_name_post')}>John</span>
+                            <span className={cx('user_name_post')}>Anonymous</span>
                             <RatingStar rating={'1'} width={16} height={16} />
                         </div>
                         <textarea className={cx('commnets_text')} name="comments_text"></textarea>
