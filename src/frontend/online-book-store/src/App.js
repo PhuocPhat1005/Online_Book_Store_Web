@@ -8,7 +8,7 @@ function App() {
         <Router>
             <div className="App">
                 <Routes>
-                    <Route path="/" element={<Navigate to="/signin" />} />
+                    <Route path="/" element={<Navigate to="/guesthome" />} />
 
                     {publicRoutes.map((route, index) => {
                         const Page = route.component;
