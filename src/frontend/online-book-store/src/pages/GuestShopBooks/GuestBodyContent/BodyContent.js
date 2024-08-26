@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 
@@ -14,6 +14,8 @@ import Products from './components/GuestProducts/GuestProducts';
 import request from '~/utils/request';
 import { GENRES, CATEGORY, FILTER_SECTION_1, FILTER_SECTION_2 } from './components/Filter_Category';
 import BasicSpinner from '~/components/BasicSpinner';
+import Button from '~/components/Button';
+import PopUp from '~/components/PopUp';
 
 const cx = classNames.bind(styles);
 
@@ -31,6 +33,17 @@ function BodyContent() {
     // const [imagesFetched, setImagesFetched] = useState(false);
 
     const [isLoading, setIsLoading] = useState(false);
+
+    // State to manage whether the PopUp is shown
+    const [isPopUpVisible, setIsPopUpVisible] = useState(false);
+
+    // Open & close PopUp
+    const handleButtonClick = () => {
+        setIsPopUpVisible(true);
+    };
+    const handleClosePopUp = () => {
+        setIsPopUpVisible(false);
+    };
 
     const handleBackPage = () => {
         if (currentPage < 0) return;
@@ -252,22 +265,13 @@ function BodyContent() {
                     </div>
                 </div>
                 <div className={cx('footer')}>
-                    <span className={cx('back_btn')} onClick={handleBackPage}>
-                        <FontAwesomeIcon icon={faChevronLeft} />
-                    </span>
-                    <div className={cx('pages')}>
-                        {showPages.map((item, index) => (
-                            <a className={cx('page_item', { active: index === currentPage })} href="/" key={index}>
-                                {item}
-                            </a>
-                        ))}
-
-                        <span className={cx('page_item')}>...</span>
-                    </div>
-                    <span className={cx('next_btn')} onClick={handleNextPage}>
-                        <FontAwesomeIcon icon={faChevronRight} />
-                    </span>
+                    {/* Change Button's onClick to trigger the PopUp */}
+                    <Button onClick={handleButtonClick} className={cx('see-more-btn')} types="findmore">
+                        See more results
+                    </Button>
                 </div>
+                {/* Render PopUp conditionally based on the state */}
+                {isPopUpVisible && <PopUp onClose={handleClosePopUp} />}
             </div>
 
             {showFilterAll && (
