@@ -62,7 +62,8 @@ const Header = ({ admin }) => {
                     </Menu>
                 </div>
                 <Button
-                    className={cx('social-contact-button')}
+                    // class="btn btn-success"
+                    className={cx('social-contact')}
                     types="primary"
                     onClick={handleShowSocialContact}
                 >

@@ -1,6 +1,6 @@
 :root {
-    --social-contact-width: 1000x;
-    --social-contact-height: 200px;
+    --social-contact-width: 300px;
+    --social-contact-height: 190px;
 }
 
 .social-contact-box {
@@ -9,6 +9,7 @@
     right: 10px;
 
     width: var(--social-contact-width);
+    // width: 0;
     height: 0;
     opacity: 0;
     visibility: hidden;
@@ -34,6 +35,7 @@
 .header {
     display: flex;
     text-wrap: nowrap;
+    width: 200px;
     width: var(--social-contact-width);
     margin-left: 15px;
     margin-top: 7px;
@@ -44,22 +46,29 @@
     color: black;
 }
 
-.line {
+.social-contact-line {
     position: relative;
     height: 1px;
     width: 100%;
     background-color: #cccccc;
 }
 
-.social-contact-menu { 
-    // position: static;
-    // width: 100%;
-    // margin-top: -120px;
-    color: black;
-}
-
 .contact {
     font-size: 18px;
     // background-color: white;
     color: black;
+    display: inline-block;
+    width: 100%;
+    text-align: left;
+}
+a:link { 
+    text-decoration: none; 
+} 
+
+a:visited { 
+    text-decoration: none; 
+} 
+
+a:active { 
+    text-decoration: none; 
 }
