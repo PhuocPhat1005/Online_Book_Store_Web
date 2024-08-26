@@ -7,15 +7,23 @@ import request from '../../utils/request';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
+import Search from '../../components/Search';
 
 const cx = classNames.bind(styles);
 
 function Events() {
   return (
-    <>
-      <div className={cx('events')}>
-      </div>
-    </>
+      <>
+        {/* <header className={cx('wrapper-header')}>
+          <div className={cx('container-header')}>
+              <div className={cx('search-bar')}>
+                  <Search />
+              </div>
+          </div>
+          </header> */}
+        <div className={cx('events')}>
+        </div>
+      </>
   );
 }
 

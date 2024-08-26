@@ -16,7 +16,7 @@
     overflow: hidden;
     background-color: white;
     box-shadow: 0 0 10px #ccc;
-
+    
     transition: height 0.25s, opacity 101ms 4s, visibility 101ms 0.25s;
 }
 
@@ -61,6 +61,7 @@
     width: 100%;
     text-align: left;
 }
+
 a:link { 
     text-decoration: none; 
 } 

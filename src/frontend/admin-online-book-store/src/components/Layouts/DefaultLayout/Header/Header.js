@@ -64,8 +64,9 @@ const Header = ({ admin }) => {
                 <Button
                     // class="btn btn-success"
                     className={cx('social-contact')}
-                    types="primary"
+                    types="primary1"
                     onClick={handleShowSocialContact}
+                    title="Social Contact"
                 >
                     <p><FontAwesomeIcon icon={faSquareShareNodes}/></p>
                     <SocialContact showSocialContact={showSocialContact} />
