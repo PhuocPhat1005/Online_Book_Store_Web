@@ -148,15 +148,19 @@ async def create_order_detail(order_id: UUID, book_id: UUID, quantity: int, db: 
             order_detail.unit_price = float(book[0].price) * (1 - sale_off[0].sale_off / 100)
     return await order_detail_service.create(order_detail, db, 0)
 
-async def create_order_detail_from_cart(order_id: UUID, cart_id: str, db: AsyncSession):
+async def create_order_detail_from_cart(order_id: UUID, cart_id: UUID, db: AsyncSession):
     cart = await read_cart_service.get_by_condition([{'id':cart_id}], db)
     if not cart:
         raise HTTPException(status_code=404, detail="cart not found")
+    book_amount = []
     for item in cart:
         book_id = item.book_id
         quantity = item.amount
+        book_amount.append((book_id, quantity))
+    for book_id, quantity in book_amount:
         await create_order_detail(order_id, book_id, quantity, db)
-        await delete_cart_service.delete({'id':cart_id, 'book_id':book_id}, db)
+    await delete_cart_service.delete({'id':cart_id}, db)
+    return "Done"
 
 @router.get("/show_order_detail", summary="Show all order detail by Order ID")
 async def show_order_detail_endpoint(order_id: UUID, db: AsyncSession = Depends(get_db)):
