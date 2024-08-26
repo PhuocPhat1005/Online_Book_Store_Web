@@ -14,13 +14,6 @@ const cx = classNames.bind(styles);
 function Events() {
   return (
       <>
-        {/* <header className={cx('wrapper-header')}>
-          <div className={cx('container-header')}>
-              <div className={cx('search-bar')}>
-                  <Search />
-              </div>
-          </div>
-          </header> */}
         <div className={cx('events')}>
         </div>
       </>

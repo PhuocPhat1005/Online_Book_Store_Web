@@ -13,10 +13,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './SideBar.scss';
-import Button from '../../../components/Button';
-import Notification from '../../../components/Notification';
-import config from '../../../config';
-import assets from '../../../assets/';
+import Button from '../../../../components/Button';
+import Notification from '../../../../components/Notification';
+import config from '../../../../config';
+import assets from '../../../../assets/';
 const cx = classNames.bind(styles);
 
 const ADMIN_MENU = [
