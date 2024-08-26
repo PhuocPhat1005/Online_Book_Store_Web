@@ -32,6 +32,10 @@ function BodyContent() {
 
     const [isLoading, setIsLoading] = useState(false);
 
+    const handleCurrentPage = (page) => {
+        setCurrentPage(page - 1);
+    };
+
     const handleBackPage = () => {
         if (currentPage < 0) return;
         else if (currentPage === 0 && showPages[0] > 1) {
@@ -40,8 +44,6 @@ function BodyContent() {
         }
 
         setCurrentPage((prev) => prev - 1);
-
-        // call API to url
     };
 
     const handleNextPage = () => {
@@ -52,8 +54,6 @@ function BodyContent() {
         }
 
         setCurrentPage((prev) => prev + 1);
-
-        // call API to url
     };
 
     useEffect(() => {
@@ -257,9 +257,13 @@ function BodyContent() {
                     </span>
                     <div className={cx('pages')}>
                         {showPages.map((item, index) => (
-                            <a className={cx('page_item', { active: index === currentPage })} href="/" key={index}>
+                            <p
+                                className={cx('page_item', { active: index === currentPage })}
+                                key={index}
+                                onClick={() => handleCurrentPage(item)}
+                            >
                                 {item}
-                            </a>
+                            </p>
                         ))}
 
                         <span className={cx('page_item')}>...</span>
