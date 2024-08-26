@@ -112,9 +112,6 @@ function SignIn() {
                     <Link to={config.routes.dashboards} className={cx('header-item')}>
                         <FontAwesomeIcon className={cx('header-icon')} icon={faHouse} />
                     </Link>
-                    <Link to={config.routes.signup} className={cx('header-item')}>
-                        <FontAwesomeIcon className={cx('header-icon')} icon={faRightToBracket} />
-                    </Link>
                 </div>
                 <div className={cx('image-container')}>
                     <Image className={cx('background')} src={images.signin} />
