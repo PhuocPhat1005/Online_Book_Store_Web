@@ -3,13 +3,22 @@
   "configurations": [
     {
       "name": "C/C++ Runner: Debug Session",
-      "type": "cppvsdbg",
+      "type": "cppdbg",
       "request": "launch",
       "args": [],
       "stopAtEntry": false,
-      "console": "externalTerminal",
-      "cwd": "c:/Users/phatl/OneDrive - VNU-HCMUS/Desktop/Online_Book_Store_Web",
-      "program": "c:/Users/phatl/OneDrive - VNU-HCMUS/Desktop/Online_Book_Store_Web/build/Debug/outDebug"
+      "externalConsole": true,
+      "cwd": "c:/Users/Oriane/Desktop/Online_Book_Store_Web",
+      "program": "c:/Users/Oriane/Desktop/Online_Book_Store_Web/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
     }
   ]
 }

@@ -23,5 +23,9 @@ yarn-debug.log*
 yarn-error.log*
 # server
 .venv
-__pycache__
+venv
+env
 .env
+__pycache__
+src/backend/.env
+/.vscode

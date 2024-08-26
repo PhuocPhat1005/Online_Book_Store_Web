@@ -13,6 +13,7 @@ import request from '~/utils/request';
 import config from '~/config';
 import CorrectBox from '~/components/CorrectBox';
 import IncorrectBox from '~/components/IncorrectBox';
+import Loading from './Loading';
 
 const cx = classNames.bind(styles);
 
@@ -20,6 +21,7 @@ function SignUp() {
     const [isSuccessfulSignUp, setIsSuccessfulSignup] = useState(false);
     const [toggleToast, setToggleToast] = useState(true);
     const [inCorrectMess, setIncorrectMess] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const correctMess = 'Sign up an account successfully';
     const navigate = useNavigate();
 
@@ -29,6 +31,7 @@ function SignUp() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setIsLoading(true);
 
         const formData = new FormData(event.target);
         const signup_data = {
@@ -51,6 +54,7 @@ function SignUp() {
             if (response.status === 200) {
                 // Handle successful form submission
                 setIsSuccessfulSignup(true);
+                setIsLoading(false);
                 console.log('Form submitted successfully');
             } else {
                 // Handle errors
@@ -58,6 +62,8 @@ function SignUp() {
                 console.error('Form submission failed', response.data);
             }
         } catch (error) {
+            setIsLoading(false);
+
             if (error.message === 'Invalid password') {
                 setToggleToast(false);
                 setIncorrectMess('Invalid password');
@@ -90,84 +96,88 @@ function SignUp() {
 
     useEffect(() => {
         if (isSuccessfulSignUp) {
-            // setIsSuccessfulSignup(false);
-
-            const timerId = setTimeout(() => {
-                navigate(config.routes.signin);
-            }, 3000);
-
-            return () => clearTimeout(timerId);
+            navigate(config.routes.signin);
         }
     }, [isSuccessfulSignUp, navigate]);
 
     return (
-        <div className={cx('wrapper')}>
-            <div className={cx('header')}>
-                <Link to={config.routes.signin} className={cx('header-item')}>
-                    <FontAwesomeIcon className={cx('header-icon', 'sign-in-icon')} icon={faRightToBracket} />
-                </Link>
-            </div>
-            <div className={cx('image-container')}>
-                <Image className={cx('background')} src={images.signin} />
-                <div className={cx('overlay')}></div>
-            </div>
-            <form className={cx('signin-form')} onSubmit={handleSubmit}>
-                <div className={cx('form-container')}>
-                    <div className={cx('title')}>
-                        <p className={cx('label')}>sign up</p>
+        <>
+            <div className={cx('wrapper')}>
+                <div className={cx('header')}>
+                    <Link to={config.routes.signin} className={cx('header-item')}>
+                        <FontAwesomeIcon className={cx('header-icon', 'sign-in-icon')} icon={faRightToBracket} />
+                    </Link>
+                </div>
+                <div className={cx('image-container')}>
+                    <Image className={cx('background')} src={images.signin} />
+                    <div className={cx('overlay')}></div>
+                </div>
+                <form className={cx('signin-form')} onSubmit={handleSubmit}>
+                    <div className={cx('form-container')}>
+                        <div className={cx('title')}>
+                            <p className={cx('label')}>sign up</p>
+                        </div>
+                        <div className={cx('body')}>
+                            <div className={cx('input-field')}>
+                                <p className={cx('input-label')}>Username</p>
+                                <input
+                                    className={cx('input-bar')}
+                                    type="text"
+                                    name="username"
+                                    placeholder="Enter your username"
+                                    required
+                                />
+                            </div>
+                            <div className={cx('input-field')}>
+                                <p className={cx('input-label')}>Email</p>
+                                <input
+                                    className={cx('input-bar')}
+                                    type="email"
+                                    name="email"
+                                    placeholder="Enter your email address (eg. email_name@gmail.com)"
+                                    required
+                                />
+                            </div>
+                            <div className={cx('input-field')}>
+                                <p className={cx('input-label')}>Password</p>
+                                <input
+                                    className={cx('input-bar')}
+                                    type="password"
+                                    name="password"
+                                    placeholder="Enter your password"
+                                    required
+                                    onChange={(e) => setPasswordResult(e.target.value)}
+                                />
+                            </div>
+                            <div className={cx('input-field')}>
+                                <p className={cx('input-label')}>Confirm Password</p>
+                                <input
+                                    className={cx('input-bar')}
+                                    type="password"
+                                    name="confirm"
+                                    placeholder="Confirm your password"
+                                    required
+                                    onChange={(e) => setConfirmPasswordResult(e.target.value)}
+                                />
+                            </div>
+                            <Button className={cx('submit-btn')} onClick={handleToast}>
+                                Sign Up
+                            </Button>
+                        </div>
                     </div>
-                    <div className={cx('body')}>
-                        <div className={cx('input-field')}>
-                            <p className={cx('input-label')}>Username</p>
-                            <input
-                                className={cx('input-bar')}
-                                type="text"
-                                name="username"
-                                placeholder="Enter your username"
-                                required
-                            />
-                        </div>
-                        <div className={cx('input-field')}>
-                            <p className={cx('input-label')}>Email</p>
-                            <input
-                                className={cx('input-bar')}
-                                type="email"
-                                name="email"
-                                placeholder="Enter your email address (eg. email_name@gmail.com)"
-                                required
-                            />
-                        </div>
-                        <div className={cx('input-field')}>
-                            <p className={cx('input-label')}>Password</p>
-                            <input
-                                className={cx('input-bar')}
-                                type="password"
-                                name="password"
-                                placeholder="Enter your password"
-                                required
-                                onChange={(e) => setPasswordResult(e.target.value)}
-                            />
-                        </div>
-                        <div className={cx('input-field')}>
-                            <p className={cx('input-label')}>Confirm Password</p>
-                            <input
-                                className={cx('input-bar')}
-                                type="password"
-                                name="confirm"
-                                placeholder="Confirm your password"
-                                required
-                                onChange={(e) => setConfirmPasswordResult(e.target.value)}
-                            />
-                        </div>
-                        <Button className={cx('submit-btn')} onClick={handleToast}>
-                            Sign Up
-                        </Button>
+                </form>
+                {!toggleToast && <IncorrectBox mess={inCorrectMess} onClose={closeBox} />}
+                {isSuccessfulSignUp && <CorrectBox mess={correctMess} onClose={closeBox} />}
+            </div>
+            {isLoading && (
+                <div className={cx('overlay_loading')}>
+                    <div className={cx('loading_container')}>
+                        <p className={cx('loading_text')}>Loading</p>
+                        <Loading className={cx('loading_circle')} />
                     </div>
                 </div>
-            </form>
-            {!toggleToast && <IncorrectBox mess={inCorrectMess} onClose={closeBox} />}
-            {isSuccessfulSignUp && <CorrectBox mess={correctMess} onClose={closeBox} />}
-        </div>
+            )}
+        </>
     );
 }
 

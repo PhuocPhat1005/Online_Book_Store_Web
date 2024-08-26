@@ -6,6 +6,14 @@ const routes = {
     contact: '/contact',
     about: '/about',
     forgotpassword: '/signin/forgotpassword',
+    cart: '/cart',
+    profile: '/profile',
+    detailsbook: '/details',
+    order: '/order',
+    guesthome: '/guesthome',
+    guestshopbooks: '/guestshopbooks',
+    guestcontact: '/guestcontact',
+    guestabout: '/guestabout',
 };
 
 export default routes;

@@ -25,9 +25,8 @@ from .voucher import Voucher
 from .user_have_voucher import UserHaveVoucher
 from .shipping import Shipping
 from .payment import Payment
-from .payment_method import PaymentMethod
-from .payment_status import PaymentStatus
-from .bank_payment import BankPayment
 from .review import Review
 from .review_photo import ReviewPhoto
 from .review_like import ReviewLike
+from .photo import Photo
+from .cart import Cart

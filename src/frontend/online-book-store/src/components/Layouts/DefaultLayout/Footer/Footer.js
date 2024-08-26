@@ -40,7 +40,7 @@ function Footer() {
                         <p className={cx('details')}>Lê Phước Phát | 22127322 (Leader)</p>
                         <p className={cx('details')}>Ngô Văn Khải | 22127174</p>
                         <p className={cx('details')}>Bùi Lê Khôi | 22127205</p>
-                        <p className={cx('details')}>Tô quốc Thanh | 22127388</p>
+                        <p className={cx('details')}>Tô Quốc Thanh | 22127388</p>
                         <p className={cx('details')}>Thái Huyễn Tùng | 22127441</p>
                     </div>
                     <div className={cx('online-shop')}>

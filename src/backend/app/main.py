@@ -9,17 +9,27 @@ from starlette.middleware.sessions import SessionMiddleware
 from app.routes import (
     auth,
     account,
+    admin,
     author,
     book,
     category,
     publishing_company,
     translator,
+    photo,
+    user,
+    cart,
+    order,
+    payment,
+    address,
+    shipping,
+    sale_off,
+    review
 )
 from app.database.database import Base
 from app.config.config import settings
 
 # Khởi tạo AsyncEngine
-engine = create_async_engine(settings.DATABASE_URL, echo=True)
+engine = create_async_engine(settings.DATABASE_URL, echo=False)
 
 # Khởi tạo session factory
 SessionLocal = sessionmaker(
@@ -58,13 +68,25 @@ async def startup():
 
 
 # Kết nối các router
+app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
+
 app.include_router(auth.router)
 app.include_router(account.router)
+app.include_router(admin.router)
 app.include_router(author.router)
 app.include_router(book.router)
 app.include_router(category.router)
 app.include_router(publishing_company.router)
 app.include_router(translator.router)
+app.include_router(photo.router)
+app.include_router(user.router)
+app.include_router(cart.router)
+app.include_router(order.router)
+app.include_router(payment.router)
+app.include_router(address.router)
+app.include_router(shipping.router)
+app.include_router(sale_off.router)
+app.include_router(review.router)
 
 
 def main():

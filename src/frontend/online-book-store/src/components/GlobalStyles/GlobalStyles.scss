@@ -4,14 +4,49 @@
 :root {
     --black: #000;
     --white: #fff;
-    --text-color: #161823;
-    --primary-color: #ffc824;
 
-    --font-family: 'IBM Plex Sans', sans-serif;
+    // Logged colors
+    --text-color: #161823;
+    --star-color: #ffbf00;
+    --faded-color: #808080;
+    --discount-color: #c72127;
+    --order-color: #ee4d2d;
+    --deepblue-color: #525f7f;
+    --lightblue-bg-color: #8898aa;
+    --voucher-color: #0096ff;
+    --emerald-color: #50c878;
+    --primary-color: #ffcc00;
+    --primary-blue: #003366;
+    --primary-light-yellow: #fffaeb;
+
+    --confirmed-color: #005fff;
+    --received-color: #55a999;
+
+    // Guest colors
+    --guest-darkblue-full: rgba(0, 30, 59, 1);
+    --guest-darkblue-half: rgba(0, 30, 59, 0.5);
+    --guest-semi-darkblue-full: rgba(0, 69, 137, 1);
+    --guest-semi-darkblue-half: rgba(0, 69, 137, 0.5);
+    --guest-blue-full: rgba(0, 127, 255, 1);
+    --guest-blue-half: rgba(0, 127, 255, 0.5);
+    --guest-semi-lightblue-full: rgba(137, 196, 255, 1);
+    --guest-semi-lightblue-half: rgba(137, 196, 255, 0.5);
+    --guest-lightblue-full: rgba(216, 235, 255, 1);
+    --guest-lightblue-half: rgba(216, 235, 255, 0.5);
+    //--black: #000
+    --guest-darkgray-full: rgba(63, 63, 63, 1);
+    --guest-gray-full: rgba(127, 127, 127, 1);
+    --guest-gray-half: rgba(128, 128, 128, 0.5);
+    --guest-lightgray-full: rgba(191, 191, 191, 1);
+    //--white: #fff
+
+    --font-family: 'IBM Plex Sans', Tahoma, Verdana, Arial, sans-serif;
 
     --header-height: 120px;
     --header-width: 1200px;
     --footer-width: 1200px;
+
+    --cart-page-width: 1600px;
 }
 
 * {

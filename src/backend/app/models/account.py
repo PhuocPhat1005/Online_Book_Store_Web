@@ -19,10 +19,12 @@ class Account(Base):
     username = Column(String(255), nullable=False, unique=True)
     email = Column(String(255), nullable=False, unique=True)
     password_hash = Column(String(255), nullable=False)
+    banned_to = Column(TIMESTAMP, nullable=True, default=None)
+    
     created_at = Column(TIMESTAMP, server_default=func.now(), nullable=False)
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now(), nullable=False)
 
-    user = relationship("User", back_populates="account")
+    user = relationship("User", back_populates="account", cascade="all, delete-orphan")
 
 
 @event.listens_for(Account, "before_update")

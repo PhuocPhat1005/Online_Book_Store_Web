@@ -1,0 +1,20 @@
+import classNames from 'classnames/bind';
+import styles from './CategoryItem.module.scss';
+import Button from '~/components/Button';
+
+const cx = classNames.bind(styles);
+
+function CategoryItem({ item, onClick, isParent, icon }) {
+    return (
+        <Button
+            className={cx('menu_item', { parent: isParent })}
+            types="text"
+            rightIcon={isParent && icon}
+            onClick={onClick}
+        >
+            {item.label}
+        </Button>
+    );
+}
+
+export default CategoryItem;

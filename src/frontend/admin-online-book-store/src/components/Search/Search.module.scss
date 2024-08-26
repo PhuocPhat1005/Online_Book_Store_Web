@@ -1,0 +1,107 @@
+/* Search */
+
+.search-bar,
+.search-result {
+    width: var(--search-width);
+}
+
+.search-bar {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 8px;
+    height: var(--search-height);
+    padding-left: 16px;
+    background-color: rgba(22, 24, 35, 0.06);
+    border-radius: var(--search-border-radius);
+    border: 1px solid transparent;
+    display: flex;
+    position: relative;
+
+    input {
+        flex: 1;
+        height: 100%;
+        color: var(--text-color);
+        font-size: 1.6rem;
+        border: none;
+        outline: none;
+        background-color: transparent;
+        color: #e8898e;
+        caret-color: #e8898e;
+
+        &::placeholder {
+            color: var(--text-color);
+        }
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        right: 52px;
+        top: var(--search-top-spacer);
+        width: 1px;
+        height: calc(var(--search-height) - var(--search-top-spacer) * 2);
+        background-color: rgba(22, 24, 35, 0.06);
+    }
+
+    &:focus-within {
+        border: 1px solid rgba(22, 24, 35, 0.2);
+    }
+}
+
+.clear,
+.loading {
+    border: none;
+    outline: none;
+    margin-right: 16px;
+    color: rgba(22, 24, 35, 0.34);
+    cursor: pointer;
+
+    position: absolute;
+    right: 52px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.loading {
+    animation: spinner 0.8s linear infinite;
+}
+
+@keyframes spinner {
+    from {
+        transform: translateY(-50%) rotate(0);
+    }
+    to {
+        transform: translateY(-50%) rotate(360deg);
+    }
+}
+
+.search-btn {
+    width: 52px;
+    height: 100%;
+    border: none;
+    outline: none;
+    border-top-right-radius: var(--search-border-radius);
+    border-bottom-right-radius: var(--search-border-radius);
+    font-size: 1.8rem;
+    color: rgba(22, 24, 35, 0.34);
+
+    &:hover {
+        background-color: rgba(22, 24, 35, 0.03);
+        cursor: pointer;
+    }
+}
+
+/* Search Result */
+
+.search-title {
+    padding: 20px 20px 10px 20px;
+    color: #e8898e;
+    font-size: 1.6rem;
+    font-weight: 400;
+}
+
+.product_search_body {
+    max-height: 300px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}

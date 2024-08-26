@@ -12,44 +12,32 @@ function SelectSort() {
         <div className={cx('menu-sort')} tabIndex="-1" {...attrs}>
             <ul className={cx('method-list')}>
                 <li className={cx('method-item')}>
-                    <a className={cx('method-item-link')} href="/">
-                        Sort by
-                    </a>
+                    <span className={cx('method-item-text')}>Popular</span>
                 </li>
                 <li className={cx('method-item')}>
-                    <a className={cx('method-item-link')} href="/">
-                        Newest
-                    </a>
+                    <span className={cx('method-item-text')}>Selling</span>
                 </li>
                 <li className={cx('method-item')}>
-                    <a className={cx('method-item-link')} href="/">
-                        Price (low to high)
-                    </a>
+                    <span className={cx('method-item-text')}>Newest</span>
                 </li>
                 <li className={cx('method-item')}>
-                    <a className={cx('method-item-link')} href="/">
-                        Price (high to low)
-                    </a>
+                    <span className={cx('method-item-text')}>Price (low to high)</span>
                 </li>
                 <li className={cx('method-item')}>
-                    <a className={cx('method-item-link')} href="/">
-                        Name A-Z
-                    </a>
-                </li>
-                <li className={cx('method-item')}>
-                    <a className={cx('method-item-link')} href="/">
-                        Name Z-A
-                    </a>
+                    <span className={cx('method-item-text')}>Price (high to low)</span>
                 </li>
             </ul>
         </div>
     );
     return (
         <div className={cx('wrapper')}>
-            <Tippy visible interactive placement="bottom-start" render={renderMenuSort}>
+            <Tippy interactive placement="bottom-start" offset={[35, 5]} render={renderMenuSort}>
                 <div className={cx('heading')}>
                     <p className={cx('title')}>Sort by</p>
-                    <FontAwesomeIcon className={cx('icon')} icon={faChevronDown} />
+                    <div className={cx('current_method')}>
+                        <p className={cx('label')}>Popular</p>
+                        <FontAwesomeIcon className={cx('icon')} icon={faChevronDown} />
+                    </div>
                 </div>
             </Tippy>
         </div>

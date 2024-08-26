@@ -1,0 +1,98 @@
+/* Portfolio */
+
+.portfolio {
+    flex: 1;
+    position: relative;
+    background-color: var(--white);
+    margin-left: 64px;
+    border-radius: 20px;
+    box-shadow: 0 4px 4px #ccc;
+}
+
+.avatar {
+    position: absolute;
+    top: -150px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 300px;
+    height: 300px;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+.portfolio_body {
+    margin-top: 200px;
+    padding: 0 120px 64px 120px;
+}
+
+.achievement {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    list-style-type: none;
+
+    width: 100%;
+}
+
+.achievement_item {
+    text-align: center;
+}
+
+.amount,
+.achievement_item_title {
+    font-size: 2.4rem;
+    font-weight: bold;
+    color: var(--deepblue-color);
+}
+
+.achievement_item_title {
+    color: var(--lightblue-bg-color);
+}
+
+.portfolio_info {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 32px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.portfolio_user_names {
+    text-align: center;
+}
+
+.portfolio_username {
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: var(--deepblue-color);
+}
+
+.portfolio_fullname {
+    font-size: 1.8rem;
+    color: var(--lightblue-bg-color);
+    margin-bottom: 32px;
+}
+
+.portfolio_user_address {
+    font-size: 1.8rem;
+    color: var(--lightblue-bg-color);
+    margin-bottom: 32px;
+}
+
+.portfolio_user_contact {
+    font-size: 2.8rem;
+    color: var(--deepblue-color);
+    margin-bottom: 32px;
+}
+
+.portfolio_footer {
+    font-size: 1.6rem;
+    color: var(--lightblue-bg-color);
+    margin-top: 32px;
+
+    text-align: justify;
+    text-justify: inter-word;
+}

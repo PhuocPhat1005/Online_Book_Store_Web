@@ -5,44 +5,31 @@ import SubHeaderContentLayout from '~/components/Layouts/SubHeaderContentLayout'
 import ConnectedLine from '~/components/ConnectedLine';
 import Button from '~/components/Button';
 import FAQMenu from './conponents/FAQMenu';
+import emailjs from '@emailjs/browser';
+import { useRef } from 'react';
 
 const cx = classNames.bind(styles);
 
 function Contact() {
+    const formDataRef = useRef(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        // const formData = new FormData(event.target);
-        // const data = {
-        //     username: formData.get('username'),
-        //     email: formData.get('email'),
-        //     password: formData.get('password')
-        // };
-
-        // console.log(data);
-
-        // try {
-        //     const response = await fetch('http://127.0.0.1:8000/auth/sign_up', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify(data),
-        //     });
-
-        //     if (response.ok) {
-        //         // Handle successful form submission
-        //         console.log('Form submitted successfully');
-        //     } else {
-        //         // Handle errors
-        //         console.error('Form submission failed');
-        //     }
-        // } catch (error) {
-        //     console.error('Form submission error:', error);
-        // }
+        emailjs
+            .sendForm('service_52cn0sv', 'template_kef8x5p', formDataRef.current, {
+                publicKey: 'qaIatjJnkKdIWaJUM',
+            })
+            .then(
+                () => {
+                    console.log('SUCCESS!');
+                    event.target.reset();
+                },
+                (error) => {
+                    console.log('FAILED...', error.text);
+                },
+            );
     };
-
 
     return (
         <div className={cx('wrapper')}>
@@ -53,11 +40,16 @@ function Contact() {
                         <p className={cx('label')}>How to find out more...</p>
                         <SubHeaderContentLayout title="SiBooks" />
                     </div>
-                    <form className={cx('form-container')} onSubmit={handleSubmit}>
+                    <form ref={formDataRef} className={cx('form-container')} onSubmit={handleSubmit}>
                         <input className={cx('input-form')} type="text" name="username" placeholder="Name" required />
                         <input className={cx('input-form')} type="email" name="email" placeholder="Email" required />
                         <input className={cx('input-form')} type="text" name="subject" placeholder="Subject" required />
-                        <textarea className={cx('input-form')} name="message" placeholder="Type your message here..." />
+                        <textarea
+                            className={cx('input-form')}
+                            name="message"
+                            placeholder="Type your message here..."
+                            spellCheck={false}
+                        />
                         <Button className={cx('submit-btn')} types="submit">
                             Submit
                         </Button>

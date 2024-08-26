@@ -5,3 +5,10 @@
     justify-content: center;
     flex-direction: column;
 }
+
+.core {
+    background-color: var(--primary-color);
+    width: 100%;
+    // padding: 64px 16px;
+    margin-bottom: 64px;
+}

@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Response, Cookie, Depends, HTTPException, status, Query
+from typing import Annotated
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from authlib.integrations.starlette_client import OAuth, OAuthError
@@ -19,6 +20,11 @@ from app.services.user_service import (
     get_current_account,
     send_email_to_user,
 )
+
+from app.schemas.user import UserCreate, UserUpdate, UserResponse
+from app.services.crud_service import CRUDService
+from app.models.user import User
+
 from app.database.database import get_db
 from app.config.config import settings
 from uuid import uuid4
@@ -28,6 +34,14 @@ from fastapi.responses import JSONResponse
 from jose import JWTError, jwt
 import requests
 
+import logging
+import uuid
+
+user_service = CRUDService[User, UserCreate, UserUpdate](User)
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 oauth = OAuth()
@@ -110,25 +124,46 @@ async def initiate_google_login(request: Request):
     }
 
 
+@router.get("/a")
+async def set_session(response: Response):
+    state = "abcd1234"
+    response.set_cookie(key="gfg_cookie_key", value=state, samesite="None", secure=True)
+    return {"state": state}
+
+
+@router.get("/b")
+def func(request: Request, gfg_cookie_key: Annotated[str | None, Cookie()] = None):
+    request_state = request.query_params.get("state")
+    response_state = gfg_cookie_key
+
+    print("\n\n")
+    print(request_state, response_state)
+    print("\n\n")
+
+    if request_state == response_state:
+        return "OKOK"
+    return "Failed"
+
+
 @router.get("/google-callback", name="google_auth", tags=["Authentication"])
 async def google_auth(request: Request, db: AsyncSession = Depends(get_db)):
     try:
         print("Check 00\n\n")
         request_state = request.query_params.get("state")
-        print(f"Request state: {request_state}\n\n")
-        print(f"Request: {request.items()}\n\n")
-        print(f"Request Session 01: {dict(request.session.items())}\n\n")
-        response_state = request.session.get("oauth_state")
-        print(f"Response state: {response_state}\n\n")
-        print(f"Request Session 02: {dict(request.session.items())}\n\n")
+        print(f"Request state: {request_state}\n")
+        response_state = request.session.get("oauth_state", None)
+        response_state = request.cookies.get("gfg_cookie_key")
+        # token = await oauth.google.authorize_access_token(request_state)
+        # print(token)
+        print(f"Response state: {response_state}\n")
+        print(f"Session in callback: {request.session.items()}")
+
         if response_state != request_state:
             raise HTTPException(
                 status_code=400,
                 detail="CSRF Warning! State not equal in request and response.",
             )
         del request.session["oauth_state"]
-
-        print("Check 01\n\n")
 
         token = await oauth.google.authorize_access_token(request)
         print("Check 02\n\n")
@@ -204,14 +239,20 @@ async def sign_up(account: AccountCreate, db: AsyncSession = Depends(get_db)):
             detail="Username already registered",
         )
     account.password = get_password_hash(account.password)
-    await create_account(db, account)
+    new_id = await create_account(db, account)
     access_token = create_access_token(data={"sub": account.username})
     refresh_token = create_refresh_token(data={"sub": account.username})
+    user = UserCreate(account_id=new_id)
+    user.cart_id = uuid.uuid4()
+    await user_service.create(user, db)
     return {"access_token": access_token, "refresh_token": refresh_token}
 
 
 @router.get("/check_session")
 async def check_session(request: Request):
+    print("\n\n")
+    print("Check session: ", dict(request.session))
+    print("\n\n")
     return {"session": dict(request.session)}
 
 
@@ -319,6 +360,16 @@ async def reset_password_by_email(
     await db.commit()
 
     return {"msg": "Password updated successfully!"}
+
+
+@router.get(
+    "/get_test_access_token",
+    summary="Get test access token",
+    description="Get access token",
+)
+async def get_access_token(username: str):
+    access_token = create_access_token(data={"sub": username})
+    return {"test_access_token": access_token}
 
 
 # @router.put(

@@ -7,14 +7,13 @@ from fastapi import Depends, HTTPException
 from app.config.config import settings
 from jose import jwt, JWTError
 from app.database.database import get_db
-
 # Send mail
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import uuid
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
 
 async def get_current_account(
     token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)
@@ -53,9 +52,9 @@ async def get_account_by_email(db: AsyncSession, email: str):
     print(f"Account: {account}")
     return account
 
-
 async def create_account(db: AsyncSession, account: AccountCreate):
     new_account = Account(
+        id = uuid.uuid4(),
         username=account.username,
         email=account.email,
         password_hash=account.password,
@@ -70,7 +69,8 @@ async def create_account(db: AsyncSession, account: AccountCreate):
         # Rollback the transaction if an error occurs
         await db.rollback()
         raise RuntimeError(f"Failed to create account: {e}") from e
-    return new_account
+
+    return new_account.id
 
 
 async def send_email_to_user(receiver_email: str, your_subject: str, your_msg: str):
@@ -93,3 +93,6 @@ async def send_email_to_user(receiver_email: str, your_subject: str, your_msg: s
         print("Email sent successfully!")
     except Exception as e:
         print(f"Failed to send email: {e}")
+
+
+    

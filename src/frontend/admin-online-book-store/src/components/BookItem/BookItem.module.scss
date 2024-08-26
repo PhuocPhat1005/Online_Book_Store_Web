@@ -1,0 +1,42 @@
+.wrapper {
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+        background-color: #fdf9f9;
+        cursor: pointer;
+    }
+}
+
+.avatar {
+    width: 73px;
+    height: 55px;
+    object-fit: cover;
+}
+
+.information {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+}
+
+.title,
+.description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #e8898e;
+    line-height: 1.5;
+    font-size: 1.6rem;
+    font-weight: 300;
+    margin-left: 16px;
+}
+
+.description {
+    margin-top: 4px;
+    font-size: 1.4rem;
+    opacity: 0.6;
+}

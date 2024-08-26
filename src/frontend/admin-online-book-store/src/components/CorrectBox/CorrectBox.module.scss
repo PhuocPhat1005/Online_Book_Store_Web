@@ -1,0 +1,51 @@
+.wrapper {
+    min-width: 400px;
+    position: fixed;
+    top: 16px;
+    left: 0;
+    background-color: var(--white);
+    padding: 12px;
+    
+    border-left: 8px solid 	#50C878	;
+    animation: slideIn ease 0.3s, fadeOut ease 1s 3s forwards;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.icon {
+    width: 35px;
+    height: 35px;
+    padding: 4px;
+    border-radius: 100%;
+
+    &:hover {
+        cursor: pointer;
+        background-color: rgba($color: #000000, $alpha: 0.05);
+    }
+}
+
+.content {
+    font-size: 2.4rem;
+    color: 	#50C878	;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+    }
+}
