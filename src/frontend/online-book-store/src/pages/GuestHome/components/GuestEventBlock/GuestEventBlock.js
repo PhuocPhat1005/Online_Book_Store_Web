@@ -10,7 +10,7 @@ function GuestEventBlock() {
             icon: <FontAwesomeIcon icon={faMicrophone} />,
             title: 'Events',
             description: 'Online and in shop, we host book launches, author signings, readings, and panel discussions.',
-            color: 'rgba(216, 235, 255, 1)',
+            color: 'rgba(137, 196, 255, .5)',
             route: '#EventsContent',
         },
         {

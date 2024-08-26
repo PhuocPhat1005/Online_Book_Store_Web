@@ -18,8 +18,10 @@
 .information {
     display: flex;
     max-width: 500px;
+    min-width: 400px;
 
     margin: 0 16px;
+    cursor: pointer;
 }
 .product_img {
     width: 90px;
@@ -36,7 +38,7 @@
 .product_title {
     flex: 1;
     flex-wrap: wrap;
-    font-size: 1.6rem;
+    font-size: 2rem;
     font-weight: bold;
     color: var(--text-color);
 }
@@ -50,7 +52,7 @@
 .new_price {
     font-size: 1.8rem;
     font-weight: bold;
-    color: var(--text-color);
+    color: var(--discount-color);
     margin-right: 16px;
 }
 
@@ -97,8 +99,9 @@
     color: var(--discount-color);
     margin-right: 32px;
 
-    max-width: 76px;
+    width: 110px;
     word-wrap: break-word;
+    text-align: center;
 }
 
 .trash_icon {

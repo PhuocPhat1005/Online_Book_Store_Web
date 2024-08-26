@@ -12,7 +12,7 @@ function GuestIntroductionBlock() {
         {
             image: 'https://www.artnews.com/wp-content/uploads/2022/09/GettyImages-1241066216.jpg?w=1200',
             alt: '',
-            title: 'Hi, We are SIBOOKS',
+            title: 'We are SIBOOKS',
             paragraph:
                 "SIBOOKS allows you to explore over new and second-hand books across various genres, including new releases, classics, kids' books, young adult novels,...",
             video: 'ZL5A2Qx3y_E',

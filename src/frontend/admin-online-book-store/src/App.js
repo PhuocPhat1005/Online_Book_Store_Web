@@ -28,7 +28,7 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" />} />
+          <Route path="/" element={<Navigate to="/dashboards" />} />
 
           {publicRoutes.map((route, index) => {
             const Page = route.component;
