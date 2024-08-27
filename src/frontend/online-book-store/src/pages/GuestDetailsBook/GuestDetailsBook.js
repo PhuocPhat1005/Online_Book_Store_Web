@@ -44,6 +44,7 @@ function GuestDetailsBook() {
     let new_price = addDotsToNumber(Math.round((data.price * (100 - discount_percentage)) / 100)).toString();
 
     const [quantityValue, setQuantityValue] = useState(0);
+    const [isAddToCart, setIsAddToCart] = useState(false);
 
     const handleQuantity = (descrease = false) => {
         if (descrease && quantityValue > 0) {
@@ -59,6 +60,39 @@ function GuestDetailsBook() {
         }
         setQuantityValue(value);
     };
+
+    const fetchAddToCart = async () => {
+        const cookies = new Cookies();
+        const access_token = cookies.get('jwt_authorization');
+        const book_id = data.id;
+
+        try {
+            const response = await request.post(
+                `cart/add_to_cart?access_token=${access_token}&book_id=${book_id}`,
+                null,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            );
+
+            if (response.status === 200) {
+                setIsAddToCart(true);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        if (isAddToCart) {
+            const timer = setTimeout(() => {
+                setIsAddToCart(false);
+            }, 3000);
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [isAddToCart]);
 
     return (
         <>

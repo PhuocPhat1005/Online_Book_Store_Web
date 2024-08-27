@@ -14,7 +14,7 @@ class EmailVerify(BaseModel):
     email: EmailStr
 
 class UserEmail(BaseModel):
-    email: str
+    email: EmailStr
 class ResetPasswordForm(BaseModel):
     token: str
     password: str

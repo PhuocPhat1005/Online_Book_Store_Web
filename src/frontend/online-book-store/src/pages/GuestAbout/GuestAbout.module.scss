@@ -23,9 +23,9 @@
 
 .information {
     padding: 32px;
-    background-color: var(--white);
+    background-color: var(--guest-semi-darkblue-full);
     max-width: 600px;
-    border: 4px solid #808080;
+    border: 4px solid var(--white);
     position: absolute;
     left: 20%;
     bottom: 18px;
@@ -33,11 +33,11 @@
 
 .text {
     font-size: 1.8rem;
-    color: #808080;
+    color: var(--guest-lightblue-full);
 }
 
 .members {
-    background-color: #fafafa;
+    background-color: var(--guest-semi-lightblue-full);
     padding: 64px 0;
 }
 
@@ -47,4 +47,6 @@
     align-items: center;
     flex-wrap: wrap;
     margin-top: 32px;
+    color: var(--guest-darkblue-full);
+    font-weight: 500;
 }

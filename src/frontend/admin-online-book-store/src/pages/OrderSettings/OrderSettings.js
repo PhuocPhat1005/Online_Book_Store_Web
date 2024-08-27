@@ -88,34 +88,56 @@ function OrderSettings() {
   let option_choice = "Choose an option";
   return (
     <>
-      <html>
-        <div className={cx('order-settings')}>
-          <div className={cx('order-settings-filter')}>
-            <Button className={cx('page-btn')} onClick={() => {}}>
-              <p>|&lt;</p>
-            </Button>
-            <Button className={cx('page-btn')} onClick={() => {page-=1}}>
-              <p>&lt;&lt;</p>
-            </Button>
-            <p className={cx('page-box')}>Page: {page}/{max_page}</p>
-            {/* <input className={cx('page-box')} type="text" id="name" placeholder="Page: "/> */}
-            <Button className={cx('page-btn')} onClick={() => {}}>
-              <p>&lt;&lt;</p>
-            </Button>
-            <Button className={cx('page-btn')} onClick={() => {}}>
-              <p>&gt;|</p>
-            </Button>
-            <p className={cx('option-title')}>Options</p>
-            <div className={cx('option-filter')}>
-              <SelectOption />
-            </div>
-            <p className={cx('sort-by-title')}>Sort by</p>
-            <div className={cx('sort-by-filter')}>
-              <SelectSortBy />
-            </div>
+      <div className={cx('order-settings')}>
+        <div className={cx('order-settings-filter')}>
+          <Button className={cx('page-btn')} onClick={() => {}}>
+            <p>|&lt;</p>
+          </Button>
+          <Button className={cx('page-btn')} onClick={() => {page-=1}}>
+            <p>&lt;&lt;</p>
+          </Button>
+          <p className={cx('page-box')}>Page: {page}/{max_page}</p>
+          {/* <input className={cx('page-box')} type="text" id="name" placeholder="Page: "/> */}
+          <Button className={cx('page-btn')} onClick={() => {}}>
+            <p>&lt;&lt;</p>
+          </Button>
+          <Button className={cx('page-btn')} onClick={() => {}}>
+            <p>&gt;|</p>
+          </Button>
+          <p className={cx('option-title')}>Options</p>
+          <div className={cx('option-filter')}>
+            <SelectOption />
+          </div>
+          <p className={cx('sort-by-title')}>Sort by</p>
+          <div className={cx('sort-by-filter')}>
+            <SelectSortBy />
           </div>
         </div>
-      </html>
+        <div className="App">
+          <table border={1}>
+            <tr>
+              <th>All</th>
+              <th>Order ID</th>
+              <th>Username</th>
+              <th>Telephone</th>
+              <th>Email</th>
+              <th>Create at</th>
+              <th>Status</th>
+              <th>Total spending</th>
+              <th>See detail</th>
+            </tr>
+            {/* {showPages.map((item, index) => (
+              <tr key={showPages.id}>
+                <td>{showPages.isbn}</td>
+                <td>{showPages.book_name}</td>
+                <td>{showPages.created_at}</td>
+                <td>{showPages.updated_at}</td>
+                <td>{showPages.price}</td>
+              </tr>
+            ))} */}
+          </table>
+        </div>
+      </div>
     </>
   );
 }

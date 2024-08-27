@@ -4,8 +4,12 @@ from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from authlib.integrations.starlette_client import OAuth, OAuthError
 from starlette.requests import Request
-from app.schemas.token import Token
-from app.schemas.account import AccountCreate, UserEmail, ResetPasswordForm
+from src.backend.app.schemas.TokenSchemas.token import Token
+from src.backend.app.schemas.AccountSchemas.account import (
+    AccountCreate,
+    UserEmail,
+    ResetPasswordForm,
+)
 from app.utils.security import (
     create_access_token,
     create_refresh_token,
@@ -21,8 +25,12 @@ from app.services.UserService.user_service import (
     send_email_to_user,
 )
 
-from app.schemas.user import UserCreate, UserUpdate, UserResponse
-from app.services.crud_service import CRUDService
+from src.backend.app.schemas.UserSchemas.user import (
+    UserCreate,
+    UserUpdate,
+    UserResponse,
+)
+from src.backend.app.services.CRUDService.crud_service import CRUDService
 from app.models.user import User
 
 from app.database.database import get_db

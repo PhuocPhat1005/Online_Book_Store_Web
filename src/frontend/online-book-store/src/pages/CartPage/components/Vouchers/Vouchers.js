@@ -1,12 +1,32 @@
+import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Voucher.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTicket } from '@fortawesome/free-solid-svg-icons';
 import VoucherItem from '../VoucherItem';
+import request from '~/utils/request';
 
 const cx = classNames.bind(styles);
 
-function Vouchers() {
+function Vouchers({ handleDiscountVoucher }) {
+    const [allVouchers, setAllVouchers] = useState([]);
+
+    useEffect(() => {
+        const fetchAllVouchers = async () => {
+            try {
+                const response = await request.get('voucher/show_all_vouchers');
+
+                if (response.status === 200) {
+                    setAllVouchers(response.data);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchAllVouchers();
+    }, []);
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('header')}>
@@ -14,10 +34,9 @@ function Vouchers() {
                 <p className={cx('header_title')}>Vouchers</p>
             </div>
             <div className={cx('body')}>
-                <VoucherItem />
-                <VoucherItem />
-                <VoucherItem />
-                <VoucherItem />
+                {allVouchers.map((item, index) => (
+                    <VoucherItem data={item} key={index} handleDiscountVoucher={handleDiscountVoucher} />
+                ))}
             </div>
             <div className={cx('footer')}>
                 <p className={cx('footer_title')}>Attention:</p>
