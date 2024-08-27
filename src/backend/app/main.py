@@ -6,29 +6,24 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
-import secrets
-from app.routes import (
-    auth,
-    account,
-    admin,
+from app.routes.VoucherController import voucher
+from app.database.database import Base
+from app.config.config import settings
+from app.routes.AccountRoute import account, admin, auth
+from app.routes.AddressRoute import address
+from app.routes.BookRoute import (
     author,
     book,
     category,
+    photo,
     publishing_company,
     translator,
-    photo,
-    user,
-    cart,
-    order,
-    payment,
-    address,
-    shipping,
-    sale_off,
-    review,
-    voucher
 )
-from app.database.database import Base
-from app.config.config import settings
+from app.routes.CartRoute import cart, sale_off, shipping
+from app.routes.CommentRoute import review
+from app.routes.OrderRoute import order
+from app.routes.PaymentRoute import payment
+from app.routes.UserRoute import user
 
 # Khởi tạo AsyncEngine
 engine = create_async_engine(settings.DATABASE_URL, echo=False)
@@ -44,12 +39,13 @@ app = FastAPI(
     description="API documents for the online bookstore SIBOOKS project",
     version="1.0.0",
 )
-
-# Cấu hình CORS
+app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
+# Cấu hình CORSMiddleware
 origins = [
-    "http://localhost:3000",
+    "http://localhost:3000",  # Thay đổi tùy theo frontend của bạn
     "http://localhost:8080",
     "http://localhost:8000",
+    "http://localhost:8000/auth",
 ]
 
 app.add_middleware(
@@ -59,9 +55,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-secret_key = secrets.token_urlsafe(32)
-# Thêm SessionMiddleware với secret key
-app.add_middleware(SessionMiddleware, secret_key=secret_key)
 
 
 # Khởi tạo các bảng trong cơ sở dữ liệu
