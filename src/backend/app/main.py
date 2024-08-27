@@ -6,28 +6,24 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
-from app.routes import (
-    auth,
-    account,
-    admin,
+from app.routes.VoucherController import voucher
+from app.database.database import Base
+from app.config.config import settings
+from app.routes.AccountRoute import account, admin, auth
+from app.routes.AddressRoute import address
+from app.routes.BookRoute import (
     author,
     book,
     category,
+    photo,
     publishing_company,
     translator,
-    photo,
-    user,
-    cart,
-    order,
-    payment,
-    address,
-    shipping,
-    sale_off,
-    review,
-    voucher
 )
-from app.database.database import Base
-from app.config.config import settings
+from app.routes.CartRoute import cart, sale_off, shipping
+from app.routes.CommentRoute import review
+from app.routes.OrderRoute import order
+from app.routes.PaymentRoute import payment
+from app.routes.UserRoute import user
 
 # Khởi tạo AsyncEngine
 engine = create_async_engine(settings.DATABASE_URL, echo=False)

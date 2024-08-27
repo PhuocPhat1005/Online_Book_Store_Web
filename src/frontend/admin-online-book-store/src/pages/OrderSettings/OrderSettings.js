@@ -30,13 +30,48 @@ function SelectOption() {
   );
   return (
     <div className={cx('wrapper-select')}>
-      <p className={cx('title-select')}>Options</p>
       <Tippy interactive placement="bottom-start" offset={[35, 5]} render={renderMenuSort}>
-          <div className={cx('heading')}>
-              <div className={cx('current_method')}>
-                  <p className={cx('label')}>Done</p>
-              </div>
-          </div>
+        <div className={cx('heading')}>
+            <div className={cx('current_method')}>
+                <p className={cx('label')}>Done</p>
+            </div>
+        </div>
+      </Tippy>
+    </div>
+  );
+}
+
+
+function SelectSortBy() {
+  const renderMenuSort = (attrs) => (
+      <div className={cx('menu-sort')} tabIndex="-1" {...attrs}>
+          <ul className={cx('method-list')}>
+              <li className={cx('method-item')}>
+                  <span className={cx('method-item-text')}>by Username</span>
+              </li>
+              <li className={cx('method-item')}>
+                  <span className={cx('method-item-text')}>by Email</span>
+              </li>
+              <li className={cx('method-item')}>
+                  <span className={cx('method-item-text')}>by Creation date</span>
+              </li>
+              <li className={cx('method-item')}>
+                  <span className={cx('method-item-text')}>by Order ID</span>
+              </li>
+              <li className={cx('method-item')}>
+                  <span className={cx('method-item-text')}>by Total spending</span>
+              </li>
+          </ul>
+      </div>
+  );
+  return (
+    <div className={cx('wrapper-sort-by-select')}>
+      <Tippy className={cx('position-select')} interactive placement="bottom-start" offset={[35, 5]} render={renderMenuSort}>
+        <div className={cx('heading')}>
+            <div className={cx('current_method')}>
+                <p className={cx('label')}>by Username</p>
+            </div>
+        </div>
       </Tippy>
     </div>
   );
@@ -70,22 +105,14 @@ function OrderSettings() {
             <Button className={cx('page-btn')} onClick={() => {}}>
               <p>&gt;|</p>
             </Button>
+            <p className={cx('option-title')}>Options</p>
             <div className={cx('option-filter')}>
               <SelectOption />
             </div>
-            {/* <div class="custom-select">
-              {/* <select>
-              </select>
-                <option value="0">Select car:</option>
-              <Options showOptions={showOptions} />
-            </div> */}
-            {/* <Options showOptions={showOptions} /> */}
-            {/* <Button
-                className={cx('custom-choice')}
-                onClick={handleOptions}
-            >
-              <Options showOptions={showOptions} />
-            </Button> */}
+            <p className={cx('sort-by-title')}>Sort by</p>
+            <div className={cx('sort-by-filter')}>
+              <SelectSortBy />
+            </div>
           </div>
         </div>
       </html>
