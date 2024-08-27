@@ -5,7 +5,7 @@ import FilterAllItem from '../FilterAllItem/FilterAllItem';
 import Button from '~/components/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+// import { useState } from 'react';
 // import PriceRange from '../PriceRange';
 
 const cx = classNames.bind(styles);

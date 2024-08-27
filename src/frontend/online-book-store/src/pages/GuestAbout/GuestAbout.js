@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 
 import styles from './GuestAbout.module.scss';
 import { HeaderContentLayout } from '~/components/Layouts';
-import ConnectedLine from '~/components/ConnectedLine';
+import GuestConnectedLine from '~/components/GuestConnectedLine/GuestConnectedLine';
 import Image from '~/components/Image';
 import SubHeaderContentLayout from '~/components/Layouts/SubHeaderContentLayout';
 import Member from './components/GuestMember';
@@ -38,7 +38,7 @@ function GuestAbout() {
                         </div>
                     </div>
                 </div>
-                <ConnectedLine />
+                <GuestConnectedLine />
                 <div className={cx('members')}>
                     <SubHeaderContentLayout title="Our Members" />
                     <div className={cx('members-container')}>
@@ -84,12 +84,12 @@ function GuestAbout() {
                         />
                     </div>
                 </div>
-                <ConnectedLine />
+                <GuestConnectedLine />
                 <Location />
-                <ConnectedLine />
+                <GuestConnectedLine />
                 <Community />
-                <ConnectedLine />
-                <ConnectedLine />
+                <GuestConnectedLine />
+                <GuestConnectedLine />
             </div>
             <GuestFooter />
         </>

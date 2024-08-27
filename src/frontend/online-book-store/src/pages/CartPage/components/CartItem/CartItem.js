@@ -14,7 +14,7 @@ function addDotsToNumber(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
-function CartItem({ data, handlePrice, originalPrice, handleDeleteProduct }) {
+function CartItem({ data, handlePrice, originalPrice, handleDeleteProduct, checked, onChange }) {
     const bookData = data.Book;
 
     const authorData = data.Author;
@@ -64,13 +64,13 @@ function CartItem({ data, handlePrice, originalPrice, handleDeleteProduct }) {
     }, [isAdd, isRemove]);
 
     useEffect(() => {
-        originalPrice(total_price);
+        originalPrice(bookData.id, total_price);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
         <div className={cx('wrapper')}>
-            <input className={cx('select_item')} type="checkbox" />
+            <input className={cx('select_item')} type="checkbox" checked={checked} onChange={onChange} />
             <div className={cx('information')} onClick={handleClickProduct}>
                 <Image className={cx('product_img')} src={bookData.book_ava} alt="product_img" />
                 <div className={cx('description')}>

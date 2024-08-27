@@ -26,11 +26,12 @@ function CartPage() {
     const [isCheckout, setIsCheckout] = useState(false);
     const [isSuccessfull, setIsSuccessfull] = useState(false);
 
-    const [originalPrice, setOriginalPrice] = useState(Number(0));
+    const [originalPrice, setOriginalPrice] = useState([]);
     const [price, setPrice] = useState(Number(0));
     const [totalPriceCheckout, setTotalPriceCheckout] = useState('');
     const [totalPriceCheckoutVoucher, setTotalPriceCheckoutVoucher] = useState('');
 
+    const [checkedArray, setCheckedArray] = useState([]); // array contains index of product which will be checked.
     const [isCheckedAll, setIsCheckedAll] = useState(false);
 
     const handleCheckout = () => {
@@ -39,6 +40,24 @@ function CartPage() {
 
     const handlePrice = (price) => {
         setPrice((prev) => prev + price);
+    };
+
+    const handleOriginalPrice = (id, origin = '', option = '') => {
+        if (option === 'delete') {
+            setOriginalPrice((_) => {
+                return originalPrice.filter((item) => item.id !== id);
+            });
+        }
+
+        setOriginalPrice((prev) => {
+            // console.log('Previous state:', prev);
+            if (!prev.some((item) => item.id === id)) {
+                const updatedState = [...prev, { id: id, price: origin }];
+                // console.log('Updated state:', updatedState);
+                return updatedState;
+            }
+            return prev;
+        });
     };
 
     const cookies = new Cookies();
@@ -89,6 +108,8 @@ function CartPage() {
 
     // Fetch the book details when booksIdInCart is updated
     useEffect(() => {
+        // console.log('bids', booksIdInCart);
+
         const fetchAllBooksInCart = async () => {
             const books = await Promise.all(booksIdInCart.map((item) => fetchBooksInCart(item)));
             setBooksInCart(books);
@@ -100,15 +121,39 @@ function CartPage() {
             if (!isEmptyCart && !isLoading) {
                 setIsSuccessfull(true);
             }
+        } else if (booksIdInCart.length === 0) {
+            setBooksInCart([]);
+            setIsEmptyCart(true);
         }
     }, [booksIdInCart, isEmptyCart, isLoading]);
 
     useEffect(() => {
-        setTotalPriceCheckout(addDotsToNumber(price + originalPrice));
+        const totalSum = originalPrice.reduce((sum, item) => sum + Number(item.price), 0);
+        console.log(totalSum);
+        // console.log(originalPrice);
+
+        setTotalPriceCheckout(addDotsToNumber(price + totalSum));
         setTotalPriceCheckoutVoucher(addDotsToNumber(totalPriceCheckout));
     }, [price, originalPrice, totalPriceCheckout]);
 
     /** Handle delete product */
+
+    const handleDeleteSignleProduct = async (id) => {
+        try {
+            await request.delete(`cart/delete_book_in_cart?access_token=${access_token}&book_id=${id}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const newBooksIdInCart = booksIdInCart.filter((item) => item.book_id !== id);
+            setBooksIdInCart(newBooksIdInCart);
+            setIsEmptyCart((prevBooksIdInCart) => prevBooksIdInCart.length === 0);
+            handleOriginalPrice(id, '', 'delete');
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const handleDeleteProduct = async (id) => {
         try {
@@ -117,6 +162,34 @@ function CartPage() {
                     'Content-Type': 'application/json',
                 },
             });
+            handleOriginalPrice(id, '', 'delete');
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleOptionDelete = async () => {
+        if (checkedArray.length <= 0) return;
+
+        try {
+            const ids = [];
+            const deletePromises = checkedArray.map(async (checkedItem) => {
+                const id = booksInCart[checkedItem].Book.id;
+                ids.push(id);
+                await handleDeleteProduct(id);
+            });
+
+            // Wait for all delete requests to complete
+            await Promise.all(deletePromises);
+
+            // Use a functional update to ensure that the latest state is captured
+            setBooksIdInCart((prevBooksIdInCart) => {
+                const newBooksIdInCart = prevBooksIdInCart.filter((item) => !ids.includes(item.book_id));
+                return newBooksIdInCart;
+            });
+
+            // Ensure the cart is marked as empty if there are no items left
+            setIsEmptyCart((prevBooksIdInCart) => prevBooksIdInCart.length === 0);
         } catch (error) {
             console.log(error);
         }
@@ -124,9 +197,28 @@ function CartPage() {
 
     /** Handle check all */
 
-    const handleCheckAll = () => {
-        setIsCheckedAll(true);
+    const handleCheckedAll = () => {
+        setIsCheckedAll(!isCheckedAll);
     };
+
+    const handleCheck = (id) => {
+        setCheckedArray((prev) => {
+            const isChecked = checkedArray.includes(id);
+
+            if (isChecked) {
+                return checkedArray.filter((item) => item !== id);
+            } else {
+                return [...prev, id];
+            }
+        });
+    };
+
+    useEffect(() => {
+        if (isCheckedAll === true) {
+            setCheckedArray(Array.from({ length: booksInCart.length }, (_, index) => index));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isCheckedAll]);
 
     return (
         <>
@@ -140,11 +232,11 @@ function CartPage() {
                                     <input
                                         className={cx('checkbox_select_all')}
                                         type="checkbox"
-                                        onChange={handleCheckAll}
+                                        onChange={handleCheckedAll}
                                     />
                                     <p className={cx('select_all_title')}>Select all</p>
                                 </div>
-                                <select className={cx('options')}>
+                                <select className={cx('options')} onClick={handleOptionDelete}>
                                     <option value="delete">Delete</option>
                                 </select>
                                 <p className={cx('products_amount')}>Amount</p>
@@ -154,13 +246,16 @@ function CartPage() {
                                 {isLoading && <BasicSpinner color="#808080" />}
                                 {isEmptyCart && <Image className={cx('empty_cart_img')} src={assets.empty_cart} />}
                                 {isSuccessfull &&
+                                    booksInCart &&
                                     booksInCart.map((data_item, index) => (
                                         <CartItem
                                             key={index}
                                             data={data_item}
                                             handlePrice={handlePrice}
-                                            originalPrice={setOriginalPrice}
-                                            handleDeleteProduct={handleDeleteProduct}
+                                            originalPrice={handleOriginalPrice}
+                                            handleDeleteProduct={handleDeleteSignleProduct}
+                                            checked={checkedArray.includes(index)}
+                                            onChange={() => handleCheck(index)}
                                         />
                                     ))}
                             </div>

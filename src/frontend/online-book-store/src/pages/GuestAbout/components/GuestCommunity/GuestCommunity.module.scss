@@ -6,7 +6,9 @@
 .title {
     text-align: center;
     font-size: 6.4rem;
-    background-color: var(--primary-color);
+    background-color: var(--guest-lightblue-full);
+    color: var(--guest-darkblue-full);
+    font-weight: 300;
     padding: 12px 0;
 }
 
@@ -14,25 +16,27 @@
     display: flex;
     flex-direction: row;
     max-height: 800px;
+    border-top: 4px solid var(--guest-darkblue-full);
+    border-bottom: 4px solid var(--guest-darkblue-full);
 }
 
 .community_img {
     &:nth-child(1) {
-        transform: translate(25%, 35%);
+        transform: translate(25%, 25%);
         z-index: 1;
     }
     &:nth-child(2) {
-        transform: translate(30%, 25%);
+        transform: translate(15%, 15%);
         z-index: 2;
     }
     &:nth-child(3) {
-        transform: translate(90%, -15%);
+        transform: translate(75%, -25%);
         z-index: 3;
     }
 }
 
 .info {
-    background-color: #e8898e;
+    background-color: var(--guest-semi-lightblue-full);
     max-width: 50%;
     position: relative;
     overflow: hidden;
@@ -46,7 +50,8 @@
     max-width: 350px;
 
     font-size: 3.2rem;
-    color: var(--white);
+    font-weight: 500;
+    color: var(--black);
 }
 
 .info_img {

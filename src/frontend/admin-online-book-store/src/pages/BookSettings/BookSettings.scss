@@ -1,4 +1,83 @@
+
 .book-settings {
+    // position: relative;
     height: 100vh;
-    background-color: #F5F5F5;
+    margin-left: 300px;
+    margin-top: 100px;;
+    background-color: #f5f5f5;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    overflow: hidden;
+}
+
+.book-settings-filter {
+    // position: static;
+    height: 100px;
+    width: 1600px;
+    margin-left: 10px;
+    margin-top: 5px;;
+    background-color: white;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    overflow: hidden;
+    padding: 0px 510px;
+}
+
+.page-box {
+    position: relative;
+    display: inline-block;
+    margin-top: -5px;
+    margin-left: 35px;
+    margin-right: -25px;
+    vertical-align: middle;
+    height: 50px;
+    width: 170px;
+    border-radius: 5px;
+    text-align: center;
+    padding: 15px;
+    background-color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: 1px solid #CCCCCC;
+}
+
+.page-btn {
+    position: relative;
+    margin-top: 25px;
+    margin-left: 35px;
+    margin-right: -25px;
+    // margin-bottom: 20px;
+    // height: 35px;
+    // width: 35px;
+    padding: 10px 10px;
+    border-radius: 5px;
+    background-color: white;
+    font-size: 15px;
+    font-weight: bold;
+    border: 1px solid #CCCCCC;
+    transition: 0.3s;
+    &:hover {
+        background-color: #CCCCCC;
+    }
+}
+
+.add-book-btn {
+    display: inline-block;
+    position: fixed;
+    margin-top: 25px;
+    margin-left: 300px;
+    // margin-bottom: 20px;
+    height: 50px;
+    width: 200px;
+    padding: 10px 10px;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
+    border: 1px solid #CCCCCC;
+    transition: 0.3s;
+    &:hover {
+        background-color: #CCCCCC;
+    }
 }

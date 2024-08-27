@@ -43,7 +43,7 @@ const SocialContact = ({ showSocialContact }) => {
                 href="https://www.x.com/sibookstore"
                 target="_blank"
             >
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faTwitter}/> Contact on X</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faTwitter}/> Contact on Twitter</p>
             </Button>
         </div>
     );
