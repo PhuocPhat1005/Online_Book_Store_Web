@@ -64,7 +64,7 @@ function CartItem({ data, handlePrice, originalPrice, handleDeleteProduct, check
     }, [isAdd, isRemove]);
 
     useEffect(() => {
-        originalPrice(total_price);
+        originalPrice(bookData.id, total_price);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
