@@ -109,7 +109,7 @@ function SignIn() {
         <>
             <div className={cx('wrapper')}>
                 <div className={cx('header')}>
-                    <Link to={config.routes.home} className={cx('header-item')}>
+                    <Link to={config.routes.guesthome} className={cx('header-item')}>
                         <FontAwesomeIcon className={cx('header-icon')} icon={faHouse} />
                     </Link>
                     <Link to={config.routes.signup} className={cx('header-item')}>
