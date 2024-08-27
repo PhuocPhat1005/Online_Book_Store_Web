@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import styles from './GuestContact.module.scss';
 import { HeaderContentLayout } from '~/components/Layouts';
 import SubHeaderContentLayout from '~/components/Layouts/SubHeaderContentLayout';
-import ConnectedLine from '~/components/ConnectedLine';
+import GuestConnectedLine from '~/components/GuestConnectedLine';
 import Button from '~/components/Button';
 import FAQMenu from './components/GuestFAQMenu';
 import emailjs from '@emailjs/browser';
@@ -86,7 +86,7 @@ function GuestContact() {
                         </form>
                     </div>
                 </div>
-                <ConnectedLine />
+                <GuestConnectedLine />
                 <div className={cx('faq-container')}>
                     <div className={cx('faq-content')}>
                         <div className={cx('faq-header')}>
@@ -97,8 +97,8 @@ function GuestContact() {
                             <FAQMenu />
                         </div>
                     </div>
-                    <ConnectedLine />
-                    <ConnectedLine />
+                    <GuestConnectedLine />
+                    <GuestConnectedLine />
                 </div>
             </div>
             <GuestFooter />
