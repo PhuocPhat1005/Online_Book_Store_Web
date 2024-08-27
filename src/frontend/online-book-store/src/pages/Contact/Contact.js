@@ -5,13 +5,16 @@ import SubHeaderContentLayout from '~/components/Layouts/SubHeaderContentLayout'
 import ConnectedLine from '~/components/ConnectedLine';
 import Button from '~/components/Button';
 import FAQMenu from './conponents/FAQMenu';
+import PopUpSentSuccesful from './conponents/PopUpSentSuccesful';
 import emailjs from '@emailjs/browser';
 import { useRef } from 'react';
+import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 
 function Contact() {
     const formDataRef = useRef(null);
+    const [showPopup, setShowPopup] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -24,11 +27,16 @@ function Contact() {
                 () => {
                     console.log('SUCCESS!');
                     event.target.reset();
+                    setShowPopup(true);
                 },
                 (error) => {
                     console.log('FAILED...', error.text);
                 },
             );
+    };
+
+    const handleClosePopup = () => {
+        setShowPopup(false);
     };
 
     return (
@@ -70,6 +78,11 @@ function Contact() {
                 <ConnectedLine />
                 <ConnectedLine />
             </div>
+
+            {/* Render the Popup component conditionally */}
+            {showPopup && (
+                <PopUpSentSuccesful message="Your message has been sent successfully." onClose={handleClosePopup} />
+            )}
         </div>
     );
 }

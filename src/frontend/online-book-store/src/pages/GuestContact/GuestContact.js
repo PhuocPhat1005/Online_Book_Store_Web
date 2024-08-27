@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './GuestContact.module.scss';
 import { HeaderContentLayout } from '~/components/Layouts';
@@ -8,12 +9,14 @@ import FAQMenu from './components/GuestFAQMenu';
 import emailjs from '@emailjs/browser';
 import Header from '~/components/Layouts/DefaultLayout/Header';
 import GuestFooter from '~/components/Layouts/DefaultLayout/GuestFooter';
+import PopUpSentSuccesful from './components/PopUpSentSuccesful';
 import { useRef } from 'react';
 
 const cx = classNames.bind(styles);
 
 function GuestContact() {
     const formDataRef = useRef(null);
+    const [showPopup, setShowPopup] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -26,11 +29,16 @@ function GuestContact() {
                 () => {
                     console.log('SUCCESS!');
                     event.target.reset();
+                    setShowPopup(true);
                 },
                 (error) => {
                     console.log('FAILED...', error.text);
                 },
             );
+    };
+
+    const handleClosePopup = () => {
+        setShowPopup(false);
     };
 
     return (
@@ -94,6 +102,9 @@ function GuestContact() {
                 </div>
             </div>
             <GuestFooter />
+            {showPopup && (
+                <PopUpSentSuccesful message="Your message has been sent successfully." onClose={handleClosePopup} />
+            )}
         </>
     );
 }
