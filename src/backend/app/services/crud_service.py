@@ -65,6 +65,13 @@ class ReadService(Generic[ModelType]):
                     condition = ( field <= float(search_value[0]) )
                     sub_conditions.append(condition)
                     continue
+                if field_name == 'rate':
+                    field = getattr(self.model, "rate", None)
+                    if field is None:
+                        raise HTTPException(status_code=400, detail=f"Field rate does not exist on {self.model.__name__}")
+                    condition = ( field >= float(search_value[0]) )
+                    sub_conditions.append(condition)
+                    continue
                 
                 field = getattr(self.model, field_name, None)
                 if field is None:

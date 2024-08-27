@@ -18,7 +18,7 @@ from app.services.user_service import (
     get_account_by_email,
     create_account,
     get_current_account,
-    send_email_to_user,
+    send_email_to_reset_password,
 )
 
 from app.schemas.user import UserCreate, UserUpdate, UserResponse
@@ -36,6 +36,8 @@ import requests
 
 import logging
 import uuid
+import re
+
 user_service = CRUDService[User, UserCreate, UserUpdate](User)
 
 # Configure logging
@@ -215,6 +217,29 @@ async def google_auth(request: Request, db: AsyncSession = Depends(get_db)):
     except Exception as e:
         return {"error": str(e)}
 
+def is_valid_password(password: str) -> tuple[bool, str]:
+    # Check the length
+    if len(password) < 8:
+        return False, "Password must be at least 8 characters long."
+
+    # Check for at least one uppercase letter
+    if not re.search(r"[A-Z]", password):
+        return False, "Password must contain at least one uppercase letter."
+
+    # Check for at least one lowercase letter
+    if not re.search(r"[a-z]", password):
+        return False, "Password must contain at least one lowercase letter."
+
+    # Check for at least one digit
+    if not re.search(r"\d", password):
+        return False, "Password must contain at least one digit."
+
+    # Check for at least one special character
+    if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
+        return False, "Password must contain at least one special character."
+
+    # If all conditions are met
+    return True, "Password is valid."
 
 @router.post(
     "/sign_up",
@@ -228,6 +253,11 @@ async def sign_up(account: AccountCreate, db: AsyncSession = Depends(get_db)):
         raise HTTPException(
             status_code=400,
             detail="Username already registered",
+        )
+    if not is_valid_password(account.password)[0]:
+        raise HTTPException(
+            status_code=400,
+            detail=is_valid_password(account.password)[1],
         )
     account.password = get_password_hash(account.password)
     new_id = await create_account(db, account)
@@ -316,8 +346,8 @@ async def forgot_password(
     )
     reset_link = f"http://localhost:3000/signin/forgotpassword/?token={reset_token}"
     email_subject = "Reset your Password"
-    message = f"Click the link to reset your password: {reset_link}\nYour link will expire in {expiration_minute} minutes.\nIf you did not request this, please ignore this email."
-    await send_email_to_user(form_data.email, email_subject, message)
+    message = f"Click the link to reset your password! Your link will expire in {expiration_minute} minutes. If you did not request this, please ignore this email."
+    await send_email_to_reset_password(form_data.email, email_subject, message, reset_link)
     return reset_token
 
 
