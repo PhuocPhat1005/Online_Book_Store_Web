@@ -10,6 +10,7 @@ from urllib.parse import parse_qs
 from app.utils.security import decode_token
 from app.models.account import Account
 from app.models.user import User
+from sqlalchemy import desc as desc_func, asc as asc_func
 
 ModelType = TypeVar("ModelType")
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
@@ -42,7 +43,7 @@ class ReadService(Generic[ModelType]):
     def __init__(self, model: Type[ModelType]):
         self.model = model
 
-    async def get_by_condition(self, list_search_params: list[Dict[str, any]], db: AsyncSession, equal_condition: int = 1, offset: int = 0, limit: int = sys.maxsize) -> list[ModelType]:
+    async def get_by_condition(self, list_search_params: list[Dict[str, any]], db: AsyncSession, equal_condition: int = 1, offset: int = 0, limit: int = sys.maxsize, order_by: str = 'id', desc: int = 1 ) -> list[ModelType]:
         conditions = []
         
         for i, search_params in enumerate(list_search_params):
@@ -98,7 +99,14 @@ class ReadService(Generic[ModelType]):
         if not conditions:
             raise HTTPException(status_code=400, detail="At least one search parameter must be provided")
 
-        query = select(self.model).where(final_condition).distinct()
+        order_by_clause = desc_func(getattr(self.model, order_by)) if desc else asc_func(getattr(self.model, order_by))
+
+        query = (
+            select(self.model)
+            .where(final_condition)
+            .order_by(order_by_clause)
+            .distinct()
+        )
         query = query.limit(limit)
         query = query.offset(offset)
         result = await db.execute(query)
@@ -194,8 +202,8 @@ class CRUDService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     async def create(self, obj_in: CreateSchemaType, db: AsyncSession, flag: int = 1) -> ModelType:
         return await self.create_service.create(obj_in, db, flag)
     
-    async def get_by_condition(self, list_search_params: list[Dict[str, any]], db: AsyncSession, equal_condition: int = 1, offset: int = 0, limit: int = sys.maxsize) -> list[ModelType]:
-        return await self.read_service.get_by_condition(list_search_params, db, equal_condition, offset, limit)
+    async def get_by_condition(self, list_search_params: list[Dict[str, any]], db: AsyncSession, equal_condition: int = 1, offset: int = 0, limit: int = sys.maxsize, order_by: str = 'id', desc: int = 1) -> list[ModelType]:
+        return await self.read_service.get_by_condition(list_search_params, db, equal_condition, offset, limit, order_by, desc)
     
     async def get_ordered(self, list_item: list[ModelType], order_by: str = "id", desc_order: bool = True) -> list[ModelType]:
         return await self.read_service.get_ordered(list_item, order_by, desc_order)

@@ -15,13 +15,32 @@ import BasicSpinner from '~/components/BasicSpinner';
 
 const cx = classNames.bind(styles);
 
+function addDotsToNumber(number) {
+    // Convert the number to a string and use a regular expression to add dots
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
 function CartPage() {
     const [isEmptyCart, setIsEmptyCart] = useState(false);
-    const [isCheckout, setIsCheckout] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isCheckout, setIsCheckout] = useState(false);
+    const [isSuccessfull, setIsSuccessfull] = useState(false);
+
+    const [originalPrice, setOriginalPrice] = useState(Number(0));
+    const [price, setPrice] = useState(Number(0));
+    const [totalPriceCheckout, setTotalPriceCheckout] = useState('');
+    const [totalPriceCheckoutVoucher, setTotalPriceCheckoutVoucher] = useState('');
+
+    const [checkedArray, setCheckedArray] = useState([]); // array contains index of product which will be checked.
+    const [isCheckedAll, setIsCheckedAll] = useState(false);
+    const [isMultipleDelete, setIsMultipleDelete] = useState(false);
 
     const handleCheckout = () => {
         setIsCheckout(!isCheckout);
+    };
+
+    const handlePrice = (price) => {
+        setPrice((prev) => prev + price);
     };
 
     const cookies = new Cookies();
@@ -30,33 +49,13 @@ function CartPage() {
     const [booksIdInCart, setBooksIdInCart] = useState([]);
     const [booksInCart, setBooksInCart] = useState([]);
 
-    const fetchBooksIdInCart = async () => {
-        setIsLoading(true);
-        try {
-            const response = await request.get('cart/show_book_in_cart', {
-                params: {
-                    access_token: access_token,
-                },
-            });
-            if (response.status === 200) {
-                if (response.data) {
-                    setBooksIdInCart(response.data);
-                    setIsEmptyCart(false);
-                } else {
-                    setIsEmptyCart(true);
-                }
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
     const fetchBooksInCart = async (item) => {
         try {
             const response = await request.get(`book/get_book/${item.book_id}`);
 
             if (response.status === 200) {
                 response.data.Book.amount = item.amount;
+
                 return response.data;
             }
         } catch (error) {
@@ -65,9 +64,30 @@ function CartPage() {
     };
 
     useEffect(() => {
+        const fetchBooksIdInCart = async () => {
+            setIsLoading(true);
+            try {
+                const response = await request.get('cart/show_book_in_cart', {
+                    params: {
+                        access_token: access_token,
+                    },
+                });
+                if (response.status === 200) {
+                    if (response.data) {
+                        setBooksIdInCart(response.data);
+                        setIsEmptyCart(false);
+                    } else {
+                        setIsEmptyCart(true);
+                    }
+                }
+            } catch (error) {
+                setIsEmptyCart(true);
+                setIsLoading(false);
+                console.log(error);
+            }
+        };
         fetchBooksIdInCart();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [access_token]);
 
     // Fetch the book details when booksIdInCart is updated
     useEffect(() => {
@@ -79,10 +99,96 @@ function CartPage() {
 
         if (booksIdInCart.length > 0) {
             fetchAllBooksInCart();
+            if (!isEmptyCart && !isLoading) {
+                setIsSuccessfull(true);
+            }
+        } else if (booksIdInCart.length === 0) {
+            setBooksInCart([]);
+            setIsEmptyCart(true);
         }
-    }, [booksIdInCart]);
+    }, [booksIdInCart, isEmptyCart, isLoading]);
 
-    // console.log(booksInCart);
+    useEffect(() => {
+        setTotalPriceCheckout(addDotsToNumber(price + originalPrice));
+        setTotalPriceCheckoutVoucher(addDotsToNumber(totalPriceCheckout));
+    }, [price, originalPrice, totalPriceCheckout]);
+
+    /** Handle delete product */
+
+    const handleDeleteProduct = async (id, isMultipleDelete) => {
+        try {
+            await request.delete(`cart/delete_book_in_cart?access_token=${access_token}&book_id=${id}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!isMultipleDelete) {
+                const newBooksIdInCart = booksIdInCart.filter((item) => item.book_id !== id);
+                setBooksIdInCart(newBooksIdInCart);
+                setIsEmptyCart(booksIdInCart.length === 0);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleOptionDelete = async () => {
+        if (checkedArray.length <= 0) return;
+
+        setIsMultipleDelete(true);
+
+        try {
+            const ids = [];
+            const deletePromises = checkedArray.map(async (checkedItem) => {
+                const id = booksInCart[checkedItem].Book.id;
+                ids.push(id);
+                await handleDeleteProduct(id, isMultipleDelete);
+            });
+
+            // Wait for all delete requests to complete
+            await Promise.all(deletePromises);
+
+            // Use a functional update to ensure that the latest state is captured
+            setBooksIdInCart((prevBooksIdInCart) => {
+                const newBooksIdInCart = prevBooksIdInCart.filter((item) => !ids.includes(item.book_id));
+
+                return newBooksIdInCart;
+            });
+
+            // Ensure the cart is marked as empty if there are no items left
+            setIsEmptyCart((prevBooksIdInCart) => prevBooksIdInCart.length === 0);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsMultipleDelete(false);
+        }
+    };
+
+    /** Handle check all */
+
+    const handleCheckedAll = () => {
+        setIsCheckedAll(!isCheckedAll);
+    };
+
+    const handleCheck = (id) => {
+        setCheckedArray((prev) => {
+            const isChecked = checkedArray.includes(id);
+
+            if (isChecked) {
+                return checkedArray.filter((item) => item !== id);
+            } else {
+                return [...prev, id];
+            }
+        });
+    };
+
+    useEffect(() => {
+        if (isCheckedAll === true) {
+            setCheckedArray(Array.from({ length: booksInCart.length }, (_, index) => index));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isCheckedAll]);
 
     return (
         <>
@@ -93,10 +199,14 @@ function CartPage() {
                         <div className={cx('products')}>
                             <div className={cx('products_header')}>
                                 <div className={cx('select_all')}>
-                                    <input className={cx('checkbox_select_all')} type="checkbox" />
+                                    <input
+                                        className={cx('checkbox_select_all')}
+                                        type="checkbox"
+                                        onChange={handleCheckedAll}
+                                    />
                                     <p className={cx('select_all_title')}>Select all</p>
                                 </div>
-                                <select className={cx('options')}>
+                                <select className={cx('options')} onClick={handleOptionDelete}>
                                     <option value="delete">Delete</option>
                                 </select>
                                 <p className={cx('products_amount')}>Amount</p>
@@ -105,9 +215,18 @@ function CartPage() {
                             <div className={cx('core')}>
                                 {isLoading && <BasicSpinner color="#808080" />}
                                 {isEmptyCart && <Image className={cx('empty_cart_img')} src={assets.empty_cart} />}
-                                {!isEmptyCart &&
-                                    !isLoading &&
-                                    booksInCart.map((data_item, index) => <CartItem key={index} data={data_item} />)}
+                                {isSuccessfull &&
+                                    booksInCart.map((data_item, index) => (
+                                        <CartItem
+                                            key={index}
+                                            data={data_item}
+                                            handlePrice={handlePrice}
+                                            originalPrice={setOriginalPrice}
+                                            handleDeleteProduct={handleDeleteProduct}
+                                            checked={checkedArray.includes(index)}
+                                            onChange={() => handleCheck(index)}
+                                        />
+                                    ))}
                             </div>
                         </div>
                         <div className={cx('payment')}>
@@ -117,11 +236,11 @@ function CartPage() {
                             <div className={cx('checkout')}>
                                 <div className={cx('total_checkout')}>
                                     <p className={cx('checkout_text')}>Total</p>
-                                    <p className={cx('checkout_text')}>100.000.000 đ</p>
+                                    <p className={cx('checkout_text')}>{totalPriceCheckout} đ</p>
                                 </div>
                                 <div className={cx('total_checkout_vouchers')}>
                                     <p className={cx('checkout_text')}>Total (with vouchers)</p>
-                                    <p className={cx('checkout_text')}>100.000.000 đ</p>
+                                    <p className={cx('checkout_text')}>{totalPriceCheckoutVoucher} đ</p>
                                 </div>
                                 <Button className={cx('checkout_btn')} onClick={handleCheckout}>
                                     Checkout

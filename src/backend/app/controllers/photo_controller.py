@@ -108,6 +108,21 @@ def normalization(name):
     name = re.sub(r'[^a-z0-9\-]', '', name)
     return name
 
+# @router.put("/Update_book_ava_all_dataset", summary='Update book avatar')
+# async def update_book_ava(db: AsyncSession = Depends(get_db)):
+#     book_update_service = UpdateService[Book, BookUpdate](Book)
+#     read_book_service = ReadService[Book](Book)
+#     books = await read_book_service.get_by_condition([{'id': ''}], db, 0)
+#     id_name = []
+#     for book in books:  
+#         id_name.append((book.id, book.book_name))
+    
+#     for id, name in id_name:    
+#         book_update = BookUpdate()
+#         book_update.book_ava = AWS_LINK + normalization(name) + '/' + normalization(name) +  '-1.jpg'
+#         await book_update_service.update({'id': id} , book_update, db)
+#     return "book updated"
+
 @router.get("/get_photo")
 async def get_all_in_folder_endpoint(typee: str, id_: str, db: AsyncSession = Depends(get_db)):
     if typee == "Book":
