@@ -78,3 +78,26 @@ body {
     text-rendering: optimizeSpeed;
     color: var(--text-color);
 }
+
+th {
+    background-color: #F6CA4D;
+}
+
+td {
+    background-color: white;
+}
+
+table, th, td {
+    // margin-top: 5px;
+    // margin-left: 10px;
+    // border: 1px solid;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    color: black;
+    padding: 10px 5px;
+}
+
+table {
+    width: 100%;
+}

@@ -30,3 +30,4 @@ boto3 == 1.34.153
 payos == 0.1.6
 pandas == 2.2.2
 openpyxl == 3.1.5
+Unidecode == 1.3.8
