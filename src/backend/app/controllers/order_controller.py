@@ -11,6 +11,7 @@ from app.models.book import Book
 from app.models.sale_off import SaleOff
 from app.models.shipping import Shipping
 from app.models.cart import Cart
+from app.models.voucher import Voucher
 from app.models.user import User
 from app.models.account import Account
 from app.database.database import get_db
@@ -29,7 +30,7 @@ read_book_service = ReadService[Book](Book)
 read_cart_service = ReadService[Cart](Cart)
 delete_cart_service = DeleteService[Cart](Cart)
 create_payment_service = CreateService[Payment, PaymentCreate](Payment)
-
+read_voucher_service = ReadService[Voucher](Voucher)
 
 def check_payment_status_with_timeout(orderId: int, timeout_minutes: int = 1):
     return "PAID"
@@ -56,7 +57,7 @@ def check_payment_status_with_timeout(orderId: int, timeout_minutes: int = 1):
 @router.post("/create_order",
             description="Create new order, payment method is COD or QR", 
             summary="Create new order, payment method is COD or QR")
-async def create_order_endpoint(access_token: str, payment_method: str, address_id: str = None, shipping_id: str = None, db: AsyncSession = Depends(get_db)):
+async def create_order_endpoint(access_token: str, payment_method: str, address_id: str = None, shipping_id: str = None, voucher_code: str = None, db: AsyncSession = Depends(get_db)):
     user_obj = await get_user_obj_by_token(access_token, db)
     user_id = user_obj.id
     cart_id = user_obj.cart_id
@@ -97,7 +98,16 @@ async def create_order_endpoint(access_token: str, payment_method: str, address_
                 pass
         book_name_quantity_price.append((book_id, book_name, quantity, price))
         total_price += float(price) * float(quantity)
-    
+    voucher = await read_voucher_service.get_by_condition([{'code':voucher_code}], db)
+    if voucher:
+        voucher = voucher[0]
+        if voucher.valid_from <= datetime.now() and voucher.valid_to >= datetime.now():
+            total_price = total_price * (1 - voucher.discount / 100)
+        else:
+            raise HTTPException(status_code=400, detail="Voucher not valid") 
+    else:
+        raise HTTPException(status_code=404, detail="Voucher not found")
+        
     payment.payment_method = payment_method
     payment.amount = 0
     ordercode = int(time.time()) * 100000 + randint(0, 100000)
@@ -148,15 +158,19 @@ async def create_order_detail(order_id: UUID, book_id: UUID, quantity: int, db: 
             order_detail.unit_price = float(book[0].price) * (1 - sale_off[0].sale_off / 100)
     return await order_detail_service.create(order_detail, db, 0)
 
-async def create_order_detail_from_cart(order_id: UUID, cart_id: str, db: AsyncSession):
+async def create_order_detail_from_cart(order_id: UUID, cart_id: UUID, db: AsyncSession):
     cart = await read_cart_service.get_by_condition([{'id':cart_id}], db)
     if not cart:
         raise HTTPException(status_code=404, detail="cart not found")
+    book_amount = []
     for item in cart:
         book_id = item.book_id
         quantity = item.amount
+        book_amount.append((book_id, quantity))
+    for book_id, quantity in book_amount:
         await create_order_detail(order_id, book_id, quantity, db)
-        await delete_cart_service.delete({'id':cart_id, 'book_id':book_id}, db)
+    await delete_cart_service.delete({'id':cart_id}, db)
+    return "Done"
 
 @router.get("/show_order_detail", summary="Show all order detail by Order ID")
 async def show_order_detail_endpoint(order_id: UUID, db: AsyncSession = Depends(get_db)):

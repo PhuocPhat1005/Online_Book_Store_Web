@@ -65,7 +65,7 @@ function SignIn() {
                 console.log('Form submitted successfully');
 
                 setIsLoading(false);
-                navigate(config.routes.dashboard);
+                navigate(config.routes.dashboards);
             } else {
                 // Handle errors
                 setToggleToast(false);
@@ -109,11 +109,8 @@ function SignIn() {
         <>
             <div className={cx('wrapper')}>
                 <div className={cx('header')}>
-                    <Link to={config.routes.dashboard} className={cx('header-item')}>
+                    <Link to={config.routes.dashboards} className={cx('header-item')}>
                         <FontAwesomeIcon className={cx('header-icon')} icon={faHouse} />
-                    </Link>
-                    <Link to={config.routes.signup} className={cx('header-item')}>
-                        <FontAwesomeIcon className={cx('header-icon')} icon={faRightToBracket} />
                     </Link>
                 </div>
                 <div className={cx('image-container')}>

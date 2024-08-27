@@ -23,7 +23,8 @@ from app.routes import (
     address,
     shipping,
     sale_off,
-    review
+    review,
+    voucher
 )
 from app.database.database import Base
 from app.config.config import settings
@@ -87,6 +88,7 @@ app.include_router(address.router)
 app.include_router(shipping.router)
 app.include_router(sale_off.router)
 app.include_router(review.router)
+app.include_router(voucher.router)
 
 
 def main():

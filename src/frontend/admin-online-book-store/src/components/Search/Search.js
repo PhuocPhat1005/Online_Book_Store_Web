@@ -83,7 +83,7 @@ function Search() {
             <div className={cx('search-bar')}>
                 <input
                     ref={inputRef}
-                    placeholder="Search..."
+                    placeholder="Search"
                     spellCheck="false"
                     value={searchValue}
                     onChange={(event) => handleSearchValue(event)}

@@ -124,25 +124,25 @@ async def initiate_google_login(request: Request):
     }
 
 
-@router.get("/a")
-async def set_session(response: Response):
-    state = "abcd1234"
-    response.set_cookie(key="gfg_cookie_key", value=state, samesite="None", secure=True)
-    return {"state": state}
+# @router.get("/a")
+# async def set_session(response: Response):
+#     state = "abcd1234"
+#     response.set_cookie(key="gfg_cookie_key", value=state, samesite="None", secure=True)
+#     return {"state": state}
 
 
-@router.get("/b")
-def func(request: Request, gfg_cookie_key: Annotated[str | None, Cookie()] = None):
-    request_state = request.query_params.get("state")
-    response_state = gfg_cookie_key
+# @router.get("/b")
+# def func(request: Request, gfg_cookie_key: Annotated[str | None, Cookie()] = None):
+#     request_state = request.query_params.get("state")
+#     response_state = gfg_cookie_key
 
-    print("\n\n")
-    print(request_state, response_state)
-    print("\n\n")
+#     print("\n\n")
+#     print(request_state, response_state)
+#     print("\n\n")
 
-    if request_state == response_state:
-        return "OKOK"
-    return "Failed"
+#     if request_state == response_state:
+#         return "OKOK"
+#     return "Failed"
 
 
 @router.get("/google-callback", name="google_auth", tags=["Authentication"])

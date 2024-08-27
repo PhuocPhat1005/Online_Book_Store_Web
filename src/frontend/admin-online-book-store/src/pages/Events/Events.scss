@@ -1,0 +1,12 @@
+.events {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+
+    width: 100%;
+    position: relative;
+
+    padding: 64px 12px;
+    background-color: #F5F5F5;
+}

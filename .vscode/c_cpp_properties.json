@@ -1,12 +1,12 @@
 {
   "configurations": [
     {
-      "name": "windows-gcc-x64",
+      "name": "windows-msvc-x64",
       "includePath": ["${workspaceFolder}/**"],
-      "compilerPath": "C:/Users/Oriane/Desktop/mingw64/bin/gcc.exe",
-      "cStandard": "${default}",
-      "cppStandard": "${default}",
-      "intelliSenseMode": "windows-gcc-x64",
+      "compilerPath": "cl.exe",
+      "cStandard": "c17",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "windows-msvc-x64",
       "compilerArgs": [""]
     }
   ],

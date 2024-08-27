@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.services.crud_service import (
     CRUDService,
@@ -27,7 +28,9 @@ from app.models.country import Country
 from app.models.user import User
 from app.models.account import Account
 from app.database.database import get_db
-from uuid import UUID
+import uuid
+import pandas as pd
+from io import BytesIO
 
 router = APIRouter()
 address_service = CRUDService[Address, AddressCreate, AddressUpdate](Address)
@@ -180,3 +183,66 @@ async def delete_address_endpoint(address_id: str, db: AsyncSession = Depends(ge
     if not address:
         raise HTTPException(status_code=404, detail="Address not found")
     return address
+
+
+@router.post("/Init_address", summary="Init address")
+async def init_address_endpoint(
+    file: UploadFile = File(...), db: AsyncSession = Depends(get_db)
+):
+    create_country_service = CreateService[Country, CountryCreate](Country)
+    create_province_service = CreateService[Province, ProvinceCreate](Province)
+    create_district_service = CreateService[District, DistrictCreate](District)
+    create_ward_service = CreateService[Ward, WardCreate](Ward)
+    # Check if the file type is supported
+    if file.content_type not in [
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/vnd.ms-excel",
+    ]:
+        raise HTTPException(
+            status_code=400, detail="Invalid file format. Please upload an Excel file."
+        )
+
+    # Read the Excel file content
+    contents = await file.read()
+    excel_data = pd.read_excel(BytesIO(contents))
+
+    # Expected columns in the Excel file
+    required_columns = ["Province", "District", "Ward"]
+
+    # Check if the required columns are present
+    if not all(column in excel_data.columns for column in required_columns):
+        raise HTTPException(
+            status_code=400, detail="Excel file is missing required columns."
+        )
+
+    # Iterate over the rows in the DataFrame and add each author to the database
+    country_id = uuid.uuid4()
+    country = CountryCreate(id=str(country_id), country_name="Vietnam")
+    await create_country_service.create(country, db, 0)
+    prev_province = "-1"
+    prev_district = "-1"
+    province_id = ""
+    district_id = ""
+    for _, row in excel_data.iterrows():
+        if prev_province != str(row["Province"]):
+            province_id = uuid.uuid4()
+            province = ProvinceCreate(
+                id=str(province_id),
+                province_name=str(row["Province"]),
+                country_id=str(country_id),
+            )
+            await create_province_service.create(province, db, 0)
+            prev_province = str(row["Province"])
+        if prev_district != str(row["District"]):
+            district_id = uuid.uuid4()
+            district = DistrictCreate(
+                id=str(district_id),
+                district_name=str(row["District"]),
+                province_id=str(province_id),
+            )
+            await create_district_service.create(district, db, 0)
+            prev_district = str(row["District"])
+        ward = WardCreate(ward_name=str(row["Ward"]), district_id=str(district_id))
+        await create_ward_service.create(ward, db)
+
+    return {"message": "Address successfully added to the database"}
