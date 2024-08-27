@@ -27,38 +27,59 @@ function ProductItem({ data, rating = 0 }) {
 
     const [isLoading, setIsLoading] = useState(false);
     const [statusFetchAuthor, setStatusFetchAuthor] = useState(false);
+    const [statusFetchTranslator, setStatusFetchTranslator] = useState(false);
 
-    const fetchAuthor = async () => {
+    const fetchData = async () => {
+        let updatedDataItem = { ...dataItem };
+
         try {
-            const response = await request.get(`book/get_book_author/${data.id}`);
-
-            if (response.status === 200) {
-                setDataItem({
-                    ...dataItem,
-                    author: response.data,
-                });
-                setStatusFetchAuthor(true);
+            const authorResponse = await request.get(`book/get_book_author/${data.id}`);
+            if (authorResponse.status === 200) {
+                updatedDataItem.author = authorResponse.data;
+            } else {
+                updatedDataItem.author = 'Unknown Author';
             }
         } catch (error) {
-            console.log(error);
+            console.log(`Error fetching author: ${error}`);
+            updatedDataItem.author = 'Unknown Author';
         }
+
+        try {
+            const translatorResponse = await request.get(`book/get_book_translator/${data.id}`);
+            if (translatorResponse.status === 200) {
+                updatedDataItem.translator = translatorResponse.data;
+            } else if (translatorResponse.status === 404) {
+                console.log(`Translator not found for book ID ${data.id}`);
+                updatedDataItem.translator = [{ Full_name: 'Unknown Translator', Pen_name: 'Unknown Translator' }];
+            }
+        } catch (error) {
+            console.log(`Error fetching translator: ${error}`);
+            updatedDataItem.translator = [{ Full_name: 'Unknown Translator', Pen_name: 'Unknown Translator' }];
+        }
+
+        // Set the data item and stop loading regardless of success or error
+        setDataItem(updatedDataItem);
+        setIsLoading(false);
+        setStatusFetchAuthor(true);
+        setStatusFetchTranslator(true);
     };
 
     const fetchProduct = async (e) => {
         e.preventDefault();
-
-        // fetch to get authors, translators.
         setIsLoading(true);
-        await fetchAuthor();
+        await fetchData();
     };
 
     useEffect(() => {
-        if (statusFetchAuthor) {
+        if (statusFetchAuthor && statusFetchTranslator) {
+            console.log(dataItem);
+
             setIsLoading(false);
             setStatusFetchAuthor(false);
+            setStatusFetchTranslator(false);
             navigate(config.routes.detailsbook, { state: { bookData: dataItem } });
         }
-    }, [dataItem, navigate, statusFetchAuthor]);
+    }, [dataItem, navigate, statusFetchAuthor, statusFetchTranslator]);
 
     return (
         <>

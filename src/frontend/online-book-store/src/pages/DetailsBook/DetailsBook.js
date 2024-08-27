@@ -29,7 +29,7 @@ function DetailsBook() {
     let old_price = addDotsToNumber(data.price).toString();
     let new_price = addDotsToNumber(Math.round((data.price * (100 - discount_percentage)) / 100)).toString();
 
-    const [quantityValue, setQuantityValue] = useState(0);
+    const [quantityValue, setQuantityValue] = useState(1);
     const [isAddToCart, setIsAddToCart] = useState(false);
 
     const handleQuantity = (descrease = false) => {
@@ -80,6 +80,8 @@ function DetailsBook() {
         }
     }, [isAddToCart]);
 
+    console.log(data);
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('introduction')}>
@@ -112,7 +114,7 @@ function DetailsBook() {
                             </li>
                             <li className={cx('item_section_1')}>
                                 Translators:
-                                <span className={cx('item_value')}>Nguyễn Văn Phước</span>
+                                <span className={cx('item_value')}>{data.translator[0].Full_name}</span>
                             </li>
                         </ul>
                         <ul className={cx('section_2')}>
