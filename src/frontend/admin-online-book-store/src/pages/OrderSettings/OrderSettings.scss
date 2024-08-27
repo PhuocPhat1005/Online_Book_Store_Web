@@ -1,5 +1,6 @@
 :root {
-    --select-width: 200px;
+    --option-width: 160px;
+    --sort-by-width: 200px;
     --select-height: 100px;
 }
 
@@ -36,7 +37,7 @@
     width: 170px;
     border-radius: 5px;
     text-align: center;
-    padding: 12px;
+    padding: 15px;
     background-color: white;
     font-size: 16px;
     font-weight: bold;
@@ -46,6 +47,7 @@
     margin-top: 25px;
     margin-left: 35px;
     margin-right: -25px;
+    // margin-bottom: 20px;
     // height: 35px;
     // width: 35px;
     padding: 10px 10px;
@@ -60,35 +62,30 @@
     }
 }
 
-// .custom-select {
-//     // display: inline-block;
-//     position: felix;
-//     margin-left: 500px;
-//     margin-top: 20px;
-//     height: 50px;
-//     width: var(--select-width);
-//     border: 1px solid #CCCCCC;
-//     border-radius: 5px;
-//     background-color: white;
-//     color: black;
-//     display: inline-block;
-//     text-align: left;
-//     padding: 10px 10px;
-//     font-size: 16px;
-// }
-
 .option-filter {
-    // position: felix;
+    position: fixed;
     margin-left: 500px;
-    margin-top: 20px;
-    // height: 50px;
-    width: var(--select-width);
+    margin-top: 30px;
+    width: var(--option-width);
+    display: inline-block;
+    text-align: left;
+}
+
+.sort-by-filter {
+    position: fixed;
+    margin-left: 830px;
+    margin-top: 30px;
+    width: var(--sort-by-width);
     display: inline-block;
     text-align: left;
 }
 
 .wrapper-select {
-    width: 100%;
+    width: var(--option-width);
+}
+
+.wrapper-sort-by-select {
+    width: var(--sort-by-width);
 }
 
 .heading-select {
@@ -101,11 +98,22 @@
     position: relative;
 }
 
-.title-select {
-    position: felix;
+.option-title {
+    position: fixed;
     font-size: 1.8rem;
-    margin-right: 100px;
-    color: #808080;
+    margin-top: -32px;
+    margin-left: 920px;
+    font-weight: bold;
+    color: #3F3F3F;
+}
+
+.sort-by-title {
+    position: fixed;
+    font-size: 1.8rem;
+    margin-top: -32px;
+    margin-left: 1250px;
+    font-weight: bold;
+    color: #3F3F3F;
 }
 
 .current_method {
@@ -124,7 +132,7 @@
 }
 
 .menu-sort {
-    width: 200px;
+    width: calc(--option-width);
     background-color: var(--white);
     border-radius: 10px;
     box-shadow: 1px 0 4px #ccc;
