@@ -31,7 +31,9 @@ function CartPage() {
     const [totalPriceCheckout, setTotalPriceCheckout] = useState('');
     const [totalPriceCheckoutVoucher, setTotalPriceCheckoutVoucher] = useState('');
 
+    const [checkedArray, setCheckedArray] = useState([]); // array contains index of product which will be checked.
     const [isCheckedAll, setIsCheckedAll] = useState(false);
+    const [isMultipleDelete, setIsMultipleDelete] = useState(false);
 
     const handleCheckout = () => {
         setIsCheckout(!isCheckout);
@@ -100,6 +102,9 @@ function CartPage() {
             if (!isEmptyCart && !isLoading) {
                 setIsSuccessfull(true);
             }
+        } else if (booksIdInCart.length === 0) {
+            setBooksInCart([]);
+            setIsEmptyCart(true);
         }
     }, [booksIdInCart, isEmptyCart, isLoading]);
 
@@ -110,23 +115,80 @@ function CartPage() {
 
     /** Handle delete product */
 
-    const handleDeleteProduct = async (id) => {
+    const handleDeleteProduct = async (id, isMultipleDelete) => {
         try {
             await request.delete(`cart/delete_book_in_cart?access_token=${access_token}&book_id=${id}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
+
+            if (!isMultipleDelete) {
+                const newBooksIdInCart = booksIdInCart.filter((item) => item.book_id !== id);
+                setBooksIdInCart(newBooksIdInCart);
+                setIsEmptyCart(booksIdInCart.length === 0);
+            }
         } catch (error) {
             console.log(error);
         }
     };
 
+    const handleOptionDelete = async () => {
+        if (checkedArray.length <= 0) return;
+
+        setIsMultipleDelete(true);
+
+        try {
+            const ids = [];
+            const deletePromises = checkedArray.map(async (checkedItem) => {
+                const id = booksInCart[checkedItem].Book.id;
+                ids.push(id);
+                await handleDeleteProduct(id, isMultipleDelete);
+            });
+
+            // Wait for all delete requests to complete
+            await Promise.all(deletePromises);
+
+            // Use a functional update to ensure that the latest state is captured
+            setBooksIdInCart((prevBooksIdInCart) => {
+                const newBooksIdInCart = prevBooksIdInCart.filter((item) => !ids.includes(item.book_id));
+
+                return newBooksIdInCart;
+            });
+
+            // Ensure the cart is marked as empty if there are no items left
+            setIsEmptyCart((prevBooksIdInCart) => prevBooksIdInCart.length === 0);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsMultipleDelete(false);
+        }
+    };
+
     /** Handle check all */
 
-    const handleCheckAll = () => {
-        setIsCheckedAll(true);
+    const handleCheckedAll = () => {
+        setIsCheckedAll(!isCheckedAll);
     };
+
+    const handleCheck = (id) => {
+        setCheckedArray((prev) => {
+            const isChecked = checkedArray.includes(id);
+
+            if (isChecked) {
+                return checkedArray.filter((item) => item !== id);
+            } else {
+                return [...prev, id];
+            }
+        });
+    };
+
+    useEffect(() => {
+        if (isCheckedAll === true) {
+            setCheckedArray(Array.from({ length: booksInCart.length }, (_, index) => index));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isCheckedAll]);
 
     return (
         <>
@@ -140,11 +202,11 @@ function CartPage() {
                                     <input
                                         className={cx('checkbox_select_all')}
                                         type="checkbox"
-                                        onChange={handleCheckAll}
+                                        onChange={handleCheckedAll}
                                     />
                                     <p className={cx('select_all_title')}>Select all</p>
                                 </div>
-                                <select className={cx('options')}>
+                                <select className={cx('options')} onClick={handleOptionDelete}>
                                     <option value="delete">Delete</option>
                                 </select>
                                 <p className={cx('products_amount')}>Amount</p>
@@ -161,6 +223,8 @@ function CartPage() {
                                             handlePrice={handlePrice}
                                             originalPrice={setOriginalPrice}
                                             handleDeleteProduct={handleDeleteProduct}
+                                            checked={checkedArray.includes(index)}
+                                            onChange={() => handleCheck(index)}
                                         />
                                     ))}
                             </div>

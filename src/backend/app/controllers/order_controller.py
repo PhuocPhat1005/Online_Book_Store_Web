@@ -1,9 +1,24 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.services.crud_service import CRUDService, ReadService, CreateService, DeleteService, get_user_obj_by_token
-from app.services.payment_service import createPaymentLink, getPaymentLinkInformation, cancelPaymentLink
+from app.services.crud_service import (
+    CRUDService,
+    ReadService,
+    CreateService,
+    DeleteService,
+    get_user_obj_by_token,
+)
+from app.services.payment_service import (
+    createPaymentLink,
+    getPaymentLinkInformation,
+    cancelPaymentLink,
+)
 from app.schemas.payment import PaymentCreate
-from app.schemas.order import OrderCreate, OrderUpdate, OrderDetailCreate, OrderDetailUpdate
+from app.schemas.order import (
+    OrderCreate,
+    OrderUpdate,
+    OrderDetailCreate,
+    OrderDetailUpdate,
+)
 from app.models.order import Order
 from app.models.order_detail import OrderDetail
 from app.models.payment import Payment
@@ -24,7 +39,9 @@ from random import randint
 
 router = APIRouter()
 order_service = CRUDService[Order, OrderCreate, OrderUpdate](Order)
-order_detail_service = CRUDService[Order, OrderDetailCreate, OrderDetailUpdate](OrderDetail)
+order_detail_service = CRUDService[Order, OrderDetailCreate, OrderDetailUpdate](
+    OrderDetail
+)
 read_user_service = ReadService[User](User)
 read_book_service = ReadService[Book](Book)
 read_cart_service = ReadService[Cart](Cart)
@@ -32,32 +49,43 @@ delete_cart_service = DeleteService[Cart](Cart)
 create_payment_service = CreateService[Payment, PaymentCreate](Payment)
 read_voucher_service = ReadService[Voucher](Voucher)
 
+
 def check_payment_status_with_timeout(orderId: int, timeout_minutes: int = 1):
     return "PAID"
     start_time = datetime.now()
     timeout = timedelta(minutes=timeout_minutes)
-    
+
     while True:
         payment_info = getPaymentLinkInformation(orderId)
-        
+
         status = payment_info.status
-        
+
         if status == "PAID":
             print(f"Order {orderId} has been paid.")
             return "PAID"
-        
+
         if datetime.now() - start_time > timeout:
             print(f"Order {orderId} has timed out.")
             cancelPaymentLink(orderId)
             return "TIMEOUT"
-        
-        print(f"Order {orderId} status is {status}. Checking again in 10 seconds...")
-        time.sleep(10) 
 
-@router.post("/create_order",
-            description="Create new order, payment method is COD or QR", 
-            summary="Create new order, payment method is COD or QR")
-async def create_order_endpoint(access_token: str, payment_method: str, address_id: str = None, shipping_id: str = None, voucher_code: str = None, db: AsyncSession = Depends(get_db)):
+        print(f"Order {orderId} status is {status}. Checking again in 10 seconds...")
+        time.sleep(10)
+
+
+@router.post(
+    "/create_order",
+    description="Create new order, payment method is COD or QR",
+    summary="Create new order, payment method is COD or QR",
+)
+async def create_order_endpoint(
+    access_token: str,
+    payment_method: str,
+    address_id: str = None,
+    shipping_id: str = None,
+    voucher_code: str = None,
+    db: AsyncSession = Depends(get_db),
+):
     user_obj = await get_user_obj_by_token(access_token, db)
     user_id = user_obj.id
     cart_id = user_obj.cart_id
@@ -69,14 +97,14 @@ async def create_order_endpoint(access_token: str, payment_method: str, address_
 
     order.address_id = address_id
     order.shipping_id = shipping_id
-    
+
     read_shipping_service = ReadService[Shipping](Shipping)
-    shipping = await read_shipping_service.get_by_condition([{'id':shipping_id}], db)
+    shipping = await read_shipping_service.get_by_condition([{"id": shipping_id}], db)
     if not shipping:
         raise HTTPException(status_code=404, detail="Shipping not found")
     shipping_cost = shipping[0].cost_unit
-    
-    cart = await read_cart_service.get_by_condition([{'id':cart_id}], db)
+
+    cart = await read_cart_service.get_by_condition([{"id": cart_id}], db)
     if not cart:
         raise HTTPException(status_code=404, detail="cart not found")
     book_name_quantity_price = []
@@ -91,28 +119,32 @@ async def create_order_endpoint(access_token: str, payment_method: str, address_
         price = book[0].price
         if book[0].sale_off:
             read_sale_off_service = ReadService[SaleOff](SaleOff)
-            sale_off = await read_sale_off_service.get_by_condition([{"id": book[0].sale_off}], db)
+            sale_off = await read_sale_off_service.get_by_condition(
+                [{"id": book[0].sale_off}], db
+            )
             if sale_off:
                 price = float(book[0].price) * (1 - sale_off[0].sale_off / 100)
             else:
                 pass
         book_name_quantity_price.append((book_id, book_name, quantity, price))
         total_price += float(price) * float(quantity)
-    voucher = await read_voucher_service.get_by_condition([{'code':voucher_code}], db)
+    voucher = await read_voucher_service.get_by_condition([{"code": voucher_code}], db)
     if voucher:
         voucher = voucher[0]
         if voucher.valid_from <= datetime.now() and voucher.valid_to >= datetime.now():
             total_price = total_price * (1 - voucher.discount / 100)
         else:
-            raise HTTPException(status_code=400, detail="Voucher not valid") 
+            raise HTTPException(status_code=400, detail="Voucher not valid")
     else:
         raise HTTPException(status_code=404, detail="Voucher not found")
-        
+
     payment.payment_method = payment_method
     payment.amount = 0
     ordercode = int(time.time()) * 100000 + randint(0, 100000)
     if payment_method == "QR":
-        payment_link = createPaymentLink(ordercode, book_name_quantity_price, total_price, shipping_cost)
+        payment_link = createPaymentLink(
+            ordercode, book_name_quantity_price, total_price, shipping_cost
+        )
         webbrowser.open(payment_link.checkoutUrl)
         payment.payment_status = check_payment_status_with_timeout(ordercode)
         if payment.payment_status == "TIMEOUT":
@@ -133,16 +165,20 @@ async def create_order_endpoint(access_token: str, payment_method: str, address_
 async def show_order_endpoint(access_token: str, db: AsyncSession = Depends(get_db)):
     user_obj = await get_user_obj_by_token(access_token, db)
     user_id = user_obj.id
-    order = await order_service.get_by_condition([{'user_id':user_id}], db)
+    order = await order_service.get_by_condition([{"user_id": user_id}], db)
     if not order:
         raise HTTPException(status_code=404, detail="order not found")
     return order
 
+
 @router.delete("/delete_order", summary="Delete order by User ID")
 async def delete_order_endpoint(order_id: UUID, db: AsyncSession = Depends(get_db)):
-    return await order_service.delete({'id':order_id}, db)
+    return await order_service.delete({"id": order_id}, db)
 
-async def create_order_detail(order_id: UUID, book_id: UUID, quantity: int, db: AsyncSession):
+
+async def create_order_detail(
+    order_id: UUID, book_id: UUID, quantity: int, db: AsyncSession
+):
     order_detail = OrderDetailCreate()
     order_detail.order_id = order_id
     order_detail.book_id = book_id
@@ -153,13 +189,20 @@ async def create_order_detail(order_id: UUID, book_id: UUID, quantity: int, db: 
     order_detail.unit_price = book[0].price
     if book[0].sale_off:
         read_sale_off_service = ReadService[SaleOff](SaleOff)
-        sale_off = await read_sale_off_service.get_by_condition([{"id": book[0].sale_off}], db)
+        sale_off = await read_sale_off_service.get_by_condition(
+            [{"id": book[0].sale_off}], db
+        )
         if sale_off:
-            order_detail.unit_price = float(book[0].price) * (1 - sale_off[0].sale_off / 100)
+            order_detail.unit_price = float(book[0].price) * (
+                1 - sale_off[0].sale_off / 100
+            )
     return await order_detail_service.create(order_detail, db, 0)
 
-async def create_order_detail_from_cart(order_id: UUID, cart_id: UUID, db: AsyncSession):
-    cart = await read_cart_service.get_by_condition([{'id':cart_id}], db)
+
+async def create_order_detail_from_cart(
+    order_id: UUID, cart_id: UUID, db: AsyncSession
+):
+    cart = await read_cart_service.get_by_condition([{"id": cart_id}], db)
     if not cart:
         raise HTTPException(status_code=404, detail="cart not found")
     book_amount = []
@@ -169,16 +212,26 @@ async def create_order_detail_from_cart(order_id: UUID, cart_id: UUID, db: Async
         book_amount.append((book_id, quantity))
     for book_id, quantity in book_amount:
         await create_order_detail(order_id, book_id, quantity, db)
-    await delete_cart_service.delete({'id':cart_id}, db)
+    await delete_cart_service.delete({"id": cart_id}, db)
     return "Done"
 
+
 @router.get("/show_order_detail", summary="Show all order detail by Order ID")
-async def show_order_detail_endpoint(order_id: UUID, db: AsyncSession = Depends(get_db)):
-    order_detail = await order_detail_service.get_by_condition([{'order_id':order_id}], db)
+async def show_order_detail_endpoint(
+    order_id: UUID, db: AsyncSession = Depends(get_db)
+):
+    order_detail = await order_detail_service.get_by_condition(
+        [{"order_id": order_id}], db
+    )
     if not order_detail:
         raise HTTPException(status_code=404, detail="order detail not found")
     return order_detail
 
+
 @router.delete("/delete_order_detail", summary="Delete order detail by Order ID")
-async def delete_order_detail_endpoint(order_id: UUID, book_id: UUID, db: AsyncSession = Depends(get_db)):
-    return await order_detail_service.delete({'order_id':order_id, 'book_id':book_id}, db)
+async def delete_order_detail_endpoint(
+    order_id: UUID, book_id: UUID, db: AsyncSession = Depends(get_db)
+):
+    return await order_detail_service.delete(
+        {"order_id": order_id, "book_id": book_id}, db
+    )

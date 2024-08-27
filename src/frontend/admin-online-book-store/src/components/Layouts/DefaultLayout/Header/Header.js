@@ -48,18 +48,10 @@ const Header = ({ admin }) => {
 
 
     return (
-        <header className={cx('wrapper')}>
+        <header className={cx('header-wrapper')}>
             <div className={cx('container')}>
                 <div className={cx('search-bar')}>
                     <Search />
-                </div>
-                <div>
-                    <Menu items={USER_MENU} onSignOut={handleSignOut}>
-                        <div className={cx('user')}>
-                            <Image className={cx('avatar')} src={assets.default_avartar} alt="" />
-                            <span className={cx('name')}>John</span>
-                        </div>
-                    </Menu>
                 </div>
                 <Button
                     // class="btn btn-success"
@@ -71,6 +63,16 @@ const Header = ({ admin }) => {
                     <p><FontAwesomeIcon icon={faSquareShareNodes}/></p>
                     <SocialContact showSocialContact={showSocialContact} />
                 </Button>
+                {/* <div> */}
+                    {/* <Menu items={USER_MENU} onSignOut={handleSignOut}> */}
+                        {/* <Button className={cx('user')}> */}
+                        <Button className={cx('user')}>
+                            <Image className={cx('avatar')} src={assets.default_avartar} alt="" />
+                            {/* <p className={cx('name')}>John</p> */}
+                            <span className={cx('name')}>John</span>
+                        </Button>
+                    {/* </Menu> */}
+                {/* </div> */}
             </div>
         </header>
     );

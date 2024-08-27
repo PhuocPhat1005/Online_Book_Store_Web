@@ -43,6 +43,7 @@
         flex: 1;
         height: 100%;
         color: var(--text-color);
+        padding-left: 16px;
         font-size: 1.6rem;
         border-top-left-radius: 20px;
         border-bottom-left-radius: 20px;
@@ -51,7 +52,6 @@
         background-color: #F5F5F5;
         color: black;
         caret-color: black;
-
         &::placeholder {
             color: var(--text-color);
         }
