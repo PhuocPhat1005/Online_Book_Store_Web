@@ -73,13 +73,26 @@ async def create_account(db: AsyncSession, account: AccountCreate):
     return new_account.id
 
 
-async def send_email_to_user(receiver_email: str, your_subject: str, your_msg: str):
+async def send_email_to_reset_password(receiver_email: str, your_subject: str, your_msg: str, reset_link: str):
     msg = MIMEMultipart()
     msg["From"] = settings.MAIL_SENDER
     msg["To"] = receiver_email
     msg["Subject"] = your_subject
 
-    msg.attach(MIMEText(your_msg, "plain"))
+    # Format the message with an HTML link
+    formatted_msg = f"""
+    <html>
+    <body>
+        <p>{your_msg}</p>
+        <p>
+            <a href="{reset_link}" style="display: inline-block; padding: 10px 20px; color: white; background-color: #007BFF; text-decoration: none; border-radius: 5px;">Reset Password</a>
+        </p>
+    </body>
+    </html>
+    """
+
+    # Attach the HTML message
+    msg.attach(MIMEText(formatted_msg, "html"))
 
     try:
         # Connect to the Gmail SMTP server
