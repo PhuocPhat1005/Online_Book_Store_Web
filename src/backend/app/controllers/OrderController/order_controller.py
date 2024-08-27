@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.services.crud_service import (
+from app.services.CRUDService.crud_service import (
     CRUDService,
     ReadService,
     CreateService,
@@ -12,8 +12,8 @@ from app.services.PaymentService.payment_service import (
     getPaymentLinkInformation,
     cancelPaymentLink,
 )
-from app.schemas.payment import PaymentCreate
-from app.schemas.order import (
+from app.schemas.PaymentSchemas.payment import PaymentCreate
+from app.schemas.OrderSchemas.order import (
     OrderCreate,
     OrderUpdate,
     OrderDetailCreate,

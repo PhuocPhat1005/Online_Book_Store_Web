@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi.responses import FileResponse
-from app.services.crud_service import (
+from app.services.CRUDService.crud_service import (
     CRUDService,
     query_string_to_dict,
     query_in_db_by_id,
@@ -11,9 +11,15 @@ from app.services.crud_service import (
 )
 from app.services.BookService.book_service import generate_all_variations
 
-from app.schemas.book import BookCreate, BookUpdate
-from app.schemas.book_author import Book_Author_Create, Book_Author_Update
-from app.schemas.book_translator import Book_Translator_Create, Book_Translator_Update
+from app.schemas.BookSchemas.book import BookCreate, BookUpdate
+from app.schemas.BookSchemas.book_author import (
+    Book_Author_Create,
+    Book_Author_Update,
+)
+from app.schemas.BookSchemas.book_translator import (
+    Book_Translator_Create,
+    Book_Translator_Update,
+)
 from app.models.book import Book
 from app.models.category import Category
 from app.models.publishing_company import PublishingCompany
@@ -30,13 +36,16 @@ from app.controllers.BookController.photo_controller import delete_folder_aws  #
 
 
 import pandas as pd
-from app.schemas.author import AuthorCreate, AuthorUpdate
-from app.schemas.translator import TranslatorCreate, TranslatorUpdate
-from app.schemas.publishing_company import (
+from app.schemas.BookSchemas.author import AuthorCreate, AuthorUpdate
+from app.schemas.BookSchemas.translator import (
+    TranslatorCreate,
+    TranslatorUpdate,
+)
+from app.schemas.BookSchemas.publishing_company import (
     PublishingCompanyCreate,
     PublishingCompanyUpdate,
 )
-from app.schemas.category import CategoryCreate, CategoryUpdate
+from app.schemas.BookSchemas.category import CategoryCreate, CategoryUpdate
 from openpyxl import load_workbook
 from io import BytesIO
 from datetime import datetime

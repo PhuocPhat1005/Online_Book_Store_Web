@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
 from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.services.crud_service import (
+from app.services.CRUDService.crud_service import (
     CRUDService,
     ReadService,
     UpdateService,
@@ -9,13 +9,13 @@ from app.services.crud_service import (
 )
 
 # from app.services.photo_service import upload_photo
-from app.services.crud_service import query_in_db_by_id
-from app.schemas.photo import PhotoCreate, PhotoUpdate
+from app.services.CRUDService.crud_service import query_in_db_by_id
+from app.schemas.BookSchemas.photo import PhotoCreate, PhotoUpdate
 from app.models.book import Book
 from app.models.user_photo import UserPhoto
 from app.models.review_photo import ReviewPhoto
 from app.models.book_photo import BookPhoto
-from app.schemas.book import BookUpdate
+from app.schemas.BookSchemas.book import BookUpdate
 from app.database.database import get_db
 from uuid import UUID
 import uuid

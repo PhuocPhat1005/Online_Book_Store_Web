@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.schemas.token import TokenData
+from app.schemas.TokenSchemas.token import TokenData
 from app.services.UserService.user_service import get_account_by_username
 from app.database.database import get_db
 from app.utils.security import decode_token

@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.services.crud_service import (
+from app.services.CRUDService.crud_service import (
     CRUDService,
     get_user_obj_by_token,
     CreateService,
     ReadService,
     UpdateService,
 )
-from app.schemas.address import (
+from app.schemas.AddressSchemas.address import (
     AddressCreate,
     AddressUpdate,
     CountryCreate,

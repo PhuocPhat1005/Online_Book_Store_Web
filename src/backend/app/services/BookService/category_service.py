@@ -1,7 +1,7 @@
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.category import Category
-from app.schemas.category import CategoryCreate, CategoryUpdate
+from src.backend.app.schemas.BookSchemas.category import CategoryCreate, CategoryUpdate
 from fastapi import Depends, HTTPException
 from app.config.config import settings
 from app.database.database import get_db
@@ -46,7 +46,7 @@ import uuid
 #     category = result.scalars().first()
 #     if not category:
 #         raise HTTPException(status_code=404, detail="Category not found")
-    
+
 #     category.category_name = category_update.name
 #     category.parent_category_id = category_update.parent_id
 #     category.description = category_update.description

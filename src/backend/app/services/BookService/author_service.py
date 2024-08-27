@@ -1,10 +1,9 @@
-# from sqlalchemy.future import select
 # from sqlalchemy.ext.asyncio import AsyncSession
 # from app.models.author import Author
 # from app.schemas.author import AuthorCreate
 # from fastapi import Depends, HTTPException
 # from app.config.config import settings
-# from jose import jwt, JWTError 
+# from jose import jwt, JWTError
 # from app.database.database import get_db
 
 

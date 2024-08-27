@@ -1,18 +1,18 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.services.crud_service import (
+from app.services.CRUDService.crud_service import (
     CRUDService,
     get_user_obj_by_token,
     UpdateService,
     ReadService,
 )
-from app.schemas.review import ReviewCreate, ReviewUpdate
+from app.schemas.CommentSchemas.review import ReviewCreate, ReviewUpdate
 from app.models.review import Review
 from app.models.book import Book
 from app.models.order import Order
 from app.models.order_detail import OrderDetail
-from app.schemas.order import OrderDetailUpdate
-from app.schemas.book import BookUpdate
+from app.schemas.OrderSchemas.order import OrderDetailUpdate
+from app.schemas.BookSchemas.book import BookUpdate
 from app.database.database import get_db
 from uuid import UUID
 
