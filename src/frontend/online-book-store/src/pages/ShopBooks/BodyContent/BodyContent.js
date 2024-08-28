@@ -26,7 +26,7 @@ function BodyContent() {
     const [conditionProducts, setConditionProducts] = useState([]);
 
     const [currentPage, setCurrentPage] = useState(0); // number
-    const [showPages, setShowPages] = useState([1, 2, 3, 4, 5]); // number array
+    const [showPages, setShowPages] = useState([1, 2, 3, 4, 5, 6, 7, 8]); // number array
     const [books, setBooks] = useState([]); // object array
     // const [imagesFetched, setImagesFetched] = useState(false);
 

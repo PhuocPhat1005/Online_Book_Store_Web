@@ -93,6 +93,7 @@ function GuestContact() {
                             <p className={cx('faq-title')}>Frequently Asked Questions</p>
                             <p className={cx('faq-subtitle')}>(We understand, there's a lot to question.)</p>
                         </div>
+                        <GuestConnectedLine />
                         <div className={cx('faq-body')}>
                             <FAQMenu />
                         </div>

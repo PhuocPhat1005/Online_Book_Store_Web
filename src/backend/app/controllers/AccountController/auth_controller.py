@@ -30,9 +30,9 @@ from app.schemas.UserSchemas.user import (
     UserUpdate,
     UserResponse,
 )
-from app.services.CRUDService.crud_service import CRUDService
+from app.services.CRUDService.crud_service import CRUDService, ReadService
 from app.models.user import User
-
+from app.models.admin import Admin
 from app.database.database import get_db
 from app.config.config import settings
 from uuid import uuid4
@@ -291,6 +291,27 @@ async def sign_in(
 
     return {"access_token": access_token, "refresh_token": refresh_token}
 
+@router.post("/sign_in_as_admin", summary="Sign in as admin", description="Sign in as admin")
+async def sign_in_as_admin(
+    form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)
+):
+    read_admin_service = ReadService[Admin](Admin)
+    admin = await read_admin_service.get_by_condition([{"admin_name": form_data.username}], db)
+    if admin:
+        admin = admin[0]
+        if not verify_password(form_data.password, admin.password_hash):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect password",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return {"msg": "Login successfully!"}
 
 @router.post("/reset_password", summary="Reset password", description="Reset password")
 async def reset_password(
