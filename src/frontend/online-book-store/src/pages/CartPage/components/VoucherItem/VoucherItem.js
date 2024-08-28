@@ -7,21 +7,16 @@ import { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
 
-function VoucherItem({ data, handleDiscountVoucher }) {
+function VoucherItem({ data, handleDiscountVoucher, appliedVoucher, isApplied = false }) {
     const [openSeeMore, setOpenSeeMore] = useState(false);
-    const [isApplied, setIsApplied] = useState(false);
 
     const handleOpenSeeMore = () => {
         setOpenSeeMore(!openSeeMore);
     };
 
-    const handleIsApplied = () => {
-        setIsApplied(!isApplied);
-    };
-
     useEffect(() => {
         if (isApplied) {
-            handleDiscountVoucher(data.discount);
+            handleDiscountVoucher(data);
         } else {
             handleDiscountVoucher(0);
         }
@@ -42,7 +37,7 @@ function VoucherItem({ data, handleDiscountVoucher }) {
                     Paper and Some Other Types of Paper and Boards
                 </p>
                 <div className={cx('footer')}>
-                    <Button className={cx('apply_btn')} onClick={handleIsApplied}>
+                    <Button className={cx('apply_btn')} onClick={() => appliedVoucher(data.id)}>
                         {isApplied && 'Applied'}
                         {!isApplied && 'Apply'}
                     </Button>

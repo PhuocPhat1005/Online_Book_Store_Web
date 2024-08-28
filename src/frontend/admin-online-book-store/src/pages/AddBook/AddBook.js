@@ -7,12 +7,7 @@ import DefaultImage from "../../assets/Common/null_book_cover.jpg";
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-<<<<<<< HEAD
-import { faCircleLeft } from '@fortawesome/free-solid-svg-icons';
-import React from 'react';
-=======
 import { faCircleLeft, faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons';
->>>>>>> 324d59a37f110908787eb853645b21ae768d648f
 
 const cx = classNames.bind(styles);
 
