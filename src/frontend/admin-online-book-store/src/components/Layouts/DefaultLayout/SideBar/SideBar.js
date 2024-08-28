@@ -11,6 +11,7 @@ import {
     faGear,
     faSignOut,
 } from '@fortawesome/free-solid-svg-icons';
+import React from 'react';
 
 import styles from './SideBar.scss';
 import Button from '../../../../components/Button';

@@ -328,7 +328,7 @@ def query_string_to_dict(query_string: str) -> dict:
 
 
 async def query_in_db_by_id(
-    db: AsyncSession, model: Type[ModelType], id_: UUID
+    db: AsyncSession, model: Type[ModelType], id_: str
 ) -> list[ModelType]:
     query = select(model).where(model.id == id_)
     result = await db.execute(query)

@@ -1,0 +1,121 @@
+.add-book {
+    height: 100vh;
+    background-color: white;
+    overflow: hidden;
+}
+
+.add-book-header {
+    position: sticky;
+    height: 100px;
+    width: 100%;
+    // padding: 0px 510px;
+    box-shadow: 0px 1px 10px grey;
+}
+
+.back-btn {
+    display: inline-block;
+    position: relative;
+    margin-top: 30px;
+    margin-left: 50px;
+    // margin-bottom: 20px;
+    height: 40px;
+    width: 100px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    box-shadow: 0px 1px 1px grey;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    border: 1px solid #CCCCCC;
+    transition: 0.3s;
+    &:hover {
+        background-color: #CCCCCC;
+    }
+}
+
+.isbn-show {
+    position: fixed;
+    margin-top: 30px;
+    margin-left: 1550px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.add-book-info {
+    // position: relative;
+    // margin-top: 100px;
+    padding: 50px 0px;
+    height: calc(100vh - 100px);
+    max-height: 1700px;
+    width: 100%;
+    font-weight: bold;
+    // background-color: pink;
+    overflow-y: scroll;
+}
+
+.add-book-info-text {
+    // position: relative;
+    // margin-top: 50px;
+    margin-left: 620px;
+    width: 1200px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.box-name {
+    position: relative;
+}
+
+input {
+    border-radius: 5px;
+    border: 1px solid #CCCCCC;
+}
+
+input[type=text] {
+    width: 100%;
+    font-size: 24px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+.description-box {
+    width: 300px;
+    height: 50px;
+}
+
+input[type=text2], textarea {
+    width: 100%;
+    font-size: 24px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    // box-sizing: border-box;
+    height: 190px;
+}
+
+input[type=text2]::placeholder {
+    vertical-align: text-top;
+}
+
+.add-book-submit-btn {
+    display: inline-block;
+    position: relative;
+    margin-top: 30px;
+    margin-left: 1000px;
+    height: 75px;
+    width: 200px;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #50C878;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    border: 1px solid #CCCCCC;
+    transition: 0.3s;
+    &:hover {
+        background-color: #3ca760;
+    }
+}

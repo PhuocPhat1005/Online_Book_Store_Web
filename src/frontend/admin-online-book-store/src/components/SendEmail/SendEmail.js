@@ -1,5 +1,6 @@
 import classNames from "classnames/bind";
 import { useState } from "react";
+import React from 'react';
 
 import styles from './SendEmail.module.scss'
 import Button from "../../components/Button";

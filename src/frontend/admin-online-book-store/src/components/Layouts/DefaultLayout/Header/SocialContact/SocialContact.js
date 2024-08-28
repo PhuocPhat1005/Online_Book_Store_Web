@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord,
          faFacebook,
          faTwitter } from '@fortawesome/free-brands-svg-icons';
+import React from 'react';
 
 const cx = classNames.bind(styles);
 

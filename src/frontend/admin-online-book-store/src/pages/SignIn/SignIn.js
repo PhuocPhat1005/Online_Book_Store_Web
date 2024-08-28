@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind';
 import { useState } from 'react';
+import React from 'react';
 
 import Image from '../../components/Image';
 import images from '../../assets';

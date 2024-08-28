@@ -2,6 +2,7 @@ import classNames from 'classnames/bind';
 import styles from './NotificationItem.module.scss';
 import Image from '../../../components/Image';
 import { useState } from 'react';
+import React from 'react';
 
 const cx = classNames.bind(styles);
 

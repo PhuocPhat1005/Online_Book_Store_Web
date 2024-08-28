@@ -3,6 +3,7 @@ import classNames from 'classnames';
 
 import images from '../../assets';
 import styles from './Image.module.scss';
+import React from 'react';
 
 function Image({ src, alt, className, fallback: customFallback = images.fallback, ...props }, ref) {
     const [fallback, setFallback] = useState('');

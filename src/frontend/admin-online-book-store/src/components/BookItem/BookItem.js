@@ -2,6 +2,8 @@ import classNames from 'classnames/bind';
 
 import styles from './BookItem.module.scss';
 import Image from '../../components/Image';
+import React from 'react';
+
 
 const cx = classNames.bind(styles);
 

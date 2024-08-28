@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import React from 'react';
 
 import styles from './GoogleRegister.module.scss';
 import request from '../../utils/request';

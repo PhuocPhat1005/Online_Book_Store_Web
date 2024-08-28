@@ -3,6 +3,7 @@ import Button from '../../components/Button';
 import styles from './UserManagement.scss';
 import { useState } from 'react';
 import Tippy from '@tippyjs/react/headless';
+import React from 'react';
 
 const cx = classNames.bind(styles);
 
