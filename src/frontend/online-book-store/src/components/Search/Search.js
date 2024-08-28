@@ -48,6 +48,8 @@ function Search() {
             try {
                 const response = await request.get(`book/get_book_by_name/${encodeURIComponent(debounce)}`);
                 if (response.status === 200) {
+                    console.log(response.data);
+
                     setSearchResult(response.data);
                     setLoading(false);
                 }
