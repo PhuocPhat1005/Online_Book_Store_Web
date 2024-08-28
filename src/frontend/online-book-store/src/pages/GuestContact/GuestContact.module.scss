@@ -45,6 +45,7 @@
     background-color: transparent;
     color: var(--guest-darkblue-full);
     caret-color: var(--guest-darkblue-half);
+    font-weight: 500;
 
     &::placeholder {
         color: var(--guest-blue-full);

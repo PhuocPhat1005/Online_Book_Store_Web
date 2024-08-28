@@ -61,30 +61,6 @@ function GuestDetailsBook() {
         setQuantityValue(value);
     };
 
-    const fetchAddToCart = async () => {
-        const cookies = new Cookies();
-        const access_token = cookies.get('jwt_authorization');
-        const book_id = data.id;
-
-        try {
-            const response = await request.post(
-                `cart/add_to_cart?access_token=${access_token}&book_id=${book_id}`,
-                null,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                },
-            );
-
-            if (response.status === 200) {
-                setIsAddToCart(true);
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
     useEffect(() => {
         if (isAddToCart) {
             const timer = setTimeout(() => {
@@ -239,7 +215,7 @@ function GuestDetailsBook() {
                 <div className={cx('ratings_all')}>
                     <div className={cx('ratings_title_wrap')}>
                         <FontAwesomeIcon className={cx('icon')} icon={faHeart} />
-                        <span className={cx('ratings_text')}>ratings & commnets</span>
+                        <span className={cx('ratings_text')}>ratings & comments</span>
                     </div>
                     <div className={cx('ratings_rate')}>
                         <div className={cx('rating_rate_section_1')}>
@@ -282,9 +258,9 @@ function GuestDetailsBook() {
                     </div>
                 </div>
                 <div className={cx('comments')}>
-                    <ul className={cx('commnets_list')}>
+                    <ul className={cx('comments_list')}>
                         <li className={cx('comments_item')}>
-                            <div className={cx('commnets_item_header')}>
+                            <div className={cx('comments_item_header')}>
                                 <Image className={cx('user_avatar')} src={assets.default_avartar} />
                                 <div className={cx('comment_user_info')}>
                                     <span className={cx('user_name')}>Tan Thanh Do</span>
@@ -297,7 +273,7 @@ function GuestDetailsBook() {
                             </span>
                         </li>
                         <li className={cx('comments_item')}>
-                            <div className={cx('commnets_item_header')}>
+                            <div className={cx('comments_item_header')}>
                                 <Image className={cx('user_avatar')} src={assets.default_avartar} />
                                 <div className={cx('comment_user_info')}>
                                     <span className={cx('user_name')}>Fat Lee</span>
@@ -309,15 +285,12 @@ function GuestDetailsBook() {
                         </li>
                     </ul>
                     <div className={cx('post_comments')}>
-                        <div className={cx('post_commnets_header')}>
+                        <div className={cx('post_comments_header')}>
                             <Image className={cx('user_avatar')} src={assets.default_avartar} />
                             <span className={cx('user_name_post')}>Anonymous</span>
-                            <RatingStar rating={'1'} width={16} height={16} />
+                            <RatingStar rating={'0'} width={16} height={16} />
                         </div>
-                        <textarea className={cx('commnets_text')} name="comments_text"></textarea>
-                        <Button types="text" className={cx('post_btn')}>
-                            post
-                        </Button>
+                        <textarea className={cx('comments_text')} name="comments_text"></textarea>
                     </div>
                 </div>
                 {/* Change Button's onClick to trigger the PopUp */}
