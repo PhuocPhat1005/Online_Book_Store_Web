@@ -55,7 +55,6 @@ const BookSettings = ({ admin }) => {
 
       setCurrentPage((prev) => prev + 1);
   };
-
   useEffect(() => {
       // Ensure current page index is valid
       if (currentPage < 0) {
@@ -71,7 +70,8 @@ const BookSettings = ({ admin }) => {
       try {
         setIsLoading(true);
         const response = await request.get(`book/get_book_per_page/${(currentPage + 1).toString()}`);
-        setBooks(response.data);
+        const jsonResponse = await response.json();
+        setBooks(jsonResponse.data);
         setIsLoading(false);
         // setImagesFetched(false); // Reset the imagesFetched flag
       } catch (error) {
@@ -122,18 +122,18 @@ const BookSettings = ({ admin }) => {
     <>
       <div className={cx('book-settings')}>
         <div className={cx('book-settings-filter')}>
-          <Button className={cx('page-btn')} onClick={() => {}}>
+          <Button className={cx('page-btn-book')} onClick={() => {}}>
             <p>|&lt;</p>
           </Button>
-          <Button className={cx('page-btn')} onClick={() => {page-=1}}>
+          <Button className={cx('page-btn-book')} onClick={() => {page-=1}}>
             <p>&lt;&lt;</p>
           </Button>
-          <div className={cx('page-box')}>Page: {page}/{max_page}</div>
+          <div className={cx('page-box-book')}>Page: {page}/{max_page}</div>
           {/* <input className={cx('page-box')} type="text" id="name" placeholder="Page: "/> */}
-          <Button className={cx('page-btn')} onClick={() => {}}>
+          <Button className={cx('page-btn-book')} onClick={() => {}}>
             <p>&lt;&lt;</p>
           </Button>
-          <Button className={cx('page-btn')} onClick={() => {}}>
+          <Button className={cx('page-btn-book')} onClick={() => {}}>
             <p>&gt;|</p>
           </Button>
           {/* <Link to={config.routes.dashboards} className={cx('add-book-btn')}>
