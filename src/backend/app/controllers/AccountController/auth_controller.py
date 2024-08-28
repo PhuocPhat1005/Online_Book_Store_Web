@@ -232,12 +232,9 @@ async def google_auth(request: Request, db: AsyncSession = Depends(get_db)):
     except Exception as e:
         return {"error": str(e)}
 
-
 @router.post(
-    "/sign_up",
-    response_model=Token,
-    summary="Sign up a new user account",
-    description="Create a new user account and return an access token and a refresh token.",
+    "/sign_up_form",
+    summary="Sign up a new user account form, not verfiy email yet",
 )
 async def sign_up(account: AccountCreate, db: AsyncSession = Depends(get_db)):
     db_user_account = await get_account_by_username(db, account.username)
@@ -246,7 +243,19 @@ async def sign_up(account: AccountCreate, db: AsyncSession = Depends(get_db)):
             status_code=400,
             detail="Username already registered",
         )
+    db_user_account = await get_account_by_email(db, account.email)
+    if db_user_account:
+        raise HTTPException(
+            status_code=400,
+            detail="Email already registered",
+        )
     account.password = get_password_hash(account.password)
+    await send_email_to_user(account.email, "Welcome to our website", "Follow link to signing up!", f"http://localhost:3000/signup") 
+    return account
+
+
+@router.post("/signup", summary="Sign up a new user account", description="Create a new user account")
+async def sign_up(account: AccountCreate, db: AsyncSession = Depends(get_db)):
     new_id = await create_account(db, account)
     access_token = create_access_token(data={"sub": account.username})
     refresh_token = create_refresh_token(data={"sub": account.username})
@@ -344,8 +353,8 @@ async def forgot_password(
     )
     reset_link = f"http://localhost:3000/signin/forgotpassword/?token={reset_token}"
     email_subject = "Reset your Password"
-    message = f"Click the link to reset your password: {reset_link}\nYour link will expire in {expiration_minute} minutes.\nIf you did not request this, please ignore this email."
-    await send_email_to_user(form_data.email, email_subject, message)
+    message = f"Click the link to reset your password. Your link will expire in {expiration_minute} minutes. If you did not request this, please ignore this email."
+    await send_email_to_user(form_data.email, email_subject, message, reset_link)
     return reset_token
 
 
