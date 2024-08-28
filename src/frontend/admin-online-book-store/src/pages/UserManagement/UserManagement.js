@@ -92,7 +92,7 @@ function UserManagement() {
           <p className={cx('page-box')}>Page: {page}/{max_page}</p>
           {/* <input className={cx('page-box')} type="text" id="name" placeholder="Page: "/> */}
           <Button className={cx('page-btn')} onClick={() => {}}>
-            <p>&lt;&lt;</p>
+            <p>&gt;&gt;</p>
           </Button>
           <Button className={cx('page-btn')} onClick={() => {}}>
             <p>&gt;|</p>

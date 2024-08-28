@@ -24,7 +24,7 @@
 }
 
 .page-box-book {
-    position: relative;
+    // position: relative;
     display: inline-block;
     margin-top: -5px;
     margin-left: 35px;
@@ -41,6 +41,10 @@
     border: 1px solid #CCCCCC;
 }
 
+#table-scroll {
+    height: calc(100vh - 200px);
+    overflow-y: auto;
+}
 .page-btn-book {
     position: relative;
     margin-top: 30px;
