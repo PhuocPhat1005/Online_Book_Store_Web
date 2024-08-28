@@ -147,10 +147,10 @@ const BookSettings = ({ admin }) => {
           <div> {/* className="App"> */}
             <table border={1}>
               <tr>
-                <th styles="width:20%">ISBN</th>
-                <th styles="width:300px">Book's name</th>
-                <th styles="width:300px">Create at</th>
-                <th styles="width:300px">Update at</th>
+                <th >ISBN</th>
+                <th >Book's name</th>
+                <th >Create at</th>
+                <th >Update at</th>
                 <th styles="width:50px">Price</th>
                 <th>See detail</th>
               </tr>

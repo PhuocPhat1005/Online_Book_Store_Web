@@ -51,7 +51,7 @@ function SignIn() {
         };
 
         try {
-            const response = await request.post('auth/sign_in', signin_data, {
+            const response = await request.post('auth/sign_in_as_admin', signin_data, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
@@ -124,12 +124,12 @@ function SignIn() {
                         </div>
                         <div className={cx('body')}>
                             <div className={cx('input-field')}>
-                                <p className={cx('input-label')}>Username</p>
+                                <p className={cx('input-label')}>Admin Username</p>
                                 <input
                                     className={cx('input-bar')}
-                                    type="text"
+                                    type="username"
                                     name="username"
-                                    placeholder="Enter your username"
+                                    placeholder="Enter admin username"
                                     required
                                 />
                             </div>

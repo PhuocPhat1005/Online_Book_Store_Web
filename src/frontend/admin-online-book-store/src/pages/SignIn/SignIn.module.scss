@@ -112,8 +112,14 @@
     background-color: transparent;
     color: var(--white);
     font-size: 1.8rem;
+    text-align: left;
 }
-
+.input-bar::placeholder{
+    margin-left: 0px;
+    padding: 0px;
+    text-align: left;
+    font-size: 1.8rem;
+}
 .info {
     display: flex;
     flex-direction: row;
@@ -150,7 +156,8 @@
     color: var(--white);
 
     padding: 16px;
-    margin-bottom: 32px;
+    margin-top: 28px;
+    // margin-bottom: 20px;
     border-radius: 50px;
 }
 
