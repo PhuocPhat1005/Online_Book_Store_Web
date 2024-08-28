@@ -126,14 +126,10 @@ async def create_address_endpoint(
     address.ward_id = ward_id
     return await address_service.create(address, db)
 
-
-@router.get("/get_user_address", summary="Get a address by access token")
-async def get_address_endpoint(access_token: str, db: AsyncSession = Depends(get_db)):
-    user_obj = await get_user_obj_by_token(access_token, db)
-    user_id = user_obj.id
+async def get_address_by_user_id(user_id, db: AsyncSession):
     address = await address_service.get_by_condition([{"user_id": user_id}], db)
     if not address:
-        raise HTTPException(status_code=404, detail="Address not found")
+        return []
     read_ward_service = ReadService[Ward](Ward)
     read_district_service = ReadService[District](District)
     read_province_service = ReadService[Province](Province)
@@ -162,6 +158,14 @@ async def get_address_endpoint(access_token: str, db: AsyncSession = Depends(get
         )
 
     return address_arr
+
+@router.get("/get_user_address", summary="Get a address by access token")
+async def get_address_endpoint(access_token: str, db: AsyncSession = Depends(get_db)):
+    user_obj = await get_user_obj_by_token(access_token, db)
+    user_id = user_obj.id
+    if not user_obj:
+        raise HTTPException(status_code=404, detail="User not found")
+    return await get_address_by_user_id(user_id, db)
 
 
 @router.put("/update_address", summary="Update a address by ID")

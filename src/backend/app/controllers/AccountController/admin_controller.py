@@ -14,9 +14,10 @@ from app.models.order_detail import OrderDetail
 from app.schemas.OrderSchemas.order import OrderUpdate
 from app.schemas.BookSchemas.book import BookUpdate
 from app.schemas.AccountSchemas.account import AccountBanned
+from app.controllers.AddressController.address_controller import get_address_by_user_id
 from app.database.database import get_db
 from uuid import UUID
-
+from datetime import datetime
 router = APIRouter()
 
 
@@ -101,17 +102,43 @@ async def Show_Top_best_selling_books(db: AsyncSession = Depends(get_db)):
 
 @router.get("/show_list_users", summary="Show list users")
 async def show_list_users(db: AsyncSession = Depends(get_db)):
-    read_user_service = ReadService[User](User)
-    users = await read_user_service.get_by_condition([{"id": ""}], db, 0)
-    if not users:
-        raise HTTPException(status_code=404, detail="Users not found")
-    user_list = []
-    for user in users:
-        user_list.append({"id": user.id, "account_id": user.account_id})
-    return user_list
-
-
-# @router.put("/Ban Account", summary="Ban account")
-# async def ban_account(account: AccountBanned, db: AsyncSession = Depends(get_db)):
-#     update_account_service = UpdateService[Account, AccountBanned](Account)
-#     return await update_account_service.update({'id': account.id}, account, db)
+    read_account_service = ReadService[Account](Account)
+    accounts = await read_account_service.get_by_condition([{"id": ""}], db, 0)
+    if not accounts:
+        raise HTTPException(status_code=404, detail="Accounts not found")
+    account_arr = []
+    list_user = []
+    for account in accounts:
+        account_arr.append((account.id, account.username, account.email, account.banned_to))
+    for account_id, user_name, email, account_banned_to in account_arr:
+        read_user_service = ReadService[User](User)
+        users = await read_user_service.get_by_condition([{"account_id": account_id}], db)
+        user = users[0]
+        list_user.append(
+            {
+                "id": account_id,
+                "user_id": user.id,
+                "full_name": user.full_name,
+                "username": user_name,
+                "address": "",
+                "email": email,
+                "phone": user.phone,
+                "created_at": user.created_at,
+                "updated_at": user.updated_at,
+                "banned_to": account_banned_to
+            }
+        )
+    for user in list_user:
+        address = await get_address_by_user_id(user["user_id"], db)
+        if address:
+            address = address[0]
+            user["address"] = f"{address['address']}, {address['ward']}, {address['district']}, {address['province']}, {address['country']}"
+        
+    return list_user
+        
+@router.put("/ban_user", summary="Ban user")
+async def ban_user(account_banned: AccountBanned, db: AsyncSession = Depends(get_db)):
+    if account_banned.banned_to < datetime.now() or account_banned.banned_to is None:
+        raise HTTPException(status_code=400, detail="Invalid banned time")
+    update_account_service = UpdateService[Account, AccountBanned](Account)
+    return await update_account_service.update({"id": account_banned.id}, account_banned, db)

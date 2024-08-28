@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-
+from datetime import date
 class AccountCreate(BaseModel):
     username: str
     email: EmailStr
@@ -20,5 +20,5 @@ class ResetPasswordForm(BaseModel):
     password: str
     
 class AccountBanned(BaseModel):
-    id: str
-    banned_to: str
+    id: str | None = "empty_uuid"
+    banned_to: date
