@@ -1,14 +1,12 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
-
-import { faFilter } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faFilter } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState } from 'react';
 
 import styles from './BodyContent.module.scss';
 import Category from './components/GuestCategory/GuestCategory';
 import FilterSection from './components/FilterSection';
 import FilterAllMenu from './components/FilterAllMenu';
-import { useEffect, useState } from 'react';
 import SelectSort from './components/SelectSort';
 import Products from './components/GuestProducts/GuestProducts';
 import request from '~/utils/request';
@@ -20,18 +18,16 @@ import PopUp from '~/components/PopUp';
 const cx = classNames.bind(styles);
 
 const BOOKS_PER_ROW = 5;
+const GUEST_BOOKS_PER_PAGE = 10;
 
 function BodyContent() {
     // Display & Manage the filter all
     const [showFilterAll, setShowFillterAll] = useState(false);
     const [isAppliedFilterAll, setIsAppliedFilterAll] = useState(false);
-    const [conditionProducts, setConditionProducts] = useState([]);
 
-    const [currentPage, setCurrentPage] = useState(0); // number
-    const [showPages, setShowPages] = useState([1, 2, 3, 4, 5]); // number array
+    const [currentPage] = useState(0); // number
     const [books, setBooks] = useState([]); // object array
-    // const [imagesFetched, setImagesFetched] = useState(false);
-
+    const [filteredBooks, setFilteredBooks] = useState([]); // object array for filtered books
     const [isLoading, setIsLoading] = useState(false);
 
     // State to manage whether the PopUp is shown
@@ -45,39 +41,6 @@ function BodyContent() {
         setIsPopUpVisible(false);
     };
 
-    const handleBackPage = () => {
-        if (currentPage < 0) return;
-        else if (currentPage === 0 && showPages[0] > 1) {
-            setShowPages(showPages.map((page) => page - 1));
-            return;
-        }
-
-        setCurrentPage((prev) => prev - 1);
-
-        // call API to url
-    };
-
-    const handleNextPage = () => {
-        if (currentPage > 99) return;
-        else if (currentPage === showPages.length - 1) {
-            setShowPages(showPages.map((page) => page + 1));
-            return;
-        }
-
-        setCurrentPage((prev) => prev + 1);
-
-        // call API to url
-    };
-
-    useEffect(() => {
-        // Ensure current page index is valid
-        if (currentPage < 0) {
-            setCurrentPage(0);
-        } else if (currentPage >= showPages.length) {
-            setCurrentPage(showPages.length - 1);
-        }
-    }, [currentPage, showPages]);
-
     // API for getting books
     useEffect(() => {
         const getAllBooks = async () => {
@@ -86,21 +49,20 @@ function BodyContent() {
 
                 const response = await request.get(`book/get_book_per_page/${(currentPage + 1).toString()}`);
 
-                setBooks(response.data);
+                // Slice the array and keep only first 10 books
+                const limitedBooks = response.data.slice(0, GUEST_BOOKS_PER_PAGE);
+                setBooks(limitedBooks);
+                setFilteredBooks(limitedBooks); // FilteredBooks array is the same as books array
                 setIsLoading(false);
-                // setImagesFetched(false); // Reset the imagesFetched flag
             } catch (error) {
                 if (error.response) {
-                    // The request was made and the server responded with a status code
-                    // that falls out of the range of 2xx
                     console.error('Form submission failed', error.response.data);
                 } else if (error.request) {
-                    // The request was made but no response was received
                     console.error('No response received', error.request);
                 } else {
-                    // Something happened in setting up the request that triggered an Error
                     console.error('Error', error.message);
                 }
+                setIsLoading(false);
             }
         };
         getAllBooks();
@@ -156,38 +118,36 @@ function BodyContent() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [priceFromQuery, priceToQuery, checkedItems.price]);
 
-    const fectchFillterApply = async () => {
-        try {
-            let params = new URLSearchParams();
-            params.append('price_from', rangePrice[0]);
-            params.append('price_to', rangePrice[1]);
+    // Filter only the books that were kept (limitedBooks)
+    const fectchFillterApply = () => {
+        let filtered = books;
 
-            const response = await request.get('book/get_book_by_conditions', {
-                params: {
-                    and_search_params: params,
-                },
-            });
-
-            if (response.status === 200) {
-                setConditionProducts(response.data);
-            }
-        } catch (error) {
-            console.log(error);
+        // Apply price range filter
+        if (rangePrice[0] !== 10e6 || rangePrice[1] !== -1) {
+            filtered = filtered.filter((book) => book.price >= rangePrice[0] && book.price <= rangePrice[1]);
         }
+
+        // Apply other filters like category, rating, etc.
+        if (checkedItems.category.length) {
+            filtered = filtered.filter((book) => checkedItems.category.includes(book.category_id));
+        }
+
+        if (checkedItems.rating.length) {
+            filtered = filtered.filter((book) => checkedItems.rating.includes(book.rating));
+        }
+
+        setFilteredBooks(filtered);
     };
 
     useEffect(() => {
-        if (isAppliedFilterAll === false) {
-            return;
+        if (isAppliedFilterAll) {
+            fectchFillterApply();
+            setIsAppliedFilterAll(false);
         }
-
-        fectchFillterApply();
-        setIsAppliedFilterAll(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAppliedFilterAll]);
 
-    // Display & Manage the fillter all
-
+    // Display & Manage the filter all
     const handleFilterAllDisplay = () => {
         setShowFillterAll(!showFilterAll);
         setCheckedItems({ deal: [], price: [], rating: [], category: [], publishers: [] });
@@ -202,9 +162,9 @@ function BodyContent() {
     // Create an array of Products components
     const products = [];
 
-    if (conditionProducts.length !== 0) {
-        for (let i = 0; i < conditionProducts.length; i += BOOKS_PER_ROW) {
-            const booksSlice = conditionProducts.slice(i, i + BOOKS_PER_ROW);
+    if (filteredBooks.length !== 0) {
+        for (let i = 0; i < filteredBooks.length; i += BOOKS_PER_ROW) {
+            const booksSlice = filteredBooks.slice(i, i + BOOKS_PER_ROW);
             products.push(<Products key={i} data={booksSlice} />);
         }
     } else {
@@ -260,17 +220,15 @@ function BodyContent() {
                         </div>
                     </div>
                     <div className={cx('core')}>
-                        {!isLoading && (products || conditionProducts)}
+                        {!isLoading && products}
                         {isLoading && <BasicSpinner color="#808080" />}
                     </div>
                 </div>
                 <div className={cx('footer')}>
-                    {/* Change Button's onClick to trigger the PopUp */}
                     <Button onClick={handleButtonClick} className={cx('see-more-btn')} types="findmore">
                         See more results
                     </Button>
                 </div>
-                {/* Render PopUp conditionally based on the state */}
                 {isPopUpVisible && <PopUp onClose={handleClosePopUp} />}
             </div>
 
