@@ -44,7 +44,7 @@ import requests
 
 import logging
 import uuid
-
+from datetime import datetime
 user_service = CRUDService[User, UserCreate, UserUpdate](User)
 
 # Configure logging
@@ -290,6 +290,17 @@ async def sign_in(
         )
     access_token = create_access_token(data={"sub": user_account.username})
     refresh_token = create_refresh_token(data={"sub": user_account.username})
+    if user_account.banned_to:
+        if user_account.banned_to > datetime.now():
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Your account has been banned to {user_account.banned_to}.",
+            )
+        else:
+            user_account.banned_to = None
+            db.add(user_account)
+            await db.commit()
+
     return {"access_token": access_token, "refresh_token": refresh_token}
 
 
