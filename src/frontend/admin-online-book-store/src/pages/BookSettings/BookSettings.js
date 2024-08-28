@@ -2,7 +2,9 @@ import classNames from 'classnames/bind';
 import Button from '../../components/Button';
 import styles from './BookSettings.scss';
 import request from '../../utils/request';
+import config from '../../config';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
@@ -10,15 +12,21 @@ const cx = classNames.bind(styles);
 
 //table css in src/components/GlobalStyles/GlobalStyles.scss
 
-function BookSettings() {
+const BookSettings = ({ admin }) => {
+  const navigate = useNavigate();
+  const handleNavigate = (route) => {
+      if (admin) {
+          navigate(route);
+      }
+  };
   let page = 1;
   let max_page = 100;
-  const BOOKS_PER_ROW = 12; // number
+  const BOOKS_PER_ROW = 1; // number
   // Display & Manage the fillter all
 
   const [conditionProducts, setConditionProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(0); // number
-  const [showPages, setShowPages] = useState([1, 2, 3, 4, 5]); // number array
+  const [showPages, setShowPages] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]); // number array
   const [books, setBooks] = useState([]); // object array
   // const [imagesFetched, setImagesFetched] = useState(false);
 
@@ -62,15 +70,23 @@ function BookSettings() {
     const getAllBooks = async () => {
       try {
         setIsLoading(true);
-
-        const response = await request.get(`book/get_book_per_page//${(currentPage + 1).toString()}`);
-
+        const response = await request.get(`book/get_book_per_page/${(currentPage + 1).toString()}`);
         setBooks(response.data);
         setIsLoading(false);
         // setImagesFetched(false); // Reset the imagesFetched flag
       } catch (error) {
-        console.log(error);
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('Form submission failed', error.response.data);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error('No response received', error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error', error.message);
       }
+    }
     };
     getAllBooks();
   }, [currentPage]);
@@ -120,7 +136,10 @@ function BookSettings() {
           <Button className={cx('page-btn')} onClick={() => {}}>
             <p>&gt;|</p>
           </Button>
-          <Button className={cx('add-book-btn')} onClick={() => {}}>
+          {/* <Link to={config.routes.dashboards} className={cx('add-book-btn')}>
+            <p><FontAwesomeIcon icon={faPlusCircle} /> Add book</p>
+          </Link> */}
+          <Button to={config.routes.addBook} className={cx('add-book-btn')} onClick={() => handleNavigate(config.routes.addBook)}>
             <p><FontAwesomeIcon icon={faPlusCircle} /> Add book</p>
           </Button>
         </div>
@@ -135,12 +154,12 @@ function BookSettings() {
               <th>See detail</th>
             </tr>
             {showPages.map((item, index) => (
-              <tr key={showPages.id}>
-                <td>{showPages.isbn}</td>
-                <td>{showPages.book_name}</td>
-                <td>{showPages.created_at}</td>
-                <td>{showPages.updated_at}</td>
-                <td>{showPages.price}</td>
+              <tr key={index}>
+                <td>{item.isbn}</td>
+                <td>{item.book_name}</td>
+                <td>{item.created_at}</td>
+                <td>{item.updated_at}</td>
+                <td>{item.price}</td>
               </tr>
             ))}
           </table>
