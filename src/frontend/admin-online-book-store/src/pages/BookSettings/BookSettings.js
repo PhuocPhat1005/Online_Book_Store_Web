@@ -118,18 +118,6 @@ const BookSettings = ({ admin }) => {
     }
   }
 
-  // const [users, setUsers] = useState([])
-  // const [loading, setLoading] = useState(false)
-  // useEffect(() => {
-  //   setLoading(true)
-  //   fetch("https://jsonplaceholder.typicode.com/users")
-  //     .then(response => response.json())
-  //     .then(json => setUsers(json))
-  //     .finally(() => {
-  //       setLoading(false)
-  //     })
-  // }, [])
-
   return (
     <>
       <div className={cx('book-settings')}>
@@ -172,7 +160,7 @@ const BookSettings = ({ admin }) => {
                   <td>{item.book_name}</td>
                   <td>{item.created_at}</td>
                   <td>{item.updated_at}</td>
-                  <td>{item.price}</td>
+                  <td>{item.price} VND</td>
                   <td><Link>See detail</Link></td>
                 </tr>
               ))}
