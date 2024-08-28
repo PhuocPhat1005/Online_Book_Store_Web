@@ -225,7 +225,7 @@ function DetailsBook() {
             <div className={cx('ratings_all')}>
                 <div className={cx('ratings_title_wrap')}>
                     <FontAwesomeIcon className={cx('icon')} icon={faHeart} />
-                    <span className={cx('ratings_text')}>ratings & commnets</span>
+                    <span className={cx('ratings_text')}>ratings & comments</span>
                 </div>
                 <div className={cx('ratings_rate')}>
                     <div className={cx('rating_rate_section_1')}>

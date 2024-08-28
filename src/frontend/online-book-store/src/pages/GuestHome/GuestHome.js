@@ -37,6 +37,7 @@ function GuestHome() {
                     <GuestEventsContent />
                 </div>
                 <GuestConnectedLine />
+                <GuestConnectedLine />
             </div>
             <GuestFooter />
         </>
