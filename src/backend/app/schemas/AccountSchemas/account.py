@@ -22,3 +22,11 @@ class ResetPasswordForm(BaseModel):
 class AccountBanned(BaseModel):
     id: str | None = "empty_uuid"
     banned_to: date
+    
+class AdminCreate(BaseModel):
+    admin_name: str
+    password_hash: str
+    
+class AdminUpdate(BaseModel):
+    admin_name: str | None = ""
+    password_hash: str | None = ""
