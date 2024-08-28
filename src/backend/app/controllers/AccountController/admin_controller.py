@@ -5,12 +5,15 @@ from app.services.CRUDService.crud_service import (
     get_user_obj_by_token,
     UpdateService,
     ReadService,
+    CreateService
 )
+from app.models.admin import Admin
 from app.models.order import Order
 from app.models.book import Book
 from app.models.user import User
 from app.models.account import Account
 from app.models.order_detail import OrderDetail
+from app.schemas.AccountSchemas.account import AdminCreate
 from app.schemas.OrderSchemas.order import OrderUpdate
 from app.schemas.BookSchemas.book import BookUpdate
 from app.schemas.AccountSchemas.account import AccountBanned
@@ -18,6 +21,7 @@ from app.controllers.AddressController.address_controller import get_address_by_
 from app.database.database import get_db
 from uuid import UUID
 from datetime import datetime
+from app.utils.security import get_password_hash
 router = APIRouter()
 
 
@@ -142,3 +146,14 @@ async def ban_user(account_banned: AccountBanned, db: AsyncSession = Depends(get
         raise HTTPException(status_code=400, detail="Invalid banned time")
     update_account_service = UpdateService[Account, AccountBanned](Account)
     return await update_account_service.update({"id": account_banned.id}, account_banned, db)
+
+@router.post('/test_create_admin', summary="Test create admin")
+async def test_create_admin(admin_create: AdminCreate, db: AsyncSession = Depends(get_db)):
+    create_admin_service = CreateService[Admin, AdminCreate](Admin)
+    admin_create.password_hash = get_password_hash(admin_create.password_hash)
+    return await create_admin_service.create(admin_create, db)
+
+# @router.get('/test_show_admin_list', summary="Test show admin list")
+# async def test_show_admin_list(db: AsyncSession = Depends(get_db)):
+#     read_admin_service = ReadService[Admin](Admin)
+#     return await read_admin_service.get_by_condition([{"id": ""}], db, 0)

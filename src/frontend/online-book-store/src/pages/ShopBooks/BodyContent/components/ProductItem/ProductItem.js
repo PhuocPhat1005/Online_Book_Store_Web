@@ -96,7 +96,7 @@ function ProductItem({ data, rating = 0 }) {
                         <p className={cx('new_price')}>{new_price} đ</p>
                         <p className={cx('old_price')}>{old_price} đ</p>
                         <div className={cx('discount')}>
-                            <span className={cx('discount_text')}>{discount_percentage}%</span>
+                            <span className={cx('discount_text')}>-{discount_percentage}%</span>
                         </div>
                     </div>
                     <p className={cx('description_text')}>{data.description}</p>
