@@ -1,19 +1,22 @@
+import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './GuestContact.module.scss';
 import { HeaderContentLayout } from '~/components/Layouts';
 import SubHeaderContentLayout from '~/components/Layouts/SubHeaderContentLayout';
-import ConnectedLine from '~/components/ConnectedLine';
+import GuestConnectedLine from '~/components/GuestConnectedLine';
 import Button from '~/components/Button';
 import FAQMenu from './components/GuestFAQMenu';
 import emailjs from '@emailjs/browser';
 import Header from '~/components/Layouts/DefaultLayout/Header';
 import GuestFooter from '~/components/Layouts/DefaultLayout/GuestFooter';
+import PopUpSentSuccesful from './components/PopUpSentSuccesful';
 import { useRef } from 'react';
 
 const cx = classNames.bind(styles);
 
 function GuestContact() {
     const formDataRef = useRef(null);
+    const [showPopup, setShowPopup] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -26,11 +29,16 @@ function GuestContact() {
                 () => {
                     console.log('SUCCESS!');
                     event.target.reset();
+                    setShowPopup(true);
                 },
                 (error) => {
                     console.log('FAILED...', error.text);
                 },
             );
+    };
+
+    const handleClosePopup = () => {
+        setShowPopup(false);
     };
 
     return (
@@ -78,7 +86,7 @@ function GuestContact() {
                         </form>
                     </div>
                 </div>
-                <ConnectedLine />
+                <GuestConnectedLine />
                 <div className={cx('faq-container')}>
                     <div className={cx('faq-content')}>
                         <div className={cx('faq-header')}>
@@ -89,11 +97,14 @@ function GuestContact() {
                             <FAQMenu />
                         </div>
                     </div>
-                    <ConnectedLine />
-                    <ConnectedLine />
+                    <GuestConnectedLine />
+                    <GuestConnectedLine />
                 </div>
             </div>
             <GuestFooter />
+            {showPopup && (
+                <PopUpSentSuccesful message="Your message has been sent successfully." onClose={handleClosePopup} />
+            )}
         </>
     );
 }

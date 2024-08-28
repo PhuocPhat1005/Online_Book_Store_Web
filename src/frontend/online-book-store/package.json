@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@emailjs/browser": "^4.4.1",
         "@fortawesome/fontawesome-svg-core": "^6.5.2",
         "@fortawesome/free-brands-svg-icons": "^6.0.0",
         "@fortawesome/free-regular-svg-icons": "^6.5.2",
@@ -16,12 +17,15 @@
         "axios": "^1.7.2",
         "classnames": "^2.5.1",
         "customize-cra": "^1.0.0",
+        "js-cookie": "^3.0.5",
+        "jwt-decode": "^4.0.0",
         "normalize.css": "^8.0.1",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-router-dom": "^6.23.1",
         "react-scripts": "^5.0.1",
         "sass": "^1.77.2",
+        "universal-cookie": "^7.2.0",
         "web-vitals": "^2.1.4"
     },
     "scripts": {

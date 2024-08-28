@@ -93,6 +93,20 @@ function BodyContent() {
         getAllBooks();
     }, [currentPage]);
 
+    const fetchRatingOutside = async () => {
+        try {
+            const response = await request.get(
+                `book/get_book_by_conditions?and_search_params=rate=${4}&equal_condition=1`,
+            );
+
+            if (response.status === 200) {
+                setConditionProducts(response.data);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     // Item query filter
     const [checkedItems, setCheckedItems] = useState({
         deal: [],
@@ -143,7 +157,7 @@ function BodyContent() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [priceFromQuery, priceToQuery, checkedItems.price]);
 
-    const fectchFillterApply = async () => {
+    const fectchFillterApplyPrice = async () => {
         try {
             let params = new URLSearchParams();
             params.append('price_from', rangePrice[0]);
@@ -168,7 +182,7 @@ function BodyContent() {
             return;
         }
 
-        fectchFillterApply();
+        fectchFillterApplyPrice();
         setIsAppliedFilterAll(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAppliedFilterAll]);
@@ -221,7 +235,11 @@ function BodyContent() {
                         </div>
                         <div className={cx('sorting')}>
                             <div className={cx('find_rating')}>
-                                <input className={cx('checkbox_find_rating')} type="checkbox" />
+                                <input
+                                    className={cx('checkbox_find_rating')}
+                                    type="checkbox"
+                                    onChange={fetchRatingOutside}
+                                />
                                 <div className={cx('star_icons')}>
                                     <span className={cx('star_icon')}>
                                         <FontAwesomeIcon icon={faStar} />

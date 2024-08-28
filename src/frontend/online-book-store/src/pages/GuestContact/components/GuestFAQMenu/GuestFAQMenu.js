@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from './GuestFAQMenu.module.scss';
-import FAQItem from '../GuestFAQItem';
+import GuestFAQItem from '../GuestFAQItem';
 
 const cx = classNames.bind(styles);
 const FAQs = [
@@ -10,24 +10,23 @@ const FAQs = [
             "No, we aren't currently hiring or accepting resumes. Staff turnover has always been very low; we love what we do.",
     },
     {
-        title: 'Are you currently hiring or accepting resumes?',
-        description:
-            "No, we aren't currently hiring or accepting resumes. Staff turnover has always been very low; we love what we do.",
+        title: 'Where can I find you?',
+        description: 'You can find us at 227 Nguyen Van Cu St, Ward 4, District 5, Ho Chi Minh City.',
     },
     {
-        title: 'Are you currently hiring or accepting resumes?',
+        title: 'Can I bought book without an account?',
         description:
-            "No, we aren't currently hiring or accepting resumes. Staff turnover has always been very low; we love what we do.",
+            'Unfortunately you cannot do that. We need basic information to deliver to you and ensure a smooth experience, so creating an account is mandatory. We guarantee that your personal information will be kept confidential. ',
     },
     {
-        title: 'Are you currently hiring or accepting resumes?',
+        title: 'Where can I get a discount?',
         description:
-            "No, we aren't currently hiring or accepting resumes. Staff turnover has always been very low; we love what we do.",
+            'Currently there is no discount code for you. You can check out our sale event where books are on sale at extremely discounted prices. ',
     },
     {
-        title: 'Are you currently hiring or accepting resumes?',
+        title: 'Is there any chance for your store to open more branches? ',
         description:
-            "No, we aren't currently hiring or accepting resumes. Staff turnover has always been very low; we love what we do.",
+            'We currently have only 1 shop with the location is 227 Nguyen Van Cu St, Ward 4, District 5, Ho Chi Minh City. We might expand our branch in the future, but that is not something will happen anytime soon.',
     },
 ];
 
@@ -35,7 +34,7 @@ function guestfaqMenu() {
     return (
         <div className={cx('wrapper')}>
             {FAQs.map((item, index) => (
-                <FAQItem title={item.title} description={item.description} key={index} />
+                <GuestFAQItem title={item.title} description={item.description} key={index} />
             ))}
         </div>
     );

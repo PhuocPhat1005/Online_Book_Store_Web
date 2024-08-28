@@ -30,6 +30,7 @@ function CartPage() {
     const [price, setPrice] = useState(Number(0));
     const [totalPriceCheckout, setTotalPriceCheckout] = useState('');
     const [totalPriceCheckoutVoucher, setTotalPriceCheckoutVoucher] = useState('');
+    const [discountVoucher, setDiscountVoucher] = useState(Number(0));
 
     const [checkedArray, setCheckedArray] = useState([]); // array contains index of product which will be checked.
     const [isCheckedAll, setIsCheckedAll] = useState(false);
@@ -42,22 +43,26 @@ function CartPage() {
         setPrice((prev) => prev + price);
     };
 
-    const handleOriginalPrice = (id, origin = '', option = '') => {
+    const handleOriginalPrice = (id, origin = '', amount = 1, option = '') => {
         if (option === 'delete') {
-            setOriginalPrice((_) => {
-                return originalPrice.filter((item) => item.id !== id);
+            setOriginalPrice((prev) => {
+                return prev.filter((item) => item.id !== id);
             });
         }
 
         setOriginalPrice((prev) => {
             // console.log('Previous state:', prev);
             if (!prev.some((item) => item.id === id)) {
-                const updatedState = [...prev, { id: id, price: origin }];
+                const updatedState = [...prev, { id: id, price: origin, amount: amount }];
                 // console.log('Updated state:', updatedState);
                 return updatedState;
             }
             return prev;
         });
+    };
+
+    const handleDiscountVoucher = (value) => {
+        setDiscountVoucher(value);
     };
 
     const cookies = new Cookies();
@@ -129,12 +134,12 @@ function CartPage() {
 
     useEffect(() => {
         const totalSum = originalPrice.reduce((sum, item) => sum + Number(item.price), 0);
-        console.log(totalSum);
-        // console.log(originalPrice);
+        // console.log(totalSum);
+        console.log(originalPrice);
 
         setTotalPriceCheckout(addDotsToNumber(price + totalSum));
-        setTotalPriceCheckoutVoucher(addDotsToNumber(totalPriceCheckout));
-    }, [price, originalPrice, totalPriceCheckout]);
+        setTotalPriceCheckoutVoucher(addDotsToNumber(((price + totalSum) * (100 - discountVoucher)) / 100));
+    }, [price, originalPrice, totalPriceCheckout, discountVoucher]);
 
     /** Handle delete product */
 
@@ -149,7 +154,7 @@ function CartPage() {
             const newBooksIdInCart = booksIdInCart.filter((item) => item.book_id !== id);
             setBooksIdInCart(newBooksIdInCart);
             setIsEmptyCart((prevBooksIdInCart) => prevBooksIdInCart.length === 0);
-            handleOriginalPrice(id, '', 'delete');
+            handleOriginalPrice(id, '', 1, 'delete');
         } catch (error) {
             console.log(error);
         }
@@ -162,7 +167,7 @@ function CartPage() {
                     'Content-Type': 'application/json',
                 },
             });
-            handleOriginalPrice(id, '', 'delete');
+            handleOriginalPrice(id, '', 1, 'delete');
         } catch (error) {
             console.log(error);
         }
@@ -262,7 +267,7 @@ function CartPage() {
                         </div>
                         <div className={cx('payment')}>
                             <div className={cx('voucher')}>
-                                <Vouchers />
+                                <Vouchers handleDiscountVoucher={handleDiscountVoucher} />
                             </div>
                             <div className={cx('checkout')}>
                                 <div className={cx('total_checkout')}>

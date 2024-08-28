@@ -3,22 +3,36 @@ import styles from './VoucherItem.module.scss';
 import Button from '~/components/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
 
-function VoucherItem() {
+function VoucherItem({ data, handleDiscountVoucher }) {
     const [openSeeMore, setOpenSeeMore] = useState(false);
+    const [isApplied, setIsApplied] = useState(false);
 
     const handleOpenSeeMore = () => {
         setOpenSeeMore(!openSeeMore);
     };
 
+    const handleIsApplied = () => {
+        setIsApplied(!isApplied);
+    };
+
+    useEffect(() => {
+        if (isApplied) {
+            handleDiscountVoucher(data.discount);
+        } else {
+            handleDiscountVoucher(0);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isApplied]);
+
     return (
         <div>
             <div className={cx('wrapper')}>
                 <div className={cx('header')}>
-                    <p className={cx('header_title')}>Voucher discount 10.000 đ for bills above 100.000 đ</p>
+                    <p className={cx('header_title')}>Voucher discount {data.discount}% on bills.</p>
                     <span className={cx('header_more')} onClick={handleOpenSeeMore}>
                         See more
                     </span>
@@ -28,7 +42,10 @@ function VoucherItem() {
                     Paper and Some Other Types of Paper and Boards
                 </p>
                 <div className={cx('footer')}>
-                    <Button className={cx('apply_btn')}>Apply</Button>
+                    <Button className={cx('apply_btn')} onClick={handleIsApplied}>
+                        {isApplied && 'Applied'}
+                        {!isApplied && 'Apply'}
+                    </Button>
                 </div>
             </div>
             {openSeeMore && (
@@ -42,21 +59,11 @@ function VoucherItem() {
                             <div className={cx('voucher_detail_info')}>
                                 <p className={cx('voucher_detail_info_header')}>Vouchers:</p>
                                 <ul className={cx('voucher_list')}>
-                                    <li className={cx('voucher_item')}>
-                                        Voucher discount 10.000 đ for bills above 100.000 đ
-                                    </li>
-                                    <li className={cx('voucher_item')}>
-                                        Voucher discount 20.000 đ for bills above 300.000 đ
-                                    </li>
-                                    <li className={cx('voucher_item')}>
-                                        Voucher discount 30.000 đ for bills above 500.000 đ
-                                    </li>
-                                    <li className={cx('voucher_item')}>
-                                        Voucher discount 50.000 đ for bills above 800.000 đ
-                                    </li>
-                                    <li className={cx('voucher_item')}>
-                                        Voucher discount 100.000 đ for bills above 1.000.000 đ
-                                    </li>
+                                    <li className={cx('voucher_item')}>Voucher discount 10% on bills.</li>
+                                    <li className={cx('voucher_item')}>Voucher discount 20% on bills.</li>
+                                    <li className={cx('voucher_item')}>Voucher discount 25% on bills.</li>
+                                    <li className={cx('voucher_item')}>Voucher discount 35% on bills.</li>
+                                    <li className={cx('voucher_item')}>Voucher discount 50% on bills.</li>
                                 </ul>
                             </div>
                             <div className={cx('voucher_detail_info')}>
@@ -70,7 +77,7 @@ function VoucherItem() {
                             <div className={cx('voucher_detail_info')}>
                                 <p className={cx('voucher_detail_info_header')}>Expiration:</p>
                                 <p className={cx('voucher_detail_info_text')}>
-                                    This voucher is available for 30 days left.
+                                    This voucher is available form {data.valid_from} to {data.valid_to}.
                                 </p>
                             </div>
                         </div>
