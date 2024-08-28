@@ -1,6 +1,6 @@
 .wrapper {
     padding: 48px 0 24px 0;
-    border-bottom: 1px solid var(--white);
+    border-bottom: 1px solid var(--guest-lightblue-full);
 }
 
 .title {
@@ -8,6 +8,7 @@
     color: var(--black);
     margin-bottom: 8px;
     font-style: italic;
+    font-weight: bold;
 }
 
 .description {
