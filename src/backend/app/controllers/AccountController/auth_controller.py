@@ -132,27 +132,6 @@ async def initiate_google_login(request: Request):
     }
 
 
-# @router.get("/a")
-# async def set_session(response: Response):
-#     state = "abcd1234"
-#     response.set_cookie(key="gfg_cookie_key", value=state, samesite="None", secure=True)
-#     return {"state": state}
-
-
-# @router.get("/b")
-# def func(request: Request, gfg_cookie_key: Annotated[str | None, Cookie()] = None):
-#     request_state = request.query_params.get("state")
-#     response_state = gfg_cookie_key
-
-#     print("\n\n")
-#     print(request_state, response_state)
-#     print("\n\n")
-
-#     if request_state == response_state:
-#         return "OKOK"
-#     return "Failed"
-
-
 @router.get("/google-callback", name="google_auth", tags=["Authentication"])
 async def google_auth(request: Request, db: AsyncSession = Depends(get_db)):
     try:
@@ -308,7 +287,7 @@ async def reset_password(
         )
     hashed_password = get_password_hash(new_password)
     account.password = hashed_password
-    db.add(account)  # Xoa dong nay duoc k z
+    # db.add(account)  # Xoa dong nay duoc k z
     await db.commit()
     return {"msg": "Password updated successfully!"}
 
@@ -378,36 +357,3 @@ async def reset_password_by_email(
 async def get_access_token(username: str):
     access_token = create_access_token(data={"sub": username})
     return {"test_access_token": access_token}
-
-
-# @router.put(
-#     "/reset_password_by_email/{reset_token}", summary = "Reset password by email", description = "Reset password by email"
-# )
-# async def reset_password_by_email(
-#     form_data: ResetPasswordForm,
-#     db: AsyncSession = Depends(get_db),
-# ):
-#     try:
-#         user_name = decode_token(form_data.token)
-#         account = await get_account_by_username(db, user_name)
-
-#         if not account:
-#             raise HTTPException(
-#                 status_code=404,
-#                 detail="Account not found",
-#             )
-#         hashed_password = get_password_hash(form_data.password)
-
-#         account.password_hash = hashed_password
-#         await db.commit()
-#         return {"msg": "Password updated successfully!"}
-#     except jwt.ExpiredSignatureError:
-#         raise HTTPException(
-#             status_code=400,
-#             detail="Token expired",
-#         )
-#     except jwt.InvalidTokenError:
-#         raise HTTPException(
-#             status_code=400,
-#             detail="Invalid Token",
-#         )

@@ -12,9 +12,11 @@ import random
 
 router = APIRouter()
 user_service = CRUDService[User, UserCreate, UserUpdate](User)
-# @router.post("/create_user", summary="Create a new user")
-# async def create_user_endpoint(user: UserCreate, db: AsyncSession = Depends(get_db)):
-#     return await user_service.create(user, db)
+
+
+@router.post("/create_user", summary="Create a new user")
+async def create_user_endpoint(user: UserCreate, db: AsyncSession = Depends(get_db)):
+    return await user_service.create(user, db)
 
 
 def get_num():
@@ -87,9 +89,9 @@ async def update_user_endpoint(
     return user
 
 
-# @router.delete("/delete_user/{user_id}", summary="Delete a user by ID")
-# async def delete_user_endpoint(user_id: UUID, db: AsyncSession = Depends(get_db)):
-#     user = await user_service.delete(user_id, db)
-#     if not user:
-#         raise HTTPException(status_code=404, detail="user not found")
-#     return user
+@router.delete("/delete_user/{user_id}", summary="Delete a user by ID")
+async def delete_user_endpoint(user_id: UUID, db: AsyncSession = Depends(get_db)):
+    user = await user_service.delete(user_id, db)
+    if not user:
+        raise HTTPException(status_code=404, detail="user not found")
+    return user
