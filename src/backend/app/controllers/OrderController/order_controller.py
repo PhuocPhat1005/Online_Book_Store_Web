@@ -136,7 +136,8 @@ async def create_order_endpoint(
         else:
             raise HTTPException(status_code=400, detail="Voucher not valid")
     else:
-        raise HTTPException(status_code=404, detail="Voucher not found")
+        if voucher_code:
+            raise HTTPException(status_code=404, detail="Voucher not found")
 
     payment.payment_method = payment_method
     payment.amount = 0
