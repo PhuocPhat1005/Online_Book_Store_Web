@@ -24,7 +24,7 @@ function DetailsBook() {
     const location = useLocation();
     let data = location.state?.bookData;
 
-    let discount_percentage = 10;
+    let discount_percentage = 0;
     const rating = data.rate.toString();
     let old_price = addDotsToNumber(data.price).toString();
     let new_price = addDotsToNumber(Math.round((data.price * (100 - discount_percentage)) / 100)).toString();
@@ -75,12 +75,12 @@ function DetailsBook() {
         if (isAddToCart) {
             const timer = setTimeout(() => {
                 setIsAddToCart(false);
-            }, 3000);
+            }, 2000);
             return () => clearTimeout(timer); // Clean up the timer on unmount
         }
     }, [isAddToCart]);
 
-    console.log(data);
+    // console.log(data);
 
     return (
         <div className={cx('wrapper')}>
@@ -146,8 +146,8 @@ function DetailsBook() {
                             Quantity:
                         </label>
                         <div className={cx('quantity_wrapper')}>
-                            <span className={cx('quantity_add')} onClick={() => handleQuantity()}>
-                                +
+                            <span className={cx('quantity_minus')} onClick={() => handleQuantity(true)}>
+                                -
                             </span>
                             <input
                                 className={cx('quantity_input')}
@@ -158,8 +158,8 @@ function DetailsBook() {
                                 value={quantityValue}
                                 onChange={(e) => handleChangeQuantity(e.target.value)}
                             />
-                            <span className={cx('quantity_minus')} onClick={() => handleQuantity(true)}>
-                                -
+                            <span className={cx('quantity_add')} onClick={() => handleQuantity()}>
+                                +
                             </span>
                         </div>
                         <span className={cx('available')}>
