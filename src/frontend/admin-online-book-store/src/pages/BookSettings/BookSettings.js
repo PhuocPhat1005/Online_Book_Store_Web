@@ -11,7 +11,10 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 const cx = classNames.bind(styles);
 
 //table css in src/components/GlobalStyles/GlobalStyles.scss
-
+function addDotsToNumber(number) {
+    // Convert the number to a string and use a regular expression to add dots
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
 const BookSettings = ({ admin }) => {
   const navigate = useNavigate();
   const handleNavigate = (route) => {
@@ -19,8 +22,6 @@ const BookSettings = ({ admin }) => {
           navigate(route);
       }
   };
-  let page = 1;
-  let max_page = 100;
   const BOOKS_PER_ROW = 1; // number
   // Display & Manage the fillter all
 
@@ -67,6 +68,7 @@ const BookSettings = ({ admin }) => {
       }
       setCurrentPage((prev) => showPages.length - 1);
   };
+  
   useEffect(() => {
       // Ensure current page index is valid
       if (currentPage < 0) {
@@ -85,7 +87,6 @@ const BookSettings = ({ admin }) => {
         console.log(response.data);
         setBooks(response.data);
         setIsLoading(false);
-        // setImagesFetched(false); // Reset the imagesFetched flag
       } catch (error) {
       if (error.response) {
         // The request was made and the server responded with a status code

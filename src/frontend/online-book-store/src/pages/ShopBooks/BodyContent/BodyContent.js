@@ -43,7 +43,7 @@ function BodyContent() {
     };
 
     const handleBackPage = () => {
-        if (currentPage < 0) return;
+        if (actualPage <= 1) return;
         else if (currentPage === 0 && showPages[0] > 1) {
             setShowPages(showPages.map((page) => page - 1));
             setActualPage((prev) => prev - 1);
@@ -55,7 +55,7 @@ function BodyContent() {
     };
 
     const handleNextPage = () => {
-        if (currentPage > 99) return;
+        if (actualPage >= 10) return;
         else if (currentPage === showPages.length - 1) {
             setShowPages(showPages.map((page) => page + 1));
             setActualPage((prev) => prev + 1);

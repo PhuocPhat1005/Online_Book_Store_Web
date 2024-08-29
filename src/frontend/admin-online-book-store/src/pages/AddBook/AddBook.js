@@ -13,6 +13,8 @@ import { faCircleLeft, faArrowUpFromBracket } from '@fortawesome/free-solid-svg-
 
 const cx = classNames.bind(styles);
 
+// store book ava
+let book_id = "";
 
 const AddBook = ({ admin }) => {
   // let DefaultImage = document.createElement("img");
@@ -24,89 +26,6 @@ const AddBook = ({ admin }) => {
       }
   };
   const [bookImgURL, setBookImgURL] = useState(DefaultImage);
-  // const [isbn, setIsbn] = useState("");
-  // const [book_name, setBookname] = useState("");
-  // const [author_name, setAuthorname] = useState("");
-  // const [category_name, setCategory] = useState("");
-  // const [publisher_name, setPublisher] = useState("");
-  // const [publishing_date, setPublishingdate] = useState("");
-  // const [price, setPrice] = useState("");
-  // const [language, setLanguage] = useState("");
-  // const [translator, setTranslator] = useState("");
-  // const [book_cover_type, setBookcover] = useState("");
-  // const [description, setDescription] = useState("");
-  // const [posts, setPosts] = useState([]);
-    
-  // function HandleIsbnChange(event){
-  //   setIsbn(event.target.value);
-  // }
-  // function HandleBooknameChange(event){
-  //   setBookname(event.target.value);
-  // }
-  // function HandleAuthornameChange(event){
-  //   setAuthorname(event.target.value);
-  // }
-  // function HandleCategoryChange(event){
-  //   setCategory(event.target.value);
-  // }
-  // function HandlePublisherChange(event){
-  //   setPublisher(event.target.value);
-  // }
-  // function HandlePublishingdateChange(event){
-  //   setPublishingdate(event.target.value);
-  // }
-  // function HandlePriceChange(event){
-  //   setPrice(event.target.value);
-  // }
-  // function HandleLanguageChange(event){
-  //   setLanguage(event.target.value);
-  // }
-  // function HandleTranslatorChange(event){
-  //   setTranslator(event.target.value);
-  // }
-  // function HandleBookcoverChange(event){
-  //   setBookcover(event.target.value);
-  // }
-  // function HandleDescriptionChange(event){
-  //   setDescription(event.target.value);
-  // }
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   // props.addPost(title, body);
-  //   setIsbn("");
-  //   setBookname("");
-  //   setAuthorname("");
-  //   setCategory("");
-  //   setPublisher("");
-  //   setPublishingdate("");
-  //   setPrice("");
-  //   setLanguage("");
-  //   setTranslator("");
-  //   setBookcover("");
-  //   setDescription("");
-  // };
-  // const addPost = async(isbn, bookmane, author_name, category_name,
-  //   publisher_name, publishing_date, price, language,
-  //   translator, book_cover_type, description) => {
-  //   const response = await client.post('', {
-  //     title,
-  //     body,
-  //   });
-  //   setPosts((prevPosts) => [response.data, ...prevPosts])
-  // };
-  // setPosts({
-  //   isbn: event.target.value,
-  //   book_name: event.target.value,
-  //   author_name: event.target.value,
-  //   category_name: event.target.value,
-  //   publisher_name: event.target.value,
-  //   publishing_date: event.target.value,
-  //   price: event.target.value,
-  //   language: event.target.value,
-  //   translator: event.target.value,
-  //   book_cover_type: event.target.value,
-  //   description: event.target.value,
-  // });
 
   const [posts, setPosts] = useState({
     isbn: "",
@@ -137,9 +56,9 @@ const AddBook = ({ admin }) => {
       id: "empty_uuid",
       isbn: formData.get('isbn'),
       book_name: formData.get('book_name'),
-      author_name: formData.get('author_name'),
-      category_name: formData.get('category_name'),
-      publisher_name: formData.get('publisher_name'),
+      // author_name: formData.get('author_name'),
+      // category_name: formData.get('category_name'),
+      // publisher_name: formData.get('publisher_name'),
       sale_off: "empty_uuid",
       publishing_date: formData.get('publishing_date'),
       price: formData.get('price'),
@@ -151,12 +70,18 @@ const AddBook = ({ admin }) => {
       amount_sell: 0,
       amount_rate: 0,
       rate: 5,
-      translator_name: formData.get('translator_name'),
+      // translator_name: formData.get('translator_name'),
       description: formData.get('description'),
     };
     let today = new Date().toISOString().slice(0, 10)
     if (add_book_data.publishing_date === "") {
       add_book_data.publishing_date = today;
+    }
+    if (add_book_data.price === "") {
+      add_book_data.price = "0.0";
+    }
+    if (add_book_data.page_number === "") {
+      add_book_data.page_number = "0";
     }
     try {
       const response = await request.post('book/create_book', add_book_data, {
@@ -166,13 +91,8 @@ const AddBook = ({ admin }) => {
       });
 
       if (response.status === 200) {
-          // Handle successful form submission
-          // handleSignin(response.data.access_token);
-
-          // setToggleToast(true);
           console.log('Form submitted successfully');
-
-          // setIsLoading(false);
+          book_id = response.data;
           console.log(response.data);
           navigate(config.routes.bookSettings);
       } else {
@@ -243,37 +163,101 @@ const AddBook = ({ admin }) => {
   //     });
   // };
 
-  
-  
   const fileUploadRef = useRef();
 
   const handleImageUpload = (event) => {
     event.preventDefault();
     fileUploadRef.current.click();
-  }
-  const uploadImageDisplay = async () => {
+  };
+
+  const uploadImageDisplay = async (file) => {
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('book_id', book_id);
+
     try {
-      const uploadedFile = fileUploadRef.current.files[0];
-      const formData = new FormData();
-      formData.append("file", uploadedFile);
-      
-      const cachedURL = URL.createObjectURL(uploadedFile);
-      setBookImgURL(cachedURL);
+      const response = await axios.post('photo/uploadfiles', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-      // const response = await fetch("https://api.escuelajs.co/api/v1/files/upload", {
-      //   method: "post",
-      //   body: formData
-      // });
-
-      // if (response.status === 201) {
-      //   const data = await response.json();
-      //   setBookImgURL(data?.location);
-      // }
-      } catch(error) {
-        console.error(error);
-        setBookImgURL(DefaultImage);
+      if (response.status === 200) {
+        console.log('Form submitted successfully');
+      } else {
+        console.error('Form submission failed', response.data);
       }
-  }
+    } catch (error) {
+      if (error.response) {
+        console.error('Form submission failed', error.response.data);
+      } else if (error.request) {
+        console.error('No response received', error.request);
+      } else {
+        console.error('Error', error.message);
+      }
+    }
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      uploadImageDisplay(file);
+    }
+  };
+
+  
+  // const fileUploadRef = useRef();
+
+  // const handleImageUpload = (event) => {
+  //   event.preventDefault();
+  //   fileUploadRef.current.click();
+  //   console.log('Upload image');
+  // }
+  // const uploadImageDisplay = async () => {
+  //   try {
+  //   const response = await request.post('photo/uploadfiles', book_id, {
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   });
+
+  //   if (response.status === 200) {
+  //       console.log('Form submitted successfully');
+  //   } else {
+  //       console.error('Form submission failed', response.data);
+  //   }
+  //   } catch (error) {
+
+  //   if (error.response) {
+  //       console.error('Form submission failed', error.response.data);
+  //   } else if (error.request) {
+  //       console.error('No response received', error.request);
+  //   } else {
+  //       console.error('Error', error.message);
+  //   }
+  // }}
+  //   try {
+  //     const uploadedFile = fileUploadRef.current.files[0];
+  //     const formData = new FormData();
+  //     formData.append("file", uploadedFile);
+      
+  //     const cachedURL = URL.createObjectURL(uploadedFile);
+  //     setBookImgURL(cachedURL);
+
+  //     // const response = await fetch("https://api.escuelajs.co/api/v1/files/upload", {
+  //     //   method: "post",
+  //     //   body: formData
+  //     // });
+
+  //     // if (response.status === 201) {
+  //     //   const data = await response.json();
+  //     //   setBookImgURL(data?.location);
+  //     // }
+  //     } catch(error) {
+  //       console.error(error);
+  //       setBookImgURL(DefaultImage);
+  //     }
+  // }
   // const handleSubmit = (event) => {
   //   event.preventDefault();
   //   props.addPost(isbn, book_name, author_name, category_name, publisher_name, publishing_date, price, language, translator, book_cover_type, description);
@@ -486,4 +470,8 @@ const AddBook = ({ admin }) => {
   );
 }
   
+<<<<<<< HEAD
   export default AddBook;
+=======
+export default AddBook;
+>>>>>>> ab611f5efdb618b14ede480215982c4d63d3e810

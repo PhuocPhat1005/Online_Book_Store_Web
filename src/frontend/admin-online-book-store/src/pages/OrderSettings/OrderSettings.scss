@@ -1,5 +1,5 @@
 :root {
-    --option-width: 160px;
+    --option-width: 200px;
     --sort-by-width: 200px;
     --select-height: 100px;
 }
@@ -155,4 +155,12 @@
 .method-item-text {
     font-size: 1.8rem;
     color: var(--text-color);
+}
+
+.see-detail-btn {
+    background-color: white;
+    color: #551A8B;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;;
 }

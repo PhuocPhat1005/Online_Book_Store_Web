@@ -460,7 +460,8 @@
 
 /* Click Add To Cart */
 
-.add_to_cart_notification {
+.add_to_cart_notification,
+.invalid_popup {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -483,4 +484,25 @@
     font-size: 3.2rem;
     font-weight: bold;
     color: var(--white);
+}
+
+/* Invalid popup */
+
+.invalid_popup_header {
+    color: var(--white);
+}
+
+.invalid_popup_text {
+    font-size: 3.2rem;
+}
+
+.invalid_popup_close {
+    font-size: 2.4rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding-right: 24px;
+    padding-top: 16px;
+
+    cursor: pointer;
 }
