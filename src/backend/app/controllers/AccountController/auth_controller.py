@@ -233,7 +233,7 @@ async def google_auth(request: Request, db: AsyncSession = Depends(get_db)):
         return {"error": str(e)}
 
 @router.post(
-    "/sign_up_form",
+    "/sign_up",
     summary="Sign up a new user account form, not verfiy email yet",
 )
 async def sign_up(account: AccountCreate, db: AsyncSession = Depends(get_db)):
@@ -251,7 +251,14 @@ async def sign_up(account: AccountCreate, db: AsyncSession = Depends(get_db)):
         )
     account.password = get_password_hash(account.password)
     await send_email_to_user(account.email, "Welcome to our website", "Follow link to signing up!", f"http://localhost:3000/signup") 
-    return account
+    # return account
+    new_id = await create_account(db, account)
+    access_token = create_access_token(data={"sub": account.username})
+    refresh_token = create_refresh_token(data={"sub": account.username})
+    user = UserCreate(account_id=new_id)
+    user.cart_id = uuid.uuid4()
+    await user_service.create(user, db)
+    return {"access_token": access_token, "refresh_token": refresh_token}
 
 
 @router.post("/signup", summary="Sign up a new user account", description="Create a new user account")
