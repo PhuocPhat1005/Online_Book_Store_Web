@@ -8,10 +8,10 @@ const cx = classNames.bind(styles);
 function BookItem({ data }) {
     return (
         <div className={cx('wrapper')}>
-            <Image className={cx('avatar')} src={data.book_ava} alt="avatar" />
+            <Image className={cx('avatar')} src={data.Book_ava} alt="avatar" />
             <div className={cx('information')}>
-                <span className={cx('title')}>{data.book_name}</span>
-                <span className={cx('description')}>{data.description}</span>
+                <span className={cx('title')}>{data.Book_name}</span>
+                <span className={cx('description')}>{data.Book_description}</span>
             </div>
         </div>
     );

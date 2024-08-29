@@ -49,15 +49,56 @@
     padding: 50px 0px;
     height: calc(100vh - 100px);
     max-height: 1700px;
-    width: 100%;
+    // width: 100%;
     font-weight: bold;
     // background-color: pink;
     overflow-y: scroll;
 }
 
+.add-book-info-img {
+    // margin-top: 50px;
+    margin-left: 100px;
+    width: 400px;
+    // height: 400px;
+    // background-color: pink;
+}
+.upload-img-label {
+    margin-left: 100px;
+    font-size: 26px;
+    font-weight: normal;
+}
+.img-size {
+    width: 400px;
+    height: 600px;
+    margin-left: 000px;
+}
+
+.upload-img-btn {
+    display: inline-block;
+    position: relative;
+    margin-top: 10px;
+    margin-left: 100px;
+    height: 60px;
+    width: 200px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #50C878;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    border: 1px solid #CCCCCC;
+    transition: 0.3s;
+    &:hover {
+        background-color: #3ca760;
+    }
+}
+
 .add-book-info-text {
+    // position: fixed;
     // position: relative;
     // margin-top: 50px;
+    margin-top: -720px;
     margin-left: 620px;
     width: 1200px;
     font-size: 24px;
@@ -71,14 +112,17 @@
 input {
     border-radius: 5px;
     border: 1px solid #CCCCCC;
+    color: black;
 }
 
-input[type=text] {
+input[type=text1] {
     width: 100%;
     font-size: 24px;
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
+    border: 1px solid #CCCCCC;
+    color: #808080;
 }
 
 .description-box {
@@ -93,6 +137,8 @@ input[type=text2], textarea {
     margin: 8px 0;
     // box-sizing: border-box;
     height: 190px;
+    border: 1px solid #CCCCCC;
+    color: #808080;
 }
 
 input[type=text2]::placeholder {

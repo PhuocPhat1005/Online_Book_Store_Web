@@ -26,7 +26,7 @@ const BookSettings = ({ admin }) => {
 
   const [conditionProducts, setConditionProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(0); // number
-  const [showPages, setShowPages] = useState([1, 2, 3, 4, 5]); // number array
+  const [showPages, setShowPages] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9]); // number array
   const [books, setBooks] = useState([]); // object array
   // const [imagesFetched, setImagesFetched] = useState(false);
 
@@ -118,18 +118,6 @@ const BookSettings = ({ admin }) => {
     }
   }
 
-  // const [users, setUsers] = useState([])
-  // const [loading, setLoading] = useState(false)
-  // useEffect(() => {
-  //   setLoading(true)
-  //   fetch("https://jsonplaceholder.typicode.com/users")
-  //     .then(response => response.json())
-  //     .then(json => setUsers(json))
-  //     .finally(() => {
-  //       setLoading(false)
-  //     })
-  // }, [])
-
   return (
     <>
       <div className={cx('book-settings')}>
@@ -159,10 +147,10 @@ const BookSettings = ({ admin }) => {
           <div> {/* className="App"> */}
             <table border={1}>
               <tr>
-                <th styles="width:20%">ISBN</th>
-                <th styles="width:300px">Book's name</th>
-                <th styles="width:300px">Create at</th>
-                <th styles="width:300px">Update at</th>
+                <th >ISBN</th>
+                <th >Book's name</th>
+                <th >Create at</th>
+                <th >Update at</th>
                 <th styles="width:50px">Price</th>
                 <th>See detail</th>
               </tr>
@@ -172,7 +160,7 @@ const BookSettings = ({ admin }) => {
                   <td>{item.book_name}</td>
                   <td>{item.created_at}</td>
                   <td>{item.updated_at}</td>
-                  <td>{item.price}</td>
+                  <td>{item.price} VND</td>
                   <td><Link>See detail</Link></td>
                 </tr>
               ))}

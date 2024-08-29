@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './GuestContact.module.scss';
 import { HeaderContentLayout } from '~/components/Layouts';
@@ -9,8 +8,8 @@ import FAQMenu from './components/GuestFAQMenu';
 import emailjs from '@emailjs/browser';
 import Header from '~/components/Layouts/DefaultLayout/Header';
 import GuestFooter from '~/components/Layouts/DefaultLayout/GuestFooter';
-import PopUpSentSuccesful from './components/PopUpSentSuccesful';
-import { useRef } from 'react';
+import PopUpWithMessage from '~/components/PopUpWithMessage';
+import { useRef, useState } from 'react';
 
 const cx = classNames.bind(styles);
 
@@ -104,7 +103,7 @@ function GuestContact() {
             </div>
             <GuestFooter />
             {showPopup && (
-                <PopUpSentSuccesful message="Your message has been sent successfully." onClose={handleClosePopup} />
+                <PopUpWithMessage message="Your message has been sent successfully." onClose={handleClosePopup} />
             )}
         </>
     );

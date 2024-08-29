@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight, faStar } from '@fortawesome/free-solid-svg-icons';
-
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './BodyContent.module.scss';
@@ -14,6 +13,7 @@ import Products from './components/Products';
 import request from '~/utils/request';
 import { GENRES, CATEGORY, FILTER_SECTION_1, FILTER_SECTION_2 } from './components/Filter_Category';
 import BasicSpinner from '~/components/BasicSpinner';
+import PopUpWithMessage from '~/components/PopUpWithMessage';
 
 const cx = classNames.bind(styles);
 
@@ -25,14 +25,20 @@ function BodyContent() {
     const [isAppliedFilterAll, setIsAppliedFilterAll] = useState(false);
     const [conditionProducts, setConditionProducts] = useState([]);
 
+    const [actualPage, setActualPage] = useState(1);
     const [currentPage, setCurrentPage] = useState(0); // number
     const [showPages, setShowPages] = useState([1, 2, 3, 4, 5]); // number array
     const [books, setBooks] = useState([]); // object array
+
+    // PopUpWithMessage states
+    const [isPopUpWithMessageVisible, setIsPopUpWithMessageVisible] = useState(false);
+    const [popUpMessage, setPopUpMessage] = useState('');
     // const [imagesFetched, setImagesFetched] = useState(false);
 
     const [isLoading, setIsLoading] = useState(false);
 
     const handleCurrentPage = (page) => {
+        setActualPage(page);
         setCurrentPage(page - 1);
     };
 
@@ -40,9 +46,11 @@ function BodyContent() {
         if (currentPage < 0) return;
         else if (currentPage === 0 && showPages[0] > 1) {
             setShowPages(showPages.map((page) => page - 1));
+            setActualPage((prev) => prev - 1);
             return;
         }
 
+        setActualPage((prev) => prev - 1);
         setCurrentPage((prev) => prev - 1);
     };
 
@@ -50,9 +58,11 @@ function BodyContent() {
         if (currentPage > 99) return;
         else if (currentPage === showPages.length - 1) {
             setShowPages(showPages.map((page) => page + 1));
+            setActualPage((prev) => prev + 1);
             return;
         }
 
+        setActualPage((prev) => prev + 1);
         setCurrentPage((prev) => prev + 1);
     };
 
@@ -65,13 +75,17 @@ function BodyContent() {
         }
     }, [currentPage, showPages]);
 
+    // useEffect(() => {
+    //     console.log(actualPage);
+    // }, [actualPage]);
+
     // API for getting books
     useEffect(() => {
         const getAllBooks = async () => {
             try {
                 setIsLoading(true);
 
-                const response = await request.get(`book/get_book_per_page/${(currentPage + 1).toString()}`);
+                const response = await request.get(`book/get_book_per_page/${actualPage.toString()}`);
 
                 setBooks(response.data);
                 setIsLoading(false);
@@ -91,7 +105,7 @@ function BodyContent() {
             }
         };
         getAllBooks();
-    }, [currentPage]);
+    }, [actualPage]);
 
     const fetchRatingOutside = async () => {
         try {
@@ -171,6 +185,10 @@ function BodyContent() {
 
             if (response.status === 200) {
                 setConditionProducts(response.data);
+                if (response.data.length === 0) {
+                    setPopUpMessage('No books satisfy the filter requirements.');
+                    setIsPopUpWithMessageVisible(true);
+                }
             }
         } catch (error) {
             console.log(error);
@@ -302,6 +320,10 @@ function BodyContent() {
                     handleFilterAllDisplay={handleFilterAllDisplay}
                     handleApplyFilterAll={handleApplyFilterAll}
                 />
+            )}
+
+            {isPopUpWithMessageVisible && (
+                <PopUpWithMessage message={popUpMessage} onClose={() => setIsPopUpWithMessageVisible(false)} />
             )}
         </div>
     );

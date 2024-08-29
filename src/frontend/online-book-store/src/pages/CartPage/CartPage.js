@@ -28,9 +28,10 @@ function CartPage() {
 
     const [originalPrice, setOriginalPrice] = useState([]);
     const [price, setPrice] = useState(Number(0));
+    const [totalPriceCheckoutNumber, setTotalPriceCheckoutNumber] = useState(Number(0));
     const [totalPriceCheckout, setTotalPriceCheckout] = useState('');
     const [totalPriceCheckoutVoucher, setTotalPriceCheckoutVoucher] = useState('');
-    const [discountVoucher, setDiscountVoucher] = useState(Number(0));
+    const [discountVoucher, setDiscountVoucher] = useState({});
 
     const [checkedArray, setCheckedArray] = useState([]); // array contains index of product which will be checked.
     const [isCheckedAll, setIsCheckedAll] = useState(false);
@@ -134,12 +135,15 @@ function CartPage() {
 
     useEffect(() => {
         const totalSum = originalPrice.reduce((sum, item) => sum + Number(item.price), 0);
-        // console.log(totalSum);
-        console.log(originalPrice);
+        const discount = discountVoucher.discount !== undefined ? discountVoucher.discount : 0;
 
-        setTotalPriceCheckout(addDotsToNumber(price + totalSum));
-        setTotalPriceCheckoutVoucher(addDotsToNumber(((price + totalSum) * (100 - discountVoucher)) / 100));
-    }, [price, originalPrice, totalPriceCheckout, discountVoucher]);
+        // console.log(totalSum);
+        // console.log(originalPrice);
+
+        setTotalPriceCheckoutNumber(price + totalSum);
+        setTotalPriceCheckout(addDotsToNumber(totalPriceCheckoutNumber));
+        setTotalPriceCheckoutVoucher(addDotsToNumber(((price + totalSum) * (100 - discount)) / 100));
+    }, [price, originalPrice, totalPriceCheckout, discountVoucher, totalPriceCheckoutNumber]);
 
     /** Handle delete product */
 
@@ -286,7 +290,13 @@ function CartPage() {
                     </div>
                 </div>
             </div>
-            {isCheckout && <Checkout closeCheckoutFunc={handleCheckout} />}
+            {isCheckout && (
+                <Checkout
+                    closeCheckoutFunc={handleCheckout}
+                    orderPrice={totalPriceCheckoutNumber}
+                    voucherDiscount={discountVoucher}
+                />
+            )}
         </>
     );
 }

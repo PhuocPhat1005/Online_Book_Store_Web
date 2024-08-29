@@ -16,7 +16,7 @@ class OrderDetailUpdate(OrderDetailBase):
 class OrderBase(BaseModel):
     id: str | None = "empty_uuid"
     user_id: str | None = "empty_uuid"
-    status: str = "Waiting for approval"
+    status: str = "Unprocessed"
     address_id: str | None = "empty_uuid"
     payment_id: str | None = "empty_uuid"
     shipping_id: str | None = "empty_uuid"
