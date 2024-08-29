@@ -2,6 +2,7 @@ import classNames from 'classnames/bind';
 import Button from '../../components/Button';
 import styles from './AddBook.scss';
 import config from '../../config';
+import request from '../../utils/request';
 import axios from 'axios';
 import assets from '../../assets';
 import DefaultImage from "../../assets/Common/null_book_cover.jpg";
@@ -123,7 +124,7 @@ const AddBook = ({ admin }) => {
   const [data, setData] = useState([]);
   const {isbn, book_name, authorname, category, publisher,
     publishing_date, price, language, translator,
-    book_cover_type, description} = posts;
+    book_size, page_number, book_cover_type, description} = posts;
 
   const handleChange = (event) => {
     setPosts({ ...posts, [event.target.name]: event.target.value });
@@ -131,25 +132,93 @@ const AddBook = ({ admin }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (isbn && book_name && authorname && category &&
-      publisher && publishing_date && price && language &&
-      translator && book_cover_type && description) {
-        // axios.post('https://jsonplaceholder.typicode.com/posts', posts)
-        axios.post('book/create_book_db/', posts)
-          // .then(res => console.log('AAA', res.data))
-          .then(res => {
-            console.log(res);
-            console.log(res.data);
-              // setData([...data, res.data]);
-              // setPosts({ isbn: "", book_name: "", authorname: "", category: "",
-              //   publisher: "", publishing_date: "", price: "", language: "",
-              //   translator: "", book_cover_type: "", description: ""});
+    const formData = new FormData(event.target);
+    const add_book_data = {
+      id: "empty_uuid",
+      isbn: formData.get('isbn'),
+      book_name: formData.get('book_name'),
+      // authorname: formData.get('authorname'),
+      // category: formData.get('category'),
+      // publisher: formData.get('publisher'),
+      publishing_company_id: "empty_uuid",
+      category_id: "empty_uuid",
+      sale_off: "empty_uuid",
+      publishing_date: formData.get('publishing_date'),
+      price: formData.get('price'),
+      language: formData.get('language'),
+      book_size: formData.get('book_size'),
+      page_number: formData.get('page_number'),
+      book_cover_type: formData.get('book_cover_type'),
+      book_ava: "",
+      amount_sell: 0,
+      amount_rate: 0,
+      rate: 5,
+      // translator: formData.get('translator'),
+      // description: formData.get('description'),
+    };
 
-          })
-          .catch(err => console.log(err))
+    try {
+      const response = await request.post('book/create_book', add_book_data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
+      if (response.status === 200) {
+          // Handle successful form submission
+          // handleSignin(response.data.access_token);
+
+          // setToggleToast(true);
+          console.log('Form submitted successfully');
+
+          // setIsLoading(false);
+          navigate(config.routes.bookSettings);
+      } else if (response.status === 422) {
+        // Handle errors
+        // setToggleToast(false);
+        console.error('Form submission failed', response.data);
+      } else {
+          // Handle errors
+          // setToggleToast(false);
+          console.error('Form submission failed', response.data);
+      }
+  } catch (error) {
+      // setIsLoading(false);
+
+      if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.error('Form submission failed', error.response.data);
+
+          // setToggleToast(false);
+          // setIncorrectMess(error.response.data.detail);
+      } else if (error.request) {
+          // The request was made but no response was received
+          console.error('No response received', error.request);
+      } else {
+          // Something happened in setting up the request that triggered an Error
+          console.error('Error', error.message);
+      }
     }
-};
+    // if (isbn && book_name && authorname && category &&
+    // publisher && publishing_date && price && language &&
+    // translator && book_cover_type && description) {
+    //   // axios.post('https://jsonplaceholder.typicode.com/posts', posts)
+    //   axios.post('book/create_book_db/', posts)
+    //     // .then(res => console.log('AAA', res.data))
+    //     .then(res => {
+    //       console.log(res);
+    //       console.log(res.data);
+    //         // setData([...data, res.data]);
+    //         // setPosts({ isbn: "", book_name: "", authorname: "", category: "",
+    //         //   publisher: "", publishing_date: "", price: "", language: "",
+    //         //   translator: "", book_cover_type: "", description: ""});
+
+    //     })
+    //     .catch(err => console.log(err))
+
+    // }
+  };
 // const handleUpdate = () => {
 //   if (isbn && book_name && authorname && category &&
 //     publisher && publishing_date && price && language &&
@@ -248,7 +317,7 @@ const AddBook = ({ admin }) => {
           {/* <p className={cx('isbn-show')}>ISBN: {}</p> */}
         </div>
         <div className={cx('add-book-info')}>
-          <div className={cx('add-book-info-img')}>
+          {/* <div className={cx('add-book-info-img')}>
             <img 
               className={cx('img-size')}
               src={bookImgURL}
@@ -270,105 +339,146 @@ const AddBook = ({ admin }) => {
                 onload="resizeImg(this, 400, 600);"
                 hidden />
             </form>
-          </div>
-          <div className={cx('add-book-info-text')}>
-          <form  onSubmit={handleSubmit}>
-            <label for="isbn" className={cx('box-name')}>ISBN</label>
-            <input type="text1"
-              id="isbn"
-              name="isbn"
-              value={isbn}
+          </div> */}
+          {/* <form onSubmit={handleSubmit}  encType='multipart/form-data'> */}
+          <form onSubmit={handleSubmit}>
+            <img 
+              className={cx('img-size')}
+              src={bookImgURL}
+              alt ="bookImg"/>
+            {/* <form id="form" encType='multipart/form-data'> */}
+              {/* <div className={cx('add-book-info-img')}>
+                <label for="file" className={cx('upload-img-label')}>Edit book's cover</label>
+                <button
+                  type='submit'
+                  className={cx('upload-img-btn')}
+                  // onClick={handleImageUpload}
+                  >
+                  <p><FontAwesomeIcon icon={faArrowUpFromBracket}/> Upload</p>
+                </button>
+                <input 
+                  type="file"
+                  id="file"
+                  ref={fileUploadRef}
+                  // onChange={uploadImageDisplay}
+                  onload="resizeImg(this, 400, 600);"
+                  hidden />
+              </div> */}
+            {/* </form> */}
+            <div className={cx('add-book-info-text')}>
+              <label for="isbn" className={cx('box-name')}>ISBN</label>
+              <input type="text1"
+                id="isbn"
+                name="isbn"
+                value={isbn}
+                onChange={handleChange}
+                // onChange={HandleIsbnChange}
+                placeholder="E.g. 978-0-545-01022-1"></input>
+              <label for="book_name" className={cx('box-name')}>Book's Name</label>
+              <input type="text1"
+                id="book_name"
+                name="book_name"
+                value={book_name}
+                onChange={handleChange}
+                // onChange={HandleBooknameChange}
+                placeholder="E.g. THÓI QUEN THÀNH CÔNG"></input>
+              <label for="authorname" className={cx('box-name')}>Author's Name</label>
+              <input type="text1"
+                id="authorname"
+                name="authorname"
+                value={authorname}
+                onChange={handleChange}
+                // onChange={HandleAuthornameChange}
+                placeholder="E.g. NAPOLEON HILL"></input>
+              <label for="category" className={cx('box-name')}>Category</label>
+              <input type="text1"
+                id="category"
+                name="category"
+                value={category}
+                onChange={handleChange}
+                // onChange={HandleCategoryChange}
+                placeholder="E.g. Inspire"></input>
+              <label for="publisher" className={cx('box-name')}>Publisher</label>
+              <input type="text1"
+                id="publisher"
+                name="publisher"
+                value={publisher}
+                onChange={handleChange}
+                // onChange={HandlePublisherChange}
+                placeholder="E.g. Nhà xuất bản trẻ"></input>
+              <label for="publishing_date" className={cx('box-name')}>Publishing date</label>
+              <input type="text1"
+                id="publishing_date"
+                name="publishing_date"
+                value={publishing_date}
+                onChange={handleChange}
+                // onChange={HandlePublishingdateChange}
+                placeholder="E.g. YYYY-MM-DD"></input>
+              <label for="price" className={cx('box-name')}>Price</label>
+              <input type="text1"
+                id="price"
+                name="price"
+                value={price}
+                onChange={handleChange}
+                // onChange={HandlePriceChange}
+                placeholder="E.g. 250000"></input>
+              <label for="language" className={cx('box-name')}>Language</label>
+              <input type="text1"
+                id="language"
+                name="language"
+                value={language}
+                onChange={handleChange}
+                // onChange={HandleLanguageChange}
+                placeholder="E.g. Vietnamese"></input>
+              {/* <label for="translator" className={cx('box-name')}>Translator</label>
+              <input type="text1"
+                id="translator"
+                name="translator"
+                value={translator}
+                onChange={handleChange}
+                // onChange={HandleTranslatorChange}
+                placeholder="E.g. Nhiều dịch giả (First News)"></input> */}
+              <label for="book_size" className={cx('box-name')}>Book size</label>
+              <input type="text1"
+                id="book_size"
+                name="book_size"
+                value={book_size}
+                onChange={handleChange}
+                // onChange={HandleTranslatorChange}
+                placeholder="E.g. 16 x 24"></input>
+              <label for="page_number" className={cx('box-name')}>Page number</label>
+              <input type="text1"
+                id="page_number"
+                name="page_number"
+                value={page_number}
+                onChange={handleChange}
+                // onChange={HandleTranslatorChange}
+                placeholder="E.g. 149"></input>
+              <label for="book_cover_type" className={cx('box-name')}>Book's cover</label>
+              <input type="text1"
+                id="book_cover_type"
+                name="book_cover_type"
+                value={book_cover_type}
+                onChange={handleChange}
+                // onChange={HandleBookcoverChange}
+                placeholder="E.g. Soft cover"></input>
+              <label for="description" className={cx('box-name')}>Description</label>
+              <textarea type="text2" id="description" name="description" value={description} 
               onChange={handleChange}
-              // onChange={HandleIsbnChange}
-              placeholder="E.g. 978-0-545-01022-1"></input>
-            <label for="book_name" className={cx('box-name')}>Book's Name</label>
-            <input type="text1"
-              id="book_name"
-              name="book_name"
-              value={book_name}
-              onChange={handleChange}
-              // onChange={HandleBooknameChange}
-              placeholder="E.g. THÓI QUEN THÀNH CÔNG"></input>
-            <label for="authorname" className={cx('box-name')}>Author's Name</label>
-            <input type="text1"
-              id="authorname"
-              name="authorname"
-              value={authorname}
-              onChange={handleChange}
-              // onChange={HandleAuthornameChange}
-              placeholder="E.g. NAPOLEON HILL"></input>
-            <label for="category" className={cx('box-name')}>Category</label>
-            <input type="text1"
-              id="category"
-              name="category"
-              value={category}
-              onChange={handleChange}
-              // onChange={HandleCategoryChange}
-              placeholder="E.g. Inspire"></input>
-            <label for="publisher" className={cx('box-name')}>Publisher</label>
-            <input type="text1"
-              id="publisher"
-              name="publisher"
-              value={publisher}
-              onChange={handleChange}
-              // onChange={HandlePublisherChange}
-              placeholder="E.g. Nhà xuất bản trẻ"></input>
-            <label for="publishing_date" className={cx('box-name')}>Publishing date</label>
-            <input type="text1"
-              id="publishing_date"
-              name="publishing_date"
-              value={publishing_date}
-              onChange={handleChange}
-              // onChange={HandlePublishingdateChange}
-              placeholder="E.g. 01/02/2018"></input>
-            <label for="price" className={cx('box-name')}>Price</label>
-            <input type="text1"
-              id="price"
-              name="price"
-              value={price}
-              onChange={handleChange}
-              // onChange={HandlePriceChange}
-              placeholder="E.g. 250,000 VND"></input>
-            <label for="language" className={cx('box-name')}>Language</label>
-            <input type="text1"
-              id="language"
-              name="language"
-              value={language}
-              onChange={handleChange}
-              // onChange={HandleLanguageChange}
-              placeholder="E.g. Vietnamese"></input>
-            <label for="translator" className={cx('box-name')}>Translator</label>
-            <input type="text1"
-              id="translator"
-              name="translator"
-              value={translator}
-              onChange={handleChange}
-              // onChange={HandleTranslatorChange}
-              placeholder="E.g. Nhiều dịch giả (First News)"></input>
-            <label for="book_cover_type" className={cx('box-name')}>Book's cover</label>
-            <input type="text1"
-              id="book_cover_type"
-              name="book_cover_type"
-              value={book_cover_type}
-              onChange={handleChange}
-              // onChange={HandleBookcoverChange}
-              placeholder="E.g. Soft cover"></input>
-            <label for="description" className={cx('box-name')}>Description</label>
-            <textarea type="text2" id="description" name="description" value={description} 
-            onChange={handleChange}
-            // onChange={HandleDescriptionChange}
-            // class="description-box"
-            placeholder=
-            "E.g. Cuốn sách chia sẻ những thói quen và nguyên tắc để đạt được thành công trong sự nghiệp và cuộc sống, dựa trên nghiên cứu và phỏng vấn các doanh nhân thành công.">
-            </textarea>
-            {/* <Button to={config.routes.bookSettings} className={cx('add-book-submit-btn')} onClick={() => handleNavigate(config.routes.bookSettings)}> */}
-            <Button className={cx('add-book-submit-btn')}
-            // onClick="handleSubmit(event)" >
-            onClick={handleSubmit}>
-              <p>Add book</p>
-            </Button>
+              // onChange={HandleDescriptionChange}
+              // class="description-box"
+              placeholder=
+              "E.g. Cuốn sách chia sẻ những thói quen và nguyên tắc để đạt được thành công trong sự nghiệp và cuộc sống, dựa trên nghiên cứu và phỏng vấn các doanh nhân thành công.">
+              </textarea>
+              {/* <Button to={config.routes.bookSettings} className={cx('add-book-submit-btn')} onClick={() => handleNavigate(config.routes.bookSettings)}> */}
+              <Button className={cx('add-book-submit-btn')}
+              // onClick="handleSubmit(event)" >
+              // onClick={handleSubmit}>
+              >
+                <p>Add book</p>
+              </Button>
+            </div>
           </form>
-          </div>
           
         </div>
       </div>
