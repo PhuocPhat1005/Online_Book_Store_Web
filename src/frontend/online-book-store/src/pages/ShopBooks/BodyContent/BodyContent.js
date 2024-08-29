@@ -25,9 +25,11 @@ function BodyContent() {
     const [isAppliedFilterAll, setIsAppliedFilterAll] = useState(false);
     const [conditionProducts, setConditionProducts] = useState([]);
 
+    const [actualPage, setActualPage] = useState(1);
     const [currentPage, setCurrentPage] = useState(0); // number
     const [showPages, setShowPages] = useState([1, 2, 3, 4, 5, 6, 7, 8]); // number array
     const [books, setBooks] = useState([]); // object array
+
     // PopUpWithMessage states
     const [isPopUpWithMessageVisible, setIsPopUpWithMessageVisible] = useState(false);
     const [popUpMessage, setPopUpMessage] = useState('');
@@ -36,6 +38,7 @@ function BodyContent() {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleCurrentPage = (page) => {
+        setActualPage(page);
         setCurrentPage(page - 1);
     };
 
@@ -43,9 +46,11 @@ function BodyContent() {
         if (currentPage < 0) return;
         else if (currentPage === 0 && showPages[0] > 1) {
             setShowPages(showPages.map((page) => page - 1));
+            setActualPage((prev) => prev - 1);
             return;
         }
 
+        setActualPage((prev) => prev - 1);
         setCurrentPage((prev) => prev - 1);
     };
 
@@ -53,9 +58,11 @@ function BodyContent() {
         if (currentPage > 99) return;
         else if (currentPage === showPages.length - 1) {
             setShowPages(showPages.map((page) => page + 1));
+            setActualPage((prev) => prev + 1);
             return;
         }
 
+        setActualPage((prev) => prev + 1);
         setCurrentPage((prev) => prev + 1);
     };
 
@@ -68,13 +75,17 @@ function BodyContent() {
         }
     }, [currentPage, showPages]);
 
+    // useEffect(() => {
+    //     console.log(actualPage);
+    // }, [actualPage]);
+
     // API for getting books
     useEffect(() => {
         const getAllBooks = async () => {
             try {
                 setIsLoading(true);
 
-                const response = await request.get(`book/get_book_per_page/${(currentPage + 1).toString()}`);
+                const response = await request.get(`book/get_book_per_page/${actualPage.toString()}`);
 
                 setBooks(response.data);
                 setIsLoading(false);
@@ -94,7 +105,7 @@ function BodyContent() {
             }
         };
         getAllBooks();
-    }, [currentPage]);
+    }, [actualPage]);
 
     const fetchRatingOutside = async () => {
         try {

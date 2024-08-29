@@ -140,7 +140,7 @@ const Header = ({ guest }) => {
                         </div>
                         <Button className={cx('cart')} types="text" to={config.routes.cart}>
                             <FontAwesomeIcon icon={faCartShopping} />
-                            <span className={cx('badge')}>99</span>
+                            {/* <span className={cx('badge')}>99</span> */}
                         </Button>
                     </>
                 )}

@@ -20,7 +20,7 @@ function ProductItem({ data, rating = 0 }) {
     const [dataItem, setDataItem] = useState(data);
 
     rating = data.rate.toString();
-    let discount_percentage = 10;
+    let discount_percentage = 0;
     let old_price = addDotsToNumber(data.price).toString();
     let new_price = addDotsToNumber(Math.round((data.price * (100 - discount_percentage)) / 100)).toString();
     const navigate = useNavigate();

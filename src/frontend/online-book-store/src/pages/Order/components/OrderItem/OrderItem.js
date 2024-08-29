@@ -14,8 +14,8 @@ function addDotsToNumber(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
-function OrderItem({ status = 'Unprocessed', bookData = [] }) {
-    let discount_percentage = 10;
+function OrderItem({ status = 'Unprocessed', totalPrice = 0, bookData = [] }) {
+    // let discount_percentage = 0;
     const [isOpenOverlay, setIsOpenOverlay] = useState(false);
 
     const handleOpenOverlay = () => {
@@ -54,17 +54,17 @@ function OrderItem({ status = 'Unprocessed', bookData = [] }) {
     }, [bookData]);
 
     /** Price */
-    const [totalPrice, setTotalPrice] = useState(0);
+    // const [totalPrice, setTotalPrice] = useState(0);
 
-    useEffect(() => {
-        let sumPrice = 0;
+    // useEffect(() => {
+    //     let sumPrice = 0;
 
-        for (let i = 0; i < books.length; i += 1) {
-            sumPrice += (books[i].Book.price * bookData[i].quantity * (100 - discount_percentage)) / 100;
-        }
+    //     for (let i = 0; i < books.length; i += 1) {
+    //         sumPrice += (books[i].Book.price * bookData[i].quantity * (100 - discount_percentage)) / 100;
+    //     }
 
-        setTotalPrice(sumPrice);
-    }, [bookData, books, discount_percentage, quantity]);
+    //     setTotalPrice(sumPrice);
+    // }, [bookData, books, discount_percentage, quantity]);
 
     return (
         <>
@@ -133,7 +133,7 @@ function OrderItem({ status = 'Unprocessed', bookData = [] }) {
                             <p className={cx('overlay_product_number')}>Items: {quantity}</p>
                             <div className={cx('overlay_total_price')}>
                                 <p className={cx('overlay_total_price_text')}>Total price:</p>
-                                <p className={cx('overlay_total_price_value')}>99.000đ</p>
+                                <p className={cx('overlay_total_price_value')}>{addDotsToNumber(totalPrice)} đ</p>
                             </div>
                         </div>
                     </div>

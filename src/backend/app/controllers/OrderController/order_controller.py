@@ -50,7 +50,7 @@ create_payment_service = CreateService[Payment, PaymentCreate](Payment)
 read_voucher_service = ReadService[Voucher](Voucher)
 
 
-def check_payment_status_with_timeout(orderId: int, timeout_minutes: int = 1):
+def check_payment_status_with_timeout(orderId: int, timeout_minutes: int = 5):
     return "PAID"
     start_time = datetime.now()
     timeout = timedelta(minutes=timeout_minutes)
