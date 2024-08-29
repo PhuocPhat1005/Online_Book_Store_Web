@@ -219,19 +219,44 @@ function BodyContent() {
     };
 
     // Create an array of Products components
-    const products = [];
+    // let products = [];
+    const [products, setProducts] = useState([]);
 
-    if (conditionProducts.length !== 0) {
-        for (let i = 0; i < conditionProducts.length; i += BOOKS_PER_ROW) {
-            const booksSlice = conditionProducts.slice(i, i + BOOKS_PER_ROW);
-            products.push(<Products key={i} data={booksSlice} />);
-        }
-    } else {
+    // if (conditionProducts.length !== 0) {
+    //     products = [];
+    //     for (let i = 0; i < conditionProducts.length; i += BOOKS_PER_ROW) {
+    //         const booksSlice = conditionProducts.slice(i, i + BOOKS_PER_ROW);
+    //         products.push(<Products key={i} data={booksSlice} />);
+    //     }
+    // } else {
+    //     products = [];
+    //     for (let i = 0; i < books.length; i += BOOKS_PER_ROW) {
+    //         const booksSlice = books.slice(i, i + BOOKS_PER_ROW);
+    //         products.push(<Products key={i} data={booksSlice} />);
+    //     }
+    // }
+
+    useEffect(() => {
+        setProducts([]);
+        console.log('Books');
+        console.log(books);
+
         for (let i = 0; i < books.length; i += BOOKS_PER_ROW) {
             const booksSlice = books.slice(i, i + BOOKS_PER_ROW);
-            products.push(<Products key={i} data={booksSlice} />);
+            setProducts((prev) => [...prev, <Products key={i} data={booksSlice} />]);
         }
-    }
+    }, [books]);
+
+    useEffect(() => {
+        setProducts([]);
+        console.log('condition');
+        console.log(conditionProducts);
+
+        for (let i = 0; i < conditionProducts.length; i += BOOKS_PER_ROW) {
+            const booksSlice = conditionProducts.slice(i, i + BOOKS_PER_ROW);
+            setProducts((prev) => [...prev, <Products key={i} data={booksSlice} />]);
+        }
+    }, [conditionProducts]);
 
     return (
         <div className={cx('body-wrapper')}>
