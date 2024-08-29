@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import OrderItem from './components/OrderItem';
 import request from '~/utils/request';
 import Cookies from 'universal-cookie';
+import BasicSpinner from '~/components/BasicSpinner';
 
 const cx = classNames.bind(styles);
 const ORDER_STATUS = ['All', 'Unprocessed', 'Confirmed', 'Delivering', 'Received', 'Cancelled/ Returned'];
@@ -17,7 +18,9 @@ function Order() {
      */
     const [orderList, setOrderList] = useState([]);
     const [books, setBooks] = useState([]);
-    const [isActiveTab, setIsActiveTab] = useState(0);
+    const [isActiveTab, setIsActiveTab] = useState(0); // index of tab.
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleActiveOrderStatus = (index) => {
         setIsActiveTab(index);
@@ -29,10 +32,22 @@ function Order() {
             const access_token = cookies.get('jwt_authorization');
 
             try {
+                setIsLoading(true);
+
                 const response = await request.get(`order/show_order?access_token=${access_token}`);
 
                 if (response.status === 200) {
-                    setOrderList(response.data);
+                    console.log(isActiveTab);
+
+                    if (isActiveTab >= 1) {
+                        const currentStatus = ORDER_STATUS[isActiveTab];
+                        const responseOrders = response.data.filter((item) => item.status === currentStatus);
+
+                        responseOrders ? setOrderList(responseOrders) : setOrderList([]);
+                    } else {
+                        // console.log(response.data);
+                        setOrderList(response.data);
+                    }
                 }
             } catch (error) {
                 console.log(error);
@@ -40,7 +55,7 @@ function Order() {
         };
 
         fetchAllOrders();
-    }, []);
+    }, [isActiveTab]);
 
     useEffect(() => {
         const fetchBooks = async () => {
@@ -61,12 +76,20 @@ function Order() {
 
         if (orderList.length > 0) {
             fetchBooks();
+            setIsLoading(false);
+        } else if (orderList.length <= 0) {
+            setBooks([]);
+            setIsLoading(false);
         }
     }, [orderList]);
 
     // useEffect(() => {
     //     console.log(books);
     // }, [books]);
+
+    // useEffect(() => {
+    //     console.log(allStatusOrder);
+    // }, [allStatusOrder]);
 
     return (
         <div className={cx('wrapper')}>
@@ -85,6 +108,7 @@ function Order() {
                 </ul>
                 <div className={cx('core_body')}>
                     {books.length !== 0 && books.map((item, index) => <OrderItem bookData={item} key={index} />)}
+                    {isLoading && <BasicSpinner color="#808080" />}
                 </div>
             </div>
         </div>
