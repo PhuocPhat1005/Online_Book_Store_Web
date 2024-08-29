@@ -18,6 +18,9 @@ async def create_translator_endpoint(
 ):
     return await translator_service.create(translator, db)
 
+@router.get("/get_all_translators", summary="Get all translators")
+async def get_all_translators_endpoint(db: AsyncSession = Depends(get_db)):
+    return await translator_service.get_by_condition([{"id": ""}], db, 0)
 
 @router.get("/get_translator/{translator_id}", summary="Get a translator by ID")
 async def get_translator_endpoint(
