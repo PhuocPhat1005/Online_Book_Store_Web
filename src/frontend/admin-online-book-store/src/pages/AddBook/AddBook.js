@@ -129,7 +129,7 @@ const AddBook = ({ admin }) => {
     setPosts({ ...posts, [event.target.name]: event.target.value });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (isbn && book_name && authorname && category &&
       publisher && publishing_date && price && language &&
