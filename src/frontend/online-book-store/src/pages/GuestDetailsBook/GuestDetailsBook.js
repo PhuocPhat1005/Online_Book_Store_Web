@@ -38,7 +38,7 @@ function GuestDetailsBook() {
     const location = useLocation();
     let data = location.state?.bookData;
 
-    let discount_percentage = 10;
+    let discount_percentage = 0;
     const rating = data.rate.toString();
     let old_price = addDotsToNumber(data.price).toString();
     let new_price = addDotsToNumber(Math.round((data.price * (100 - discount_percentage)) / 100)).toString();

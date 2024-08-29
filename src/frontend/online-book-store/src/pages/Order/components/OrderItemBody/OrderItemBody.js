@@ -13,7 +13,7 @@ function addDotsToNumber(number) {
 function OrderItemBody({ className, data = {}, quantity = 1 }) {
     const bookData = data.Book;
 
-    let discount_percentage = 10;
+    let discount_percentage = 0;
     let newPrice = (bookData.price * (100 - discount_percentage)) / 100;
     let oldPrice = bookData.price;
 

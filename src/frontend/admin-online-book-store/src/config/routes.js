@@ -4,6 +4,7 @@ const routes = {
     bookSettings: '/book-settings',
     addBook: '/add-book',
     orderSettings: '/order-settings',
+    orderManagement: '/order-management',
     userManagement: '/user-management',
     signin: '/signin',
 };

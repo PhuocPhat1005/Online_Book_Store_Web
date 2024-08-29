@@ -23,7 +23,7 @@ function CartItem({ data, handlePrice, originalPrice, handleDeleteProduct, check
     const [isAdd, setIsAdd] = useState(false);
     const [isRemove, setIsRemove] = useState(false);
 
-    let discount_percentage = 10;
+    let discount_percentage = 0;
     let old_price = bookData.price;
     let new_price = Math.round((bookData.price * (100 - discount_percentage)) / 100);
     let total_price = amount * new_price;

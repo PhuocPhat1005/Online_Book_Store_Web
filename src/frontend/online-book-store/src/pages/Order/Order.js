@@ -18,6 +18,7 @@ function Order() {
      */
     const [orderList, setOrderList] = useState([]);
     const [books, setBooks] = useState([]);
+    const [prices, setPrices] = useState([]);
     const [isActiveTab, setIsActiveTab] = useState(0); // index of tab.
 
     const [isLoading, setIsLoading] = useState(false);
@@ -37,16 +38,17 @@ function Order() {
                 const response = await request.get(`order/show_order?access_token=${access_token}`);
 
                 if (response.status === 200) {
-                    console.log(isActiveTab);
-
                     if (isActiveTab >= 1) {
                         const currentStatus = ORDER_STATUS[isActiveTab];
                         const responseOrders = response.data.filter((item) => item.status === currentStatus);
 
                         responseOrders ? setOrderList(responseOrders) : setOrderList([]);
+                        setPrices(response.data.map((item) => item.total_price));
                     } else {
                         // console.log(response.data);
                         setOrderList(response.data);
+
+                        setPrices(response.data.map((item) => item.total_price));
                     }
                 }
             } catch (error) {
@@ -91,6 +93,10 @@ function Order() {
     //     console.log(allStatusOrder);
     // }, [allStatusOrder]);
 
+    useEffect(() => {
+        console.log(prices);
+    }, [prices]);
+
     return (
         <div className={cx('wrapper')}>
             <p className={cx('title')}>your order</p>
@@ -107,7 +113,10 @@ function Order() {
                     ))}
                 </ul>
                 <div className={cx('core_body')}>
-                    {books.length !== 0 && books.map((item, index) => <OrderItem bookData={item} key={index} />)}
+                    {books.length !== 0 &&
+                        books.map((item, index) => (
+                            <OrderItem totalPrice={prices[index]} bookData={item} key={index} />
+                        ))}
                     {isLoading && <BasicSpinner color="#808080" />}
                 </div>
             </div>

@@ -7,7 +7,7 @@ import Image from '~/components/Image';
 import Button from '~/components/Button';
 import RatingStar from '~/components/RatingStar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook, faCircleInfo, faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faCircleInfo, faHeart, faXmark } from '@fortawesome/free-solid-svg-icons';
 import assets from '~/assets';
 
 import Cookies from 'universal-cookie';
@@ -24,7 +24,7 @@ function DetailsBook() {
     const location = useLocation();
     let data = location.state?.bookData;
 
-    let discount_percentage = 10;
+    let discount_percentage = 0;
     const rating = data.rate.toString();
     let old_price = addDotsToNumber(data.price).toString();
     let new_price = addDotsToNumber(Math.round((data.price * (100 - discount_percentage)) / 100)).toString();
@@ -47,7 +47,18 @@ function DetailsBook() {
         setQuantityValue(value);
     };
 
+    /** Popup */
+
+    const [isInValid, setIsInvalid] = useState(false);
+
     const fetchAddToCart = async () => {
+        if (quantityValue <= 0) {
+            setIsInvalid(true);
+            return;
+        }
+
+        setIsInvalid(false);
+
         const cookies = new Cookies();
         const access_token = cookies.get('jwt_authorization');
         const book_id = data.id;
@@ -75,12 +86,10 @@ function DetailsBook() {
         if (isAddToCart) {
             const timer = setTimeout(() => {
                 setIsAddToCart(false);
-            }, 3000);
+            }, 2000);
             return () => clearTimeout(timer); // Clean up the timer on unmount
         }
     }, [isAddToCart]);
-
-    console.log(data);
 
     return (
         <div className={cx('wrapper')}>
@@ -146,8 +155,8 @@ function DetailsBook() {
                             Quantity:
                         </label>
                         <div className={cx('quantity_wrapper')}>
-                            <span className={cx('quantity_add')} onClick={() => handleQuantity()}>
-                                +
+                            <span className={cx('quantity_minus')} onClick={() => handleQuantity(true)}>
+                                -
                             </span>
                             <input
                                 className={cx('quantity_input')}
@@ -158,8 +167,8 @@ function DetailsBook() {
                                 value={quantityValue}
                                 onChange={(e) => handleChangeQuantity(e.target.value)}
                             />
-                            <span className={cx('quantity_minus')} onClick={() => handleQuantity(true)}>
-                                -
+                            <span className={cx('quantity_add')} onClick={() => handleQuantity()}>
+                                +
                             </span>
                         </div>
                         <span className={cx('available')}>
@@ -309,6 +318,18 @@ function DetailsBook() {
             {isAddToCart && (
                 <div className={cx('add_to_cart_notification')}>
                     <p className={cx('notification_content')}>Add to cart successfully</p>
+                </div>
+            )}
+            {isInValid && (
+                <div className={cx('invalid_popup')}>
+                    <div className={cx('invalid_popup_header')}>
+                        <p className={cx('invalid_popup_text')}>Please choose the quantity</p>
+                        <FontAwesomeIcon
+                            icon={faXmark}
+                            className={cx('invalid_popup_close')}
+                            onClick={() => setIsInvalid(false)}
+                        />
+                    </div>
                 </div>
             )}
         </div>
