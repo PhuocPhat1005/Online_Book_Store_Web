@@ -1,10 +1,10 @@
 import React from 'react';
 import classNames from 'classnames/bind';
-import styles from './PopUpSentSuccesful.module.scss';
+import styles from './PopUpWithMessage.module.scss';
 
 const cx = classNames.bind(styles);
 
-function PopUpSentSuccesful({ message, onClose }) {
+function PopUpWithMessage({ message, onClose }) {
     return (
         <div className={cx('overlay')}>
             <div className={cx('popup')}>
@@ -17,4 +17,4 @@ function PopUpSentSuccesful({ message, onClose }) {
     );
 }
 
-export default PopUpSentSuccesful;
+export default PopUpWithMessage;

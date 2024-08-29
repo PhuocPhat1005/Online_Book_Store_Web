@@ -10,6 +10,15 @@ const cx = classNames.bind(styles);
 
 function Vouchers({ handleDiscountVoucher }) {
     const [allVouchers, setAllVouchers] = useState([]);
+    const [appliedVoucher, setAppliedVoucher] = useState([]);
+
+    const handleAppliedVoucher = (voucherId) => {
+        if (appliedVoucher.find((item) => item === voucherId)) {
+            setAppliedVoucher((_) => appliedVoucher.filter((item) => item !== voucherId));
+        } else {
+            setAppliedVoucher([voucherId]);
+        }
+    };
 
     useEffect(() => {
         const fetchAllVouchers = async () => {
@@ -35,7 +44,13 @@ function Vouchers({ handleDiscountVoucher }) {
             </div>
             <div className={cx('body')}>
                 {allVouchers.map((item, index) => (
-                    <VoucherItem data={item} key={index} handleDiscountVoucher={handleDiscountVoucher} />
+                    <VoucherItem
+                        data={item}
+                        key={index}
+                        handleDiscountVoucher={handleDiscountVoucher}
+                        appliedVoucher={handleAppliedVoucher}
+                        isApplied={appliedVoucher.includes(item.id)}
+                    />
                 ))}
             </div>
             <div className={cx('footer')}>

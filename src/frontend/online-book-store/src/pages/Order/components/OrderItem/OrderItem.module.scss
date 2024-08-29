@@ -6,8 +6,14 @@
 }
 
 .order_item_wrapper {
+    margin-top: 16px;
+
     &:hover {
         cursor: pointer;
+    }
+
+    &:nth-child(1) {
+        margin-top: 0;
     }
 }
 

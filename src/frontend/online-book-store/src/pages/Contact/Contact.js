@@ -7,8 +7,7 @@ import Button from '~/components/Button';
 import FAQMenu from './conponents/FAQMenu';
 import PopUpSentSuccesful from './conponents/PopUpSentSuccesful';
 import emailjs from '@emailjs/browser';
-import { useRef } from 'react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 const cx = classNames.bind(styles);
 
@@ -79,7 +78,6 @@ function Contact() {
                 <ConnectedLine />
             </div>
 
-            {/* Render the Popup component conditionally */}
             {showPopup && (
                 <PopUpSentSuccesful message="Your message has been sent successfully." onClose={handleClosePopup} />
             )}
