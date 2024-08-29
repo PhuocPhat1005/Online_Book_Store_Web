@@ -23,7 +23,10 @@ async def create_author_endpoint(
     #     return await author_service.create(author, db)
     # else:
     #     raise HTTPException(status_code=403, detail="Not authorized")
-
+    
+@router.get("/get_all_authors", summary="Get all authors")
+async def get_all_authors_endpoint(db: AsyncSession = Depends(get_db)):
+    return await author_service.get_by_condition([{"id": ""}], db, 0)
 
 @router.get("/get_author/{author_id}", summary="Get a Author by ID")
 async def get_author_endpoint(author_id: UUID, db: AsyncSession = Depends(get_db)):

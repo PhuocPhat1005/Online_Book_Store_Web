@@ -31,6 +31,7 @@ from app.models.book_photo import BookPhoto
 from app.models.sale_off import SaleOff
 from app.database.database import get_db
 from uuid import UUID
+import uuid
 
 from app.controllers.BookController.photo_controller import delete_folder_aws  # SERVICE
 
@@ -792,9 +793,51 @@ async def find_book_sale_off(sale_off_id: str, db: AsyncSession):
 
 
 @router.post("/create_book", summary="Create a new book")
-async def create_book_endpoint(book: BookCreate, db: AsyncSession = Depends(get_db)):
-    return await book_service.create(book, db)
+async def create_book_endpoint(book: BookCreate,  category_name: str = None, publisher_name: str = None, author_name: str = None, translator_name: str = None, db: AsyncSession = Depends(get_db)):
+    if book.id == "empty_uuid":
+        book.id = str(uuid.uuid4())
+    id_ = book.id
+    if category_name:
+        read_category_service = ReadService[Category](Category)
+        category = await read_category_service.get_by_condition([{}, {"category_name": category_name}], db)
+        if not category:
+            raise HTTPException(status_code=404, detail="Category not found")
+        book.category_id = category[0].id
+        
+    if publisher_name:
+        read_publishing_company_service = ReadService[PublishingCompany](PublishingCompany)
+        publisher = await read_publishing_company_service.get_by_condition([{}, {"publishing_company_name": publisher_name}], db)
+        if not publisher:
+            raise HTTPException(status_code=404, detail="Publisher not found")
+        book.publishing_company_id = publisher[0].id
+    author_id = None
+    translator_id = None
+    
+    if author_name:
+        read_author_service = ReadService[Author](Author)
+        author = await read_author_service.get_by_condition([{}, {"full_name": author_name}], db)
+        if not author:
+            raise HTTPException(status_code=404, detail="Author not found")
+        author_id = author[0].id
+        
+    if translator_name:
+        read_translator_service = ReadService[Translator](Translator)
+        translator = await read_translator_service.get_by_condition([{}, {"full_name": translator_name}], db)
+        if not translator:
+            raise HTTPException(status_code=404, detail="Translator not found")
+        translator_id = translator[0].id
+    await book_service.create(book, db, 0)
+    
+    if author_id:
+        create_book_author_service = CreateService[BookAuthor, Book_Author_Create](BookAuthor)
+        book_author = Book_Author_Create(book_id=str(id_), author_id=str(author_id))
+        await create_book_author_service.create(book_author, db)
+    if translator_id:
+        create_book_translator_service = CreateService[BookTranslator, Book_Translator_Create](BookTranslator)
+        book_translator = Book_Translator_Create(book_id=str(id_), translator_id=str(translator_id))
+        await create_book_translator_service.create(book_translator, db)
 
+    return id_
 
 @router.get("/get_book/{book_id}", summary="Get a book by ID")
 async def get_book_endpoint(book_id: UUID, db: AsyncSession = Depends(get_db)):
@@ -857,13 +900,66 @@ async def get_book_overview(book_id: UUID, db: AsyncSession = Depends(get_db)):
 
 
 @router.put("/update_book/{book_id}", summary="Update a book by ID")
-async def update_book_endpoint(
-    book_id: UUID, book_update: BookUpdate, db: AsyncSession = Depends(get_db)
-):
+async def update_book_endpoint(id_: str, book_update: BookUpdate,  category_name: str = None, publisher_name: str = None, author_name: str = None, translator_name: str = None, db: AsyncSession = Depends(get_db)):
+    book_id = id_
+    if category_name:
+        read_category_service = ReadService[Category](Category)
+        category = await read_category_service.get_by_condition([{}, {"category_name": category_name}], db)
+        if not category:
+            raise HTTPException(status_code=404, detail="Category not found")
+        book_update.category_id = category[0].id
+    if publisher_name:
+        read_publishing_company_service = ReadService[PublishingCompany](PublishingCompany)
+        publisher = await read_publishing_company_service.get_by_condition([{}, {"publishing_company_name": publisher_name}], db)
+        if not publisher:
+            raise HTTPException(status_code=404, detail="Publisher not found")
+        book_update.publishing_company_id = publisher[0].id
+    author_id = None
+    translator_id = None
+    if author_name:
+        read_author_service = ReadService[Author](Author)
+        author = await read_author_service.get_by_condition([{}, {"full_name": author_name}], db)
+        if not author:
+            raise HTTPException(status_code=404, detail="Author not found")
+        author_id = author[0].id
+    if translator_name:
+        read_translator_service = ReadService[Translator](Translator)
+        translator = await read_translator_service.get_by_condition([{}, {"full_name": translator_name}], db)
+        if not translator:
+            raise HTTPException(status_code=404, detail="Translator not found")
+        translator_id = translator[0].id
+    if author_id:
+        book_author = await find_book_author(book_id, db)
+        if book_author == "Can not find author of this book":
+            create_book_author = CreateService[BookAuthor, Book_Author_Create](BookAuthor)
+            book_author_create = Book_Author_Create()
+            book_author_create.author_id = author_id
+            book_author_create.book_id = book_id
+            await create_book_author.create(book_author_create, db)
+        else:
+            update_book_author = UpdateService[BookAuthor, Book_Author_Update](BookAuthor)
+            book_author_update = Book_Author_Update()
+            book_author_update.author_id = author_id
+            book_author_update.book_id = book_id
+            await update_book_author.update({"book_id": book_id}, book_author_update, db)
+    if translator_id:
+        book_translator = await find_book_translator(book_id, db)
+        if book_translator == "Can not find translator of this book":
+            create_book_translator = CreateService[BookTranslator, Book_Translator_Create](BookTranslator)
+            book_translator_create = Book_Translator_Create()
+            book_translator_create.translator_id = translator_id
+            book_translator_create.book_id = book_id
+            await create_book_translator.create(book_translator_create, db)
+        else:
+            update_book_translator = UpdateService[BookTranslator, Book_Translator_Update](BookTranslator)
+            book_translator_update = Book_Translator_Update()
+            book_translator_update.translator_id = translator_id
+            book_translator_update.book_id = book_id
+            await update_book_translator.update({"book_id": book_id}, book_translator_update, db)
     book = await book_service.update({"id": book_id}, book_update, db)
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
-    return book
+    return book_id
 
 
 @router.delete("/delete_book/{book_id}", summary="Delete a book by ID")
