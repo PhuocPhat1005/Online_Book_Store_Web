@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight, faStar } from '@fortawesome/free-solid-svg-icons';
-
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './BodyContent.module.scss';
@@ -14,6 +13,7 @@ import Products from './components/Products';
 import request from '~/utils/request';
 import { GENRES, CATEGORY, FILTER_SECTION_1, FILTER_SECTION_2 } from './components/Filter_Category';
 import BasicSpinner from '~/components/BasicSpinner';
+import PopUpWithMessage from '~/components/PopUpWithMessage';
 
 const cx = classNames.bind(styles);
 
@@ -28,6 +28,9 @@ function BodyContent() {
     const [currentPage, setCurrentPage] = useState(0); // number
     const [showPages, setShowPages] = useState([1, 2, 3, 4, 5, 6, 7, 8]); // number array
     const [books, setBooks] = useState([]); // object array
+    // PopUpWithMessage states
+    const [isPopUpWithMessageVisible, setIsPopUpWithMessageVisible] = useState(false);
+    const [popUpMessage, setPopUpMessage] = useState('');
     // const [imagesFetched, setImagesFetched] = useState(false);
 
     const [isLoading, setIsLoading] = useState(false);
@@ -171,6 +174,10 @@ function BodyContent() {
 
             if (response.status === 200) {
                 setConditionProducts(response.data);
+                if (response.data.length === 0) {
+                    setPopUpMessage('No books satisfy the filter requirements.');
+                    setIsPopUpWithMessageVisible(true);
+                }
             }
         } catch (error) {
             console.log(error);
@@ -302,6 +309,10 @@ function BodyContent() {
                     handleFilterAllDisplay={handleFilterAllDisplay}
                     handleApplyFilterAll={handleApplyFilterAll}
                 />
+            )}
+
+            {isPopUpWithMessageVisible && (
+                <PopUpWithMessage message={popUpMessage} onClose={() => setIsPopUpWithMessageVisible(false)} />
             )}
         </div>
     );
