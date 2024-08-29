@@ -26,9 +26,9 @@ const AddBook = ({ admin }) => {
   const [bookImgURL, setBookImgURL] = useState(DefaultImage);
   // const [isbn, setIsbn] = useState("");
   // const [book_name, setBookname] = useState("");
-  // const [authorname, setAuthorname] = useState("");
-  // const [category, setCategory] = useState("");
-  // const [publisher, setPublisher] = useState("");
+  // const [author_name, setAuthorname] = useState("");
+  // const [category_name, setCategory] = useState("");
+  // const [publisher_name, setPublisher] = useState("");
   // const [publishing_date, setPublishingdate] = useState("");
   // const [price, setPrice] = useState("");
   // const [language, setLanguage] = useState("");
@@ -85,8 +85,8 @@ const AddBook = ({ admin }) => {
   //   setBookcover("");
   //   setDescription("");
   // };
-  // const addPost = async(isbn, bookmane, authorname, category,
-  //   publisher, publishing_date, price, language,
+  // const addPost = async(isbn, bookmane, author_name, category_name,
+  //   publisher_name, publishing_date, price, language,
   //   translator, book_cover_type, description) => {
   //   const response = await client.post('', {
   //     title,
@@ -97,9 +97,9 @@ const AddBook = ({ admin }) => {
   // setPosts({
   //   isbn: event.target.value,
   //   book_name: event.target.value,
-  //   authorname: event.target.value,
-  //   category: event.target.value,
-  //   publisher: event.target.value,
+  //   author_name: event.target.value,
+  //   category_name: event.target.value,
+  //   publisher_name: event.target.value,
   //   publishing_date: event.target.value,
   //   price: event.target.value,
   //   language: event.target.value,
@@ -111,19 +111,19 @@ const AddBook = ({ admin }) => {
   const [posts, setPosts] = useState({
     isbn: "",
     book_name: "",
-    authorname: "",
-    category: "",
-    publisher: "",
+    author_name: "",
+    category_name: "",
+    publisher_name: "",
     publishing_date: "",
     price: "",
     language: "",
-    translator: "",
+    translator_name: "",
     book_cover_type: "",
     description: "",
   });
   const [data, setData] = useState([]);
-  const {isbn, book_name, authorname, category, publisher,
-    publishing_date, price, language, translator,
+  const {isbn, book_name, author_name, category_name, publisher_name,
+    publishing_date, price, language, translator_name,
     book_size, page_number, book_cover_type, description} = posts;
 
   const handleChange = (event) => {
@@ -137,11 +137,9 @@ const AddBook = ({ admin }) => {
       id: "empty_uuid",
       isbn: formData.get('isbn'),
       book_name: formData.get('book_name'),
-      // authorname: formData.get('authorname'),
-      // category: formData.get('category'),
-      // publisher: formData.get('publisher'),
-      publishing_company_id: "empty_uuid",
-      category_id: "empty_uuid",
+      author_name: formData.get('author_name'),
+      category_name: formData.get('category_name'),
+      publisher_name: formData.get('publisher_name'),
       sale_off: "empty_uuid",
       publishing_date: formData.get('publishing_date'),
       price: formData.get('price'),
@@ -153,10 +151,13 @@ const AddBook = ({ admin }) => {
       amount_sell: 0,
       amount_rate: 0,
       rate: 5,
-      // translator: formData.get('translator'),
-      // description: formData.get('description'),
+      translator_name: formData.get('translator_name'),
+      description: formData.get('description'),
     };
-
+    let today = new Date().toISOString().slice(0, 10)
+    if (add_book_data.publishing_date === "") {
+      add_book_data.publishing_date = today;
+    }
     try {
       const response = await request.post('book/create_book', add_book_data, {
         headers: {
@@ -172,11 +173,8 @@ const AddBook = ({ admin }) => {
           console.log('Form submitted successfully');
 
           // setIsLoading(false);
+          console.log(response.data);
           navigate(config.routes.bookSettings);
-      } else if (response.status === 422) {
-        // Handle errors
-        // setToggleToast(false);
-        console.error('Form submission failed', response.data);
       } else {
           // Handle errors
           // setToggleToast(false);
@@ -200,8 +198,8 @@ const AddBook = ({ admin }) => {
           console.error('Error', error.message);
       }
     }
-    // if (isbn && book_name && authorname && category &&
-    // publisher && publishing_date && price && language &&
+    // if (isbn && book_name && author_name && category_name &&
+    // publisher_name && publishing_date && price && language &&
     // translator && book_cover_type && description) {
     //   // axios.post('https://jsonplaceholder.typicode.com/posts', posts)
     //   axios.post('book/create_book_db/', posts)
@@ -210,8 +208,8 @@ const AddBook = ({ admin }) => {
     //       console.log(res);
     //       console.log(res.data);
     //         // setData([...data, res.data]);
-    //         // setPosts({ isbn: "", book_name: "", authorname: "", category: "",
-    //         //   publisher: "", publishing_date: "", price: "", language: "",
+    //         // setPosts({ isbn: "", book_name: "", author_name: "", category_name: "",
+    //         //   publisher_name: "", publishing_date: "", price: "", language: "",
     //         //   translator: "", book_cover_type: "", description: ""});
 
     //     })
@@ -220,13 +218,13 @@ const AddBook = ({ admin }) => {
     // }
   };
 // const handleUpdate = () => {
-//   if (isbn && book_name && authorname && category &&
-//     publisher && publishing_date && price && language &&
+//   if (isbn && book_name && author_name && category_name &&
+//     publisher_name && publishing_date && price && language &&
 //     translator && book_cover_type && description) {
 //       axios.put(`https://jsonplaceholder.typicode.com/posts/${editID}`, posts)
 //           .then(res => {
-//             setPosts({ isbn: "", book_name: "", authorname: "", category: "",
-//               publisher: "", publishing_date: "", price: "", language: "",
+//             setPosts({ isbn: "", book_name: "", author_name: "", category_name: "",
+//               publisher_name: "", publishing_date: "", price: "", language: "",
 //               translator: "", book_cover_type: "", description: ""});
 //             setRefresh(refresh + 1)
 //           })
@@ -254,31 +252,31 @@ const AddBook = ({ admin }) => {
     fileUploadRef.current.click();
   }
   const uploadImageDisplay = async () => {
-  try {
-    const uploadedFile = fileUploadRef.current.files[0];
-    const formData = new FormData();
-    formData.append("file", uploadedFile);
-    
-    // const cachedURL = URL.createObjectURL(uploadedFile);
-    // setBookImgURL(cachedURL);
+    try {
+      const uploadedFile = fileUploadRef.current.files[0];
+      const formData = new FormData();
+      formData.append("file", uploadedFile);
+      
+      const cachedURL = URL.createObjectURL(uploadedFile);
+      setBookImgURL(cachedURL);
 
-    const response = await fetch("https://api.escuelajs.co/api/v1/files/upload", {
-      method: "post",
-      body: formData
-    });
+      // const response = await fetch("https://api.escuelajs.co/api/v1/files/upload", {
+      //   method: "post",
+      //   body: formData
+      // });
 
-    if (response.status === 201) {
-      const data = await response.json();
-      setBookImgURL(data?.location);
-    }
-    } catch(error) {
-      console.error(error);
-      setBookImgURL(DefaultImage);
-    }
+      // if (response.status === 201) {
+      //   const data = await response.json();
+      //   setBookImgURL(data?.location);
+      // }
+      } catch(error) {
+        console.error(error);
+        setBookImgURL(DefaultImage);
+      }
   }
   // const handleSubmit = (event) => {
   //   event.preventDefault();
-  //   props.addPost(isbn, book_name, authorname, category, publisher, publishing_date, price, language, translator, book_cover_type, description);
+  //   props.addPost(isbn, book_name, author_name, category_name, publisher_name, publishing_date, price, language, translator, book_cover_type, description);
   //   setIsbn('');
   //   setBookname('');
   //   setAuthorname('');
@@ -295,9 +293,9 @@ const AddBook = ({ admin }) => {
   //   const response = await client.post('', {
   //     isbn,
   //     book_name,
-  //     authorname,
-  //     category,
-  //     publisher,
+  //     author_name,
+  //     category_name,
+  //     publisher_name,
   //     publishing_date,
   //     price,
   //     language,
@@ -317,7 +315,7 @@ const AddBook = ({ admin }) => {
           {/* <p className={cx('isbn-show')}>ISBN: {}</p> */}
         </div>
         <div className={cx('add-book-info')}>
-          {/* <div className={cx('add-book-info-img')}>
+          <div className={cx('add-book-info-img')}>
             <img 
               className={cx('img-size')}
               src={bookImgURL}
@@ -328,24 +326,26 @@ const AddBook = ({ admin }) => {
               <button
                 type='submit'
                 className={cx('upload-img-btn')}
-                onClick={handleImageUpload}> 
+                onClick={handleImageUpload}
+                >
                 <p><FontAwesomeIcon icon={faArrowUpFromBracket}/> Upload</p>
               </button>
               <input 
                 type="file"
                 id="file"
                 ref={fileUploadRef}
+                className={cx('img-size')}
                 onChange={uploadImageDisplay}
                 onload="resizeImg(this, 400, 600);"
                 hidden />
             </form>
-          </div> */}
+          </div>
           {/* <form onSubmit={handleSubmit}  encType='multipart/form-data'> */}
           <form onSubmit={handleSubmit}>
-            <img 
+            {/* <img 
               className={cx('img-size')}
               src={bookImgURL}
-              alt ="bookImg"/>
+              alt ="bookImg"/> */}
             {/* <form id="form" encType='multipart/form-data'> */}
               {/* <div className={cx('add-book-info-img')}>
                 <label for="file" className={cx('upload-img-label')}>Edit book's cover</label>
@@ -382,27 +382,27 @@ const AddBook = ({ admin }) => {
                 onChange={handleChange}
                 // onChange={HandleBooknameChange}
                 placeholder="E.g. THÓI QUEN THÀNH CÔNG"></input>
-              <label for="authorname" className={cx('box-name')}>Author's Name</label>
+              <label for="author_name" className={cx('box-name')}>Author's Name</label>
               <input type="text1"
-                id="authorname"
-                name="authorname"
-                value={authorname}
+                id="author_name"
+                name="author_name"
+                value={author_name}
                 onChange={handleChange}
                 // onChange={HandleAuthornameChange}
                 placeholder="E.g. NAPOLEON HILL"></input>
-              <label for="category" className={cx('box-name')}>Category</label>
+              <label for="category_name" className={cx('box-name')}>Category</label>
               <input type="text1"
-                id="category"
-                name="category"
-                value={category}
+                id="category_name"
+                name="category_name"
+                value={category_name}
                 onChange={handleChange}
                 // onChange={HandleCategoryChange}
                 placeholder="E.g. Inspire"></input>
-              <label for="publisher" className={cx('box-name')}>Publisher</label>
+              <label for="publisher_name" className={cx('box-name')}>Publisher</label>
               <input type="text1"
-                id="publisher"
-                name="publisher"
-                value={publisher}
+                id="publisher_name"
+                name="publisher_name"
+                value={publisher_name}
                 onChange={handleChange}
                 // onChange={HandlePublisherChange}
                 placeholder="E.g. Nhà xuất bản trẻ"></input>
@@ -430,14 +430,14 @@ const AddBook = ({ admin }) => {
                 onChange={handleChange}
                 // onChange={HandleLanguageChange}
                 placeholder="E.g. Vietnamese"></input>
-              {/* <label for="translator" className={cx('box-name')}>Translator</label>
+              <label for="translator" className={cx('box-name')}>Translator</label>
               <input type="text1"
-                id="translator"
-                name="translator"
-                value={translator}
+                id="translator_name"
+                name="translator_name"
+                value={translator_name}
                 onChange={handleChange}
                 // onChange={HandleTranslatorChange}
-                placeholder="E.g. Nhiều dịch giả (First News)"></input> */}
+                placeholder="E.g. Nhiều dịch giả (First News)"></input>
               <label for="book_size" className={cx('box-name')}>Book size</label>
               <input type="text1"
                 id="book_size"
