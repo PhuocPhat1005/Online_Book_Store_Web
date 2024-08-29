@@ -4,7 +4,6 @@ import { faMagnifyingGlass, faSpinner, faXmarkCircle } from '@fortawesome/free-s
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
 import styles from './Search.module.scss';
-import React from 'react';
 
 import { Wrapper as PopperWrapper } from '../../components/Popper';
 import BookItem from '../../components/BookItem';

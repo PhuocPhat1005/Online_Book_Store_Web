@@ -6,7 +6,6 @@ import {
     faSquareShareNodes,
     faUser,
 } from '@fortawesome/free-solid-svg-icons';
-import React from 'react';
 
 import styles from './EventsHeader.scss';
 import Button from '../../../../components/Button';

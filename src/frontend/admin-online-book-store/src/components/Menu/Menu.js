@@ -3,7 +3,6 @@ import MenuItem from '../MenuItem';
 import { Wrapper as PopperWrapper } from '../Popper';
 import classNames from 'classnames/bind';
 import styles from './Menu.module.scss';
-import React from 'react';
 
 const cx = classNames.bind(styles);
 
