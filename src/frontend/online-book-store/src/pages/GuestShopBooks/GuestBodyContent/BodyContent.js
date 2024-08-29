@@ -14,6 +14,7 @@ import { GENRES, CATEGORY, FILTER_SECTION_1, FILTER_SECTION_2 } from './componen
 import BasicSpinner from '~/components/BasicSpinner';
 import Button from '~/components/Button';
 import PopUp from '~/components/PopUp';
+import PopUpWithMessage from '~/components/PopUpWithMessage';
 
 const cx = classNames.bind(styles);
 
@@ -29,6 +30,10 @@ function BodyContent() {
     const [books, setBooks] = useState([]); // object array
     const [filteredBooks, setFilteredBooks] = useState([]); // object array for filtered books
     const [isLoading, setIsLoading] = useState(false);
+
+    // PopUpWithMessage states
+    const [isPopUpWithMessageVisible, setIsPopUpWithMessageVisible] = useState(false);
+    const [popUpMessage, setPopUpMessage] = useState('');
 
     // State to manage whether the PopUp is shown
     const [isPopUpVisible, setIsPopUpVisible] = useState(false);
@@ -137,6 +142,12 @@ function BodyContent() {
         }
 
         setFilteredBooks(filtered);
+
+        // Show the PopUpWithMessage if no books match the filter criteria
+        if (filtered.length === 0) {
+            setPopUpMessage('No books satisfy the filter requirements.');
+            setIsPopUpWithMessageVisible(true);
+        }
     };
 
     useEffect(() => {
@@ -242,6 +253,10 @@ function BodyContent() {
                     handleFilterAllDisplay={handleFilterAllDisplay}
                     handleApplyFilterAll={handleApplyFilterAll}
                 />
+            )}
+
+            {isPopUpWithMessageVisible && (
+                <PopUpWithMessage message={popUpMessage} onClose={() => setIsPopUpWithMessageVisible(false)} />
             )}
         </div>
     );
