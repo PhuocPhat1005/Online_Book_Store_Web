@@ -23,6 +23,7 @@ function addDotsToNumber(number) {
 function DetailsBook() {
     const location = useLocation();
     let data = location.state?.bookData;
+    console.log(data);
 
     let discount_percentage = 0;
     const rating = data.rate.toString();

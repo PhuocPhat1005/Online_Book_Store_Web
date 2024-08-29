@@ -5,9 +5,9 @@ import Image from '~/components/Image';
 
 const cx = classNames.bind(styles);
 
-function BookItem({ data }) {
+function BookItem({ data, onClick }) {
     return (
-        <div className={cx('wrapper')}>
+        <div className={cx('wrapper')} onClick={onClick}>
             <Image className={cx('avatar')} src={data.Book_ava} alt="avatar" />
             <div className={cx('information')}>
                 <span className={cx('title')}>{data.Book_name}</span>
