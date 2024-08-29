@@ -9,13 +9,10 @@ import Tippy from '@tippyjs/react/headless';
 
 const cx = classNames.bind(styles);
 
-function SelectOption() {
+function SelectStatus() {
   const renderMenuSort = (attrs) => (
       <div className={cx('menu-sort')} tabIndex="-1" {...attrs}>
           <ul className={cx('method-list')}>
-              <li className={cx('method-item')}>
-                  <span className={cx('method-item-text')}>Pending</span>
-              </li>
               <li className={cx('method-item')}>
                   <span className={cx('method-item-text')}>Unprocessed</span>
               </li>
@@ -26,7 +23,10 @@ function SelectOption() {
                   <span className={cx('method-item-text')}>Delivering</span>
               </li>
               <li className={cx('method-item')}>
-                  <span className={cx('method-item-text')}>Done</span>
+                  <span className={cx('method-item-text')}>Received</span>
+              </li>
+              <li className={cx('method-item')}>
+                  <span className={cx('method-item-text')}>Cancelled/Returned</span>
               </li>
           </ul>
       </div>
@@ -36,7 +36,7 @@ function SelectOption() {
       <Tippy interactive placement="bottom-start" offset={[35, 5]} render={renderMenuSort}>
         <div className={cx('heading')}>
             <div className={cx('current_method')}>
-                <p className={cx('label')}>Done</p>
+                <p className={cx('label')}>Confirmed</p>
             </div>
         </div>
       </Tippy>
@@ -189,9 +189,9 @@ function OrderSettings( {data} ) {
           <Button className={cx('page-btn')} onClick={handleLastPage}>
             <p>&gt;|</p>
           </Button>
-          <p className={cx('option-title')}>Options</p>
+          <p className={cx('option-title')}>Status</p>
           <div className={cx('option-filter')}>
-            <SelectOption />
+            <SelectStatus />
           </div>
           {/* <p className={cx('sort-by-title')}>Sort by</p>
           <div className={cx('sort-by-filter')}>
