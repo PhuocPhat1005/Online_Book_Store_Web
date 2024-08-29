@@ -17,10 +17,13 @@ function addDotsToNumber(number) {
 }
 
 function ProductItem({ data, rating = 0 }) {
+    // console.log('Item');
+    // console.log(data);
+
     const [dataItem, setDataItem] = useState(data);
 
     rating = data.rate.toString();
-    let discount_percentage = 10;
+    let discount_percentage = 0;
     let old_price = addDotsToNumber(data.price).toString();
     let new_price = addDotsToNumber(Math.round((data.price * (100 - discount_percentage)) / 100)).toString();
     const navigate = useNavigate();
@@ -30,7 +33,11 @@ function ProductItem({ data, rating = 0 }) {
     const [statusFetchTranslator, setStatusFetchTranslator] = useState(false);
 
     const fetchData = async () => {
-        let updatedDataItem = { ...dataItem };
+        // console.log('DataItem');
+        // console.log(dataItem);
+        let updatedDataItem = { ...data };
+        // console.log('Before');
+        // console.log(updatedDataItem);
 
         try {
             const authorResponse = await request.get(`book/get_book_author/${data.id}`);
@@ -58,6 +65,9 @@ function ProductItem({ data, rating = 0 }) {
         }
 
         // Set the data item and stop loading regardless of success or error
+        // console.log('Update');
+        // console.log(updatedDataItem);
+
         setDataItem(updatedDataItem);
         setIsLoading(false);
         setStatusFetchAuthor(true);
@@ -72,7 +82,7 @@ function ProductItem({ data, rating = 0 }) {
 
     useEffect(() => {
         if (statusFetchAuthor && statusFetchTranslator) {
-            console.log(dataItem);
+            // console.log(dataItem);
 
             setIsLoading(false);
             setStatusFetchAuthor(false);
