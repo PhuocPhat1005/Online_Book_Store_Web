@@ -68,3 +68,57 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+# Frontend Setup
+
+To ensure that the frontend of this project works correctly, you need to install all the necessary libraries and dependencies. Follow the steps below to set up the frontend environment:
+
+### 1. Install Node.js and npm
+
+Make sure that Node.js and npm - Node Package Manager are installed on your system. You can download and install them from [nodejs.org](https://nodejs.org/).
+
+### 2. Navigate to the Project Directory
+
+Navigate to the project directory where the `package.json` file is located.
+
+```bash
+cd src/frontend/online-book-store
+```
+
+### 3. Install Dependencies
+
+Use npm to install all the required frontend libraries. These dependencies are listed in the package.json file. To install them, run:
+
+```bash
+npm install
+```
+
+### 4. Verify Installation
+
+Once the installation is complete, you can verify that everything is set up correctly by starting the development server:
+
+```bash
+npm start
+```
+
+This will start the frontend application, and you can access it typically at [localhost:3000](http://localhost:3000).
+
+### Adding or Updating Frontend Libraries
+
+-   To install an extra library you can run:
+
+```bash
+npm install library_name
+```
+
+This will install the `library_name` and add it to the `package.json` file automatically.
+
+-   To update an existing library you can run:
+
+```bash
+npm update library_name
+```
+
+This will update the `library_name` to the latest version.
+
+### Libraries used
