@@ -470,8 +470,4 @@ const AddBook = ({ admin }) => {
   );
 }
   
-<<<<<<< HEAD
-  export default AddBook;
-=======
 export default AddBook;
->>>>>>> ab611f5efdb618b14ede480215982c4d63d3e810
