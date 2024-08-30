@@ -121,4 +121,33 @@ npm update library_name
 
 This will update the `library_name` to the latest version.
 
-### Libraries used
+### Libraries Used
+
+This project uses the following key libraries and dependencies:
+
+-   **@emailjs/browser**: A library that helps in sending emails directly from the browser using EmailJS.
+-   **@fortawesome/fontawesome-svg-core, @fortawesome/free-brands-svg-icons, @fortawesome/free-regular-svg-icons, @fortawesome/free-solid-svg-icons, @fortawesome/react-fontawesome**: These libraries are part of the Font Awesome icon toolkit used for including scalable vector icons in your React application.
+-   **@react-oauth/google**: A React component for Google's OAuth2 authentication, useful for implementing Google sign-in functionality.
+-   **@tippyjs/react**: A lightweight and highly customizable tooltip and popover library for React.
+-   **axios**: A promise-based HTTP client for making requests to your backend API or other services.
+-   **classnames**: A utility for conditionally joining class names together, useful for managing dynamic styling in React components.
+-   **customize-cra**: A tool to customize Create React App configuration without ejecting, allowing more flexible build settings.
+-   **js-cookie**: A simple JavaScript API for handling cookies in the browser.
+-   **jwt-decode**: A small library that helps in decoding JSON Web Tokens (JWT) for client-side authentication purposes.
+-   **normalize.css**: A modern, HTML5-ready alternative to CSS resets, it makes browsers render all elements more consistently and in line with modern standards.
+-   **react**: The main library for building user interfaces with components in this project.
+-   **react-dom**: This package provides DOM-specific methods that can be used at the top level of a web app to enable efficient rendering.
+-   **react-router-dom**: A fully-featured client and server-side routing library for React, used for managing navigation between pages in the app.
+-   **react-scripts**: Scripts and configuration used by Create React App.
+-   **sass**: A CSS preprocessor which adds special features such as variables, nested rules, and mixins on top of regular CSS.
+-   **universal-cookie**: A universal cookie library for React that works in both client-side and server-side rendering environments.
+-   **web-vitals**: A library that measures the quality of a user experience by reporting essential web vitals metrics.
+
+### DevDependencies
+
+These dependencies are used during the development process to enhance productivity:
+
+-   **babel-plugin-module-resolver**: A Babel plugin to add custom module resolution paths, making your imports cleaner and more manageable.
+-   **react-app-rewired**: A tool that allows you to override the Create React App configuration without ejecting, giving you more control over the build process.
+
+Make sure to run `npm install` to install all the required dependencies before running the app. If you need to install additional libraries or update existing ones, follow the instructions provided in the previous sections.
