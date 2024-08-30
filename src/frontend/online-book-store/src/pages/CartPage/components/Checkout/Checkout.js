@@ -70,7 +70,15 @@ function Checkout({ closeCheckoutFunc, orderPrice, voucherDiscount }) {
 
     /** Submit BUY NOW */
 
+    const [isInValid, setIsInValid] = useState(false);
+    const [invalidMessage, setInvalidMessage] = useState('Oops, you have missed some information.');
+
     const handleSubmitBuyNow = async () => {
+        if (addressId === '' || voucherDiscount === 0 || voucherDiscount.code === undefined) {
+            setIsInValid(true);
+            return;
+        }
+
         const cookies = new Cookies();
         const access_token = cookies.get('jwt_authorization');
 
@@ -86,10 +94,11 @@ function Checkout({ closeCheckoutFunc, orderPrice, voucherDiscount }) {
                     },
                 },
             );
-
             setIsSuccessfull(true);
         } catch (error) {
             console.log(error);
+            setIsInValid(true);
+            setInvalidMessage('Opps, there is nothing in your cart.');
         }
     };
 
@@ -199,6 +208,18 @@ function Checkout({ closeCheckoutFunc, orderPrice, voucherDiscount }) {
                         <div className={cx('popup_body')}>
                             <p className={cx('popup_text')}>Thanks for your checkout.</p>
                         </div>
+                    </div>
+                </div>
+            )}
+            {isInValid && (
+                <div className={cx('invalid_popup')}>
+                    <div className={cx('invalid_popup_header')}>
+                        <p className={cx('invalid_popup_text')}>{invalidMessage}</p>
+                        <FontAwesomeIcon
+                            icon={faXmark}
+                            className={cx('invalid_popup_close')}
+                            onClick={() => setIsInValid(false)}
+                        />
                     </div>
                 </div>
             )}
