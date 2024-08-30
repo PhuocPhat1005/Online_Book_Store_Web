@@ -41,19 +41,13 @@ function SelectSortBy() {
       <div className={cx('menu-sort')} tabIndex="-1" {...attrs}>
           <ul className={cx('method-list')}>
               <li className={cx('method-item')}>
-                  <span className={cx('method-item-text')}>by Username</span>
+                  <span className={cx('method-item-text')}>by Name</span>
               </li>
               <li className={cx('method-item')}>
                   <span className={cx('method-item-text')}>by Email</span>
               </li>
               <li className={cx('method-item')}>
-                  <span className={cx('method-item-text')}>by Creation date</span>
-              </li>
-              <li className={cx('method-item')}>
-                  <span className={cx('method-item-text')}>by Order ID</span>
-              </li>
-              <li className={cx('method-item')}>
-                  <span className={cx('method-item-text')}>by Total spending</span>
+                  <span className={cx('method-item-text')}>by Update at</span>
               </li>
           </ul>
       </div>
@@ -63,7 +57,7 @@ function SelectSortBy() {
       <Tippy interactive placement="bottom-start" offset={[35, 5]} render={renderMenuSort}>
         <div className={cx('heading')}>
             <div className={cx('current_method')}>
-                <p className={cx('label')}>by Username</p>
+                <p className={cx('label')}>by Name</p>
             </div>
         </div>
       </Tippy>
@@ -187,8 +181,9 @@ function UserManagement() {
               <th>Email</th>
               <th>Phone</th>
               <th>Address</th>
-              <th>Create at</th>
+              {/* <th>Create at</th> */}
               <th>Update at</th>
+              {/* <th>Ban</th> */}
               <th>See detail</th>
             </tr>
             {users.map((itemUser, index) => (
@@ -198,7 +193,7 @@ function UserManagement() {
                 <td>{itemUser.email}</td>
                 <td>{itemUser.phone}</td>
                 <td>{itemUser.address}</td>
-                <td>{itemUser.created_at}</td>
+                {/* <td>{itemUser.created_at}</td> */}
                 <td>{itemUser.updated_at}</td>
                 {/* <td>{itemUser.banned_to}</td> */}
                 <td>
