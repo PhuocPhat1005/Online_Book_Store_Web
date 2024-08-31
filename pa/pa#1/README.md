@@ -8,9 +8,9 @@ _CS300 - CSC13002 - Introduction to Software Engineering_
 * You are required to draft an initial version of your project plan. After submitting this version, the TA’s will review and provide feedback. Based on the feedback, you will update and submit again in the next assignment (PA2).
 * The project plan document follows the template provided in Moodle. The plan should follow the overall plan detailed in **LN04 – Project Assignments**. You may want to check an example of the document at [Link](http://sce.uhcl.edu/helm/RationalUnifiedProcess/examples/csports/ovu_webex.htm.)
 * In this PA1, the project plan is NOT required to be fully complete in this Inception phase. Instead, your team SHOULD fill out relevant information for the following sections:
-  * 1. Introduction: be brief
-  * 2. Project Overview (and its subsections): be brief
-  * 3. Project Organization (and its subsections)
+  * 1 Introduction: be brief
+  * 2 Project Overview (and its subsections): be brief
+  * 3 Project Organization (and its subsections)
   * 4.2 Project Plan (and its subsections)
   * 4.3 Project Monitoring and Control: Sections 4.3.1 and 4.3.3. Leave Section 4.3.2 blank for now.
 * When using the template, remember to remove the [blue italic texts] and replace them with your texts in normal format (black and normal font, use font 10, Times New Roman). For the other sections, remove the blue texts and keep them empty.
