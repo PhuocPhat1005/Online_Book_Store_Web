@@ -24,9 +24,9 @@ _CS300 - CSC13002 - Introduction to Software Engineering_
 * Similar to the project plan, you will update the vision document again after this assignment.
 ## Weekly report (5 points)
 * Planning meeting, weekly meetings, review meeting. Follow instructions in the “GoogleDriveFolderStructureRequirement” file.
-## Submission:
+## Submission
 * You must copy all documents to the directory named PA1-Group[GroupId] and compressed the whole directory to zip/rar file. For example: PA1-Group01.zip
-## Grading Criteria:
+## Grading Criteria
 * The assignment will be graded according to how well your team prepare the required documents using limited information your team has at this time. Criteria include:
   * English writing: clear and easy to understand with few errors.
   * Well formatted texts, diagrams, charts.
