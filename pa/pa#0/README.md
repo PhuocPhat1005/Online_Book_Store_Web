@@ -1,3 +1,4 @@
+_CS300 - CSC13002 - Introduction to Software Engineering_
 # Project Assignment 0 (PA0)
 * Total scores: 30 points
 * Duration: 1 week.
