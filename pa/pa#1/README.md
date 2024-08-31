@@ -8,9 +8,9 @@ _CS300 - CSC13002 - Introduction to Software Engineering_
 * You are required to draft an initial version of your project plan. After submitting this version, the TA’s will review and provide feedback. Based on the feedback, you will update and submit again in the next assignment (PA2).
 * The project plan document follows the template provided in Moodle. The plan should follow the overall plan detailed in **LN04 – Project Assignments**. You may want to check an example of the document at [Link](http://sce.uhcl.edu/helm/RationalUnifiedProcess/examples/csports/ovu_webex.htm.)
 * In this PA1, the project plan is NOT required to be fully complete in this Inception phase. Instead, your team SHOULD fill out relevant information for the following sections:
-  * 1. Introduction: be brief
-  * 2. Project Overview (and its subsections): be brief
-  * 3. Project Organization (and its subsections)
+  * 1 Introduction: be brief
+  * 2 Project Overview (and its subsections): be brief
+  * 3 Project Organization (and its subsections)
   * 4.2 Project Plan (and its subsections)
   * 4.3 Project Monitoring and Control: Sections 4.3.1 and 4.3.3. Leave Section 4.3.2 blank for now.
 * When using the template, remember to remove the [blue italic texts] and replace them with your texts in normal format (black and normal font, use font 10, Times New Roman). For the other sections, remove the blue texts and keep them empty.
@@ -24,9 +24,9 @@ _CS300 - CSC13002 - Introduction to Software Engineering_
 * Similar to the project plan, you will update the vision document again after this assignment.
 ## Weekly report (5 points)
 * Planning meeting, weekly meetings, review meeting. Follow instructions in the “GoogleDriveFolderStructureRequirement” file.
-## Submission:
+## Submission
 * You must copy all documents to the directory named PA1-Group[GroupId] and compressed the whole directory to zip/rar file. For example: PA1-Group01.zip
-## Grading Criteria:
+## Grading Criteria
 * The assignment will be graded according to how well your team prepare the required documents using limited information your team has at this time. Criteria include:
   * English writing: clear and easy to understand with few errors.
   * Well formatted texts, diagrams, charts.
