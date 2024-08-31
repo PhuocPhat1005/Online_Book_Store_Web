@@ -20,9 +20,13 @@ const OrderManagement = () => {
     navigate(route);
   };
   const [orders, setOrders] = useState([]); // object array
-
+  const st = data.status;
+  function changeStatus (status) {
+    // data.status = status;
+    console.log(data.status);
+  }
   useEffect(() => {
-    const getOrderInfor = async () => {
+    const putOrderInfor = async () => {
       try {
         const response = await request.put(`admin/approval_orders`, data.id, data.status, {
         headers: {
@@ -42,9 +46,31 @@ const OrderManagement = () => {
         }
       }
     };
+    putOrderInfor();
+  });
+  useEffect(() => {
+    const getOrderInfor = async () => {
+      try {
+        const response = await request.get(`admin/approval_orders`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+        console.log(response.data);
+        setOrders(response.data);
+        } catch (error) {
+        if (error.response) {
+          console.error('Form submission failed', error.response.data);
+        } else if (error.request) {
+          console.error('No response received', error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.error('Error', error.message);
+        }
+      }
+    };
     getOrderInfor();
   });
-
   return (
     <>
       <div className={cx('order-management')}>
@@ -65,21 +91,21 @@ const OrderManagement = () => {
             </table>
           </div>
           <div className={cx('status-box')}>
-            <p className={cx('status-line')}>Status: {data.status}</p>
-            <Button className={cx('status-btn')} onClick={data.status="Unprocessed"}>
-              <p><FontAwesomeIcon icon={faPenToSquare}/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unprocessed</p>
+            <p className={cx('status-line')}>Status: {st}</p>
+            <Button className={cx('status-btn')} onClick={changeStatus("Unprocessed")}>
+              <p><FontAwesomeIcon icon={faPenToSquare}/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unprocessed</p>
             </Button>
-            <Button className={cx('status-btn')} onClick={data.status="Confirmed"}>
-              <p><FontAwesomeIcon icon={faPenToSquare}/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmed</p>
+            <Button className={cx('status-btn')} onClick={changeStatus("Confirmed")}>
+              <p><FontAwesomeIcon icon={faPenToSquare}/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmed</p>
             </Button>
-            <Button className={cx('status-btn')} onClick={data.status="Delivering"}>
-              <p><FontAwesomeIcon icon={faPenToSquare}/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delivering</p>
+            <Button className={cx('status-btn')} onClick={changeStatus("Delivering")}>
+              <p><FontAwesomeIcon icon={faPenToSquare}/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delivering</p>
             </Button>
-            <Button className={cx('status-btn')} onClick={data.status="Received"}>
-              <p><FontAwesomeIcon icon={faPenToSquare}/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Received</p>
+            <Button className={cx('status-btn')} onClick={changeStatus("Received")}>
+              <p><FontAwesomeIcon icon={faPenToSquare}/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Received</p>
             </Button>
-            <Button className={cx('status-btn')} onClick={data.status="Cancelled/ Returned"}>
-              <p><FontAwesomeIcon icon={faPenToSquare}/>&nbsp;&nbsp;&nbsp;&nbsp;Cancelled/Returned</p>
+            <Button className={cx('status-btn')} onClick={changeStatus("Cancelled/ Returned")}>
+              <p><FontAwesomeIcon icon={faPenToSquare}/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cancelled/Returned</p>
             </Button>
           </div>
         </div>
