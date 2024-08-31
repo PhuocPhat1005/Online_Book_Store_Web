@@ -8,17 +8,26 @@ This is the backend server for the project. It is built using FastAPI (Python). 
 ### 2.2. **Installation**
 1. Clone the repository
 2. Do the following:
+```Python!=
+    cd src/backend
+```
 3. Create a virtual environment
+```Python!=
+    python -m venv venv
+```
 4. Activate the virtual environment
+```Python!=
+    . venv/Scripts/activate
+```
 5. Set the environment variables in the `.env` file including:
 * `DATABASE_URL` - the URL of the PostgreSQL database (Password, Account, Host, Port, Database)
 * `SECRET_KEY` - a secret key for the FastAPI app
 * `JWT_SECRET` - a secret key for the JWT token
-6. Install all packages
+1. Install all packages
 ```Python!=
     pip install -r requirements.txt
 ```
-7. Run server using the following command
+1. Run server using the following command
 ```Python!=
     uvicorn main:app --reload
 ```

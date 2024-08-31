@@ -5,13 +5,11 @@ import config from '../../config';
 import request from '../../utils/request';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
-<<<<<<< HEAD
-import React from 'react';
-=======
+
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Tippy from '@tippyjs/react/headless';
->>>>>>> 754dce7bdfc05bacc4e1ec446b9bbdd2903af53b
+
 
 const cx = classNames.bind(styles);
 
