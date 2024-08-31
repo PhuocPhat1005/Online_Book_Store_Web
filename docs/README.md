@@ -1,4 +1,5 @@
 # About All documents
+* This folder will store all documents about **SIBOOKS-WEB** project.
 ## Project management
 * Plan
 * Schedule
