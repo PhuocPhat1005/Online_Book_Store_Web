@@ -22,5 +22,5 @@ The SIBOOKS WEB is an e-commerce website for Book Store, this web can be used fo
 </div>
 
 <!-- BEGIN YOUTUBE-CARDS -->
-[![Online Book Store UI](https://ytcards.demolab.com/?id=-wloHUp86EU&title=Online+Book+Store+UI&lang=en&timestamp=-wloHUp86EU&background_color=%230d1117&title_color=%23ffffff&stats_color=%23dedede&max_title_lines=1&width=250&border_radius=5&duration=VIDEO_DURATION "Online Book Store UI")](https://www.youtube.com/watch?v=-wloHUp86EU)
+[![Online Book Store UI](https://ytcards.demolab.com/?id=-wloHUp86EU&title=Online+Book+Store+UI&lang=en&timestamp=-wloHUp86EU&background_color=%230d1117&title_color=%23ffffff&stats_color=%23dedede&max_title_lines=1&width=250&border_radius=5&duration=440 "Online Book Store UI")](https://www.youtube.com/watch?v=-wloHUp86EU)
 <!-- END YOUTUBE-CARDS -->
