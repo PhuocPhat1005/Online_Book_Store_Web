@@ -23,8 +23,8 @@ The SIBOOKS WEB is an e-commerce website for Book Store, this web can be used fo
 [![Online Book Store UI Demo](https://ytcards.demolab.com/?id=-wloHUp86EU&title=Online+Book+Store+UI+Demo&lang=en&timestamp=-wloHUp86EU&background_color=%230d1117&title_color=%23ffffff&stats_color=%23dedede&max_title_lines=1&width=250&border_radius=5&duration=2195 "Online Book Store UI Demo")](https://www.youtube.com/watch?v=-wloHUp86EU)
 <!-- END YOUTUBE-CARDS -->
 ## 5. **Tools Management**
-● [Google Drive](https://drive.google.com/drive/folders/1OkmKCLP79hJeeMM6AjpGuXRUf3QzdbLE?usp=sharing): manage all documents, resources, reports, and schedules, ...
-● [Trello](https://trello.com/w/sibooksweb): manage all tasks that each member needs to do
-● [Toggl](https://track.toggl.com/organization/8360737/workspaces/8359779/settings/general): manage the task time of each member
-● [Github](https://github.com/PhuocPhat1005/Online_Book_Store_Web): manage the source code of this project
-● [Discord](https://discord.gg/hCrzZzNs) or [Zalo](https://zalo.me/g/mkrler289): discuss or chat with each other
+* [Google Drive](https://drive.google.com/drive/folders/1OkmKCLP79hJeeMM6AjpGuXRUf3QzdbLE?usp=sharing): manage all documents, resources, reports, and schedules, ...
+* [Trello](https://trello.com/w/sibooksweb): manage all tasks that each member needs to do
+* [Toggl](https://track.toggl.com/organization/8360737/workspaces/8359779/settings/general): manage the task time of each member
+* [Github](https://github.com/PhuocPhat1005/Online_Book_Store_Web): manage the source code of this project
+* [Discord](https://discord.gg/hCrzZzNs) or [Zalo](https://zalo.me/g/mkrler289): discuss or chat with each other
