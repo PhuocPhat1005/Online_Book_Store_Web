@@ -1,4 +1,5 @@
 import signal
+import os
 import asyncio
 import uvicorn
 from fastapi import FastAPI
@@ -25,6 +26,8 @@ from app.routes.CommentRoute import review
 from app.routes.OrderRoute import order
 from app.routes.PaymentRoute import payment
 from app.routes.UserRoute import user
+
+PORT = int(os.getenv("PORT", 8000))
 
 # Khởi tạo AsyncEngine
 engine = create_async_engine(settings.DATABASE_URL, echo=False)
@@ -106,7 +109,7 @@ app.include_router(voucher.router)
 # Run Uvicorn server with graceful shutdown
 def main():
     config = uvicorn.Config(
-        "main:app", host="0.0.0.0", port=8000, log_level="info", reload=True
+        "main:app", host="0.0.0.0", port=PORT, log_level="info", reload=True
     )
     server = uvicorn.Server(config)
 
