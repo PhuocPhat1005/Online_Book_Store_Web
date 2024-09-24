@@ -49,12 +49,7 @@ app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
 
 # Cấu hình CORSMiddleware
 origins = [
-    "http://localhost:3000",  
-    "http://localhost:8080",
-    "http://localhost:8000",
-    "http://localhost:8000/auth",
-    "https://online-book-store-web-frontend.onrender.com/",
-    "https://online-book-store-web.onrender.com/",
+    "https://online-book-store-web-frontend.onrender.com",
 ]
 
 app.add_middleware(
