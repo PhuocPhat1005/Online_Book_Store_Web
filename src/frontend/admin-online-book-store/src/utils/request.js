@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const request = axios.create({
-    baseURL: 'http://127.0.0.1:8000/',
+    baseURL: 'https://online-book-store-web.onrender.com/',
     headers: {
         // 'Content-Type': 'application/json',
         // 'Content-Type': 'application/x-www-form-urlencoded',

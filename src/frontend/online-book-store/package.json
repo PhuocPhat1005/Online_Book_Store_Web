@@ -30,7 +30,7 @@
         "web-vitals": "^2.1.4"
     },
     "scripts": {
-        "start": "serve -s build -l $PORT",
+        "start": "serve -s build -l 3000",
         "build": "react-app-rewired build",
         "test": "react-app-rewired test",
         "eject": "react-scripts eject"
