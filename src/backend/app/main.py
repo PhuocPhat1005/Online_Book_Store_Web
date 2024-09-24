@@ -2,6 +2,7 @@ import signal
 import asyncio
 import uvicorn
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from fastapi.middleware.cors import CORSMiddleware
@@ -86,7 +87,10 @@ app.include_router(sale_off.router)
 app.include_router(review.router)
 app.include_router(voucher.router)
 
-
+@app.get("/")
+async def redirect_to_docs():
+    return RedirectResponse(url="/docs")
+    
 def main():
     config = uvicorn.Config(
         "main:app", host="0.0.0.0", port=8000, log_level="info", reload=True
