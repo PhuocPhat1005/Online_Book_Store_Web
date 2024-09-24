@@ -2,7 +2,7 @@ import signal
 import asyncio
 import uvicorn
 from fastapi import FastAPI
-from fastapi.responses import RedirectResponse
+from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from fastapi.middleware.cors import CORSMiddleware
@@ -88,12 +88,12 @@ app.include_router(review.router)
 app.include_router(voucher.router)
 
 @app.get("/")
-async def redirect_to_docs():
-    return "Start server"
+async def read_root():
+    return JSONResponse(content={"message": "Welcome!"})
     
 def main():
     config = uvicorn.Config(
-        "main:app", host="0.0.0.0", port=8000, log_level="info", reload=True
+        "main:app", port=8000, log_level="info", reload=True
     )
     server = uvicorn.Server(config)
 
