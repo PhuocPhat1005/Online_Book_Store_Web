@@ -1,5 +1,6 @@
 import signal
 import os
+import os
 import asyncio
 import uvicorn
 from fastapi import FastAPI
@@ -72,11 +73,11 @@ async def startup():
 @app.head("/")
 async def read_root():
     print("HEAD")
-    return JSONResponse(content={"message": f"Welcome to the API!{PORT}"})
+    return JSONResponse(content={"message": "Welcome to the API!"})
 
 @app.get("/")
 async def read_root():
-    return JSONResponse(content={"message": f"Welcome to the API!{PORT}"})
+    return JSONResponse(content={"message": "Welcome to the API!"})
 
 @app.get("/healthz")
 async def health_check():
