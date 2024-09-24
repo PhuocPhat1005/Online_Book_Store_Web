@@ -55,7 +55,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH"], 
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
@@ -65,10 +65,17 @@ async def startup():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
-# # Define the default GET route
 @app.get("/")
 async def read_root():
-    return JSONResponse(content={"message": "Get Welcome to the API!"})
+    return JSONResponse(content={"message": "Welcome to the API!"})
+
+@app.get("/healthz")
+async def health_check():
+    return JSONResponse(content={"status": "healthy"})
+
+@app.head("/healthz")
+async def head_health_check():
+    return JSONResponse(content={"status": "healthy"})
 
 # Kết nối các router
 app.include_router(auth.router)
