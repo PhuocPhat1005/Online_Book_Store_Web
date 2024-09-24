@@ -89,7 +89,7 @@ app.include_router(voucher.router)
 
 @app.get("/")
 async def redirect_to_docs():
-    return RedirectResponse(url="/docs")
+    return "Start server"
     
 def main():
     config = uvicorn.Config(
