@@ -53,6 +53,8 @@ origins = [
     "http://localhost:8080",
     "http://localhost:8000",
     "http://localhost:8000/auth",
+    "https://online-book-store-web-frontend.onrender.com/",
+    "https://online-book-store-web.onrender.com/",
 ]
 
 app.add_middleware(
