@@ -1,7 +1,9 @@
 import signal
+import os
 import asyncio
 import uvicorn
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from fastapi.middleware.cors import CORSMiddleware
@@ -25,6 +27,8 @@ from app.routes.OrderRoute import order
 from app.routes.PaymentRoute import payment
 from app.routes.UserRoute import user
 
+PORT = int(os.getenv("PORT", 8000))
+
 # Khởi tạo AsyncEngine
 engine = create_async_engine(settings.DATABASE_URL, echo=False)
 
@@ -39,10 +43,12 @@ app = FastAPI(
     description="API documents for the online bookstore SIBOOKS project",
     version="1.0.0",
 )
+
 app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
+
 # Cấu hình CORSMiddleware
 origins = [
-    "http://localhost:3000",  # Thay đổi tùy theo frontend của bạn
+    "http://localhost:3000",  
     "http://localhost:8080",
     "http://localhost:8000",
     "http://localhost:8000/auth",
@@ -56,7 +62,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 # Khởi tạo các bảng trong cơ sở dữ liệu
 @app.on_event("startup")
 async def startup():
@@ -64,9 +69,24 @@ async def startup():
         await conn.run_sync(Base.metadata.create_all)
 
 
-# Kết nối các router
-app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
+@app.head("/")
+async def read_root():
+    print("HEAD")
+    return JSONResponse(content={"message": f"Welcome to the API!{PORT}"})
 
+@app.get("/")
+async def read_root():
+    return JSONResponse(content={"message": f"Welcome to the API!{PORT}"})
+
+@app.get("/healthz")
+async def health_check():
+    return JSONResponse(content={"status": "healthy"})
+
+@app.head("/healthz")
+async def head_health_check():
+    return JSONResponse(content={"status": "healthy"})
+
+# Kết nối các router
 app.include_router(auth.router)
 app.include_router(account.router)
 app.include_router(admin.router)
@@ -86,10 +106,10 @@ app.include_router(sale_off.router)
 app.include_router(review.router)
 app.include_router(voucher.router)
 
-
+# Run Uvicorn server with graceful shutdown
 def main():
     config = uvicorn.Config(
-        "main:app", host="0.0.0.0", port=8000, log_level="info", reload=True
+        "main:app", host="0.0.0.0", port=PORT, log_level="info", reload=True
     )
     server = uvicorn.Server(config)
 
@@ -113,7 +133,6 @@ def main():
         pass
     finally:
         loop.close()
-
 
 if __name__ == "__main__":
     main()
