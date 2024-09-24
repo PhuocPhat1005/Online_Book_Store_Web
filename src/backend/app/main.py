@@ -65,6 +65,12 @@ async def startup():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
+
+@app.head("/")
+async def read_root():
+    print("HEAD")
+    return JSONResponse(content={"message": "Welcome to the API!"})
+
 @app.get("/")
 async def read_root():
     return JSONResponse(content={"message": "Welcome to the API!"})
