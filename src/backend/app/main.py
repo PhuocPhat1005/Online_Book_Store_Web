@@ -40,10 +40,12 @@ app = FastAPI(
     description="API documents for the online bookstore SIBOOKS project",
     version="1.0.0",
 )
+
 app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
+
 # Cấu hình CORSMiddleware
 origins = [
-    "http://localhost:3000",  # Thay đổi tùy theo frontend của bạn
+    "http://localhost:3000",  
     "http://localhost:8080",
     "http://localhost:8000",
     "http://localhost:8000/auth",
@@ -57,17 +59,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 # Khởi tạo các bảng trong cơ sở dữ liệu
 @app.on_event("startup")
 async def startup():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
+# Define the default GET route
+@app.get("/")
+async def read_root():
+    return JSONResponse(content={"message": "Welcome to the API!"})
 
 # Kết nối các router
-app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
-
 app.include_router(auth.router)
 app.include_router(account.router)
 app.include_router(admin.router)
@@ -87,13 +90,10 @@ app.include_router(sale_off.router)
 app.include_router(review.router)
 app.include_router(voucher.router)
 
-@app.get("/")
-async def read_root():
-    return JSONResponse(content={"message": "Welcome!"})
-    
+# Run Uvicorn server with graceful shutdown
 def main():
     config = uvicorn.Config(
-        "main:app", port=8000, log_level="info", reload=True
+        "main:app", host="0.0.0.0", port=8000, log_level="info", reload=True
     )
     server = uvicorn.Server(config)
 
@@ -117,7 +117,6 @@ def main():
         pass
     finally:
         loop.close()
-
 
 if __name__ == "__main__":
     main()
