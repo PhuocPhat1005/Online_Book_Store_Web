@@ -23,11 +23,11 @@ This is the backend server for the project. It is built using FastAPI (Python). 
 * `DATABASE_URL` - the URL of the PostgreSQL database (Password, Account, Host, Port, Database)
 * `SECRET_KEY` - a secret key for the FastAPI app
 * `JWT_SECRET` - a secret key for the JWT token
-1. Install all packages
+6. Install all packages
 ```Python!=
     pip install -r requirements.txt
 ```
-1. Run server using the following command
+7. Run server using the following command
 ```Python!=
     uvicorn main:app --reload
 ```
